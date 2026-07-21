@@ -635,6 +635,8 @@ function arrowPct(v) {{
 
   <!-- ====== 页面：仪表盘概览 ====== -->
   <div class="page active" id="page-overview">
+    <div id="dailyCompare" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;"></div>
+
     <div class="kpi-grid" id="kpiGrid"></div>
 
     <div id="latencyCard" style="background:var(--card-bg);border-radius:10px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
@@ -906,6 +908,59 @@ function renderOverview() {{
   var avgTokens = total > 0 ? Math.round(totalTokens/total) : 0;
   var totalDur = fdata.reduce(function(s,r){{return s+(r.duration_ms||0)}},0);
   var avgDur = total > 0 ? Math.round(totalDur/total) : 0;
+
+  // ===== 日环比摘要条 =====
+  (function() {{
+    var byDate = {{}};
+    fdata.forEach(function(r) {{
+      var d = r.date || (r.timestamp || '').slice(0, 10);
+      if (!byDate[d]) byDate[d] = {{total:0, success:0, tokens:0, dur:0}};
+      byDate[d].total++;
+      if (r.status === 'success') byDate[d].success++;
+      byDate[d].tokens += (r.tokens_used || 0);
+      byDate[d].dur += (r.duration_ms || 0);
+    }});
+    var dates = Object.keys(byDate).sort();
+    if (dates.length >= 2) {{
+      var today = byDate[dates[dates.length - 1]];
+      var yesterday = byDate[dates[dates.length - 2]];
+      var td = dates[dates.length - 1].slice(5);
+      var yd = dates[dates.length - 2].slice(5);
+
+      function delta(cur, prev) {{
+        if (!prev || prev === 0) return {{pct: 0, dir: 'flat'}};
+        return {{pct: Math.round((cur - prev) / prev * 1000) / 10, dir: cur > prev ? 'up' : 'down'}};
+      }}
+
+      var items = [
+        {{label: '任务量', cur: today.total, prev: yesterday.total, fmt: function(v){{return v+'条'}}, better: 'neutral'}},
+        {{label: '成功率', cur: today.total>0?Math.round(today.success/today.total*1000)/10:0,
+         prev: yesterday.total>0?Math.round(yesterday.success/yesterday.total*1000)/10:0, fmt: function(v){{return v+'%'}}, better: 'up'}},
+        {{label: 'Token', cur: today.tokens, prev: yesterday.tokens, fmt: function(v){{return v>1000?Math.round(v/1000)+'K':v}}, better: 'neutral'}},
+        {{label: '平均耗时', cur: today.total>0?Math.round(today.dur/today.total):0,
+         prev: yesterday.total>0?Math.round(yesterday.dur/yesterday.total):0, fmt: function(v){{return v>=1000?Math.round(v/1000)+'s':v+'ms'}}, better: 'down'}},
+      ];
+
+      var ch = '';
+      items.forEach(function(m) {{
+        var d = delta(m.cur, m.prev);
+        var absPct = Math.abs(d.pct);
+        var arrow = d.dir === 'up' ? '&#9650;' : (d.dir === 'down' ? '&#9660;' : '&#9644;');
+        var tc;
+        if (absPct <= 5 || m.better === 'neutral') tc = 'var(--muted)';
+        else if (m.better === 'up') tc = d.dir === 'up' ? '#2a9d8f' : '#e76f51';
+        else if (m.better === 'down') tc = d.dir === 'down' ? '#2a9d8f' : '#e76f51';
+        ch += '<div style="background:var(--card-bg);border-radius:8px;padding:8px 14px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1;min-width:120px;">';
+        ch += '<div style="font-size:.68rem;color:var(--muted);margin-bottom:2px;">' + m.label + ' (' + yd + '→' + td + ')</div>';
+        ch += '<div style="font-size:1rem;font-weight:700;">' + m.fmt(m.cur) + ' <span style="font-size:.7rem;color:' + tc + ';">' + arrow + ' ' + absPct + '%</span></div>';
+        ch += '</div>';
+      }});
+      document.getElementById('dailyCompare').innerHTML = ch;
+      document.getElementById('dailyCompare').style.display = 'flex';
+    }} else {{
+      document.getElementById('dailyCompare').style.display = 'none';
+    }}
+  }})();
 
   var errCounts = {{}};
   fdata.forEach(function(r){{ if(r.status==='failed'&&r.error_type){{ var k=r.error_type; errCounts[k]=(errCounts[k]||0)+1; }} }});
