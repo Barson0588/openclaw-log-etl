@@ -379,6 +379,12 @@ class LogAnalyzer:
             "avg_tokens_per_task": round(self.df["tokens_used"].mean(), 1),
             "total_duration_seconds": round(self.df["duration_ms"].sum() / 1000, 1),
             "avg_duration_ms": round(self.df["duration_ms"].mean(), 1),
+            "p50_duration_ms": round(self.df["duration_ms"].quantile(0.50), 1),
+            "p95_duration_ms": round(self.df["duration_ms"].quantile(0.95), 1),
+            "p99_duration_ms": round(self.df["duration_ms"].quantile(0.99), 1),
+            "p50_tokens": round(self.df["tokens_used"].quantile(0.50), 1),
+            "p95_tokens": round(self.df["tokens_used"].quantile(0.95), 1),
+            "p99_tokens": round(self.df["tokens_used"].quantile(0.99), 1),
             "date_range_start": self.df["timestamp"].min().strftime("%Y-%m-%d"),
             "date_range_end": self.df["timestamp"].max().strftime("%Y-%m-%d"),
             "top_error_type": (

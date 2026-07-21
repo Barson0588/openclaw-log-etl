@@ -637,6 +637,14 @@ function arrowPct(v) {{
   <div class="page active" id="page-overview">
     <div class="kpi-grid" id="kpiGrid"></div>
 
+    <div id="latencyCard" style="background:var(--card-bg);border-radius:10px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-weight:600;font-size:.82rem;">延迟分位分布 (P50 / P95 / P99)</span>
+        <span style="font-size:.68rem;color:var(--muted);" id="latencyLabel"></span>
+      </div>
+      <svg id="latencyChart" viewBox="0 0 600 60" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;"></svg>
+    </div>
+
     <div class="compare-grid" id="triggerCompare" style="margin-bottom:14px;"></div>
 
     <div class="collapsible open" id="sec-charts">
@@ -989,6 +997,35 @@ function renderOverview() {{
     return'<div class="compare-card '+cls+'"><h4>'+label+' ('+arr.length+' 条)</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.78rem;"><div><span class="value '+t2+'">'+rt+'%</span><br><span style="color:var(--muted)">成功率</span></div><div><strong>'+Math.round(ad)+'</strong>ms<br><span style="color:var(--muted)">平均耗时</span></div><div><strong>'+tk.toLocaleString()+'</strong><br><span style="color:var(--muted)">Token</span></div><div><strong>'+s+'/'+arr.length+'</strong><br><span style="color:var(--muted)">成功/总数</span></div></div></div>';
   }}
   document.getElementById('triggerCompare').innerHTML=cc('Cron 定时','cron',cron)+cc('User 手动','user',user)+cc('其他','',other);
+
+  // 延迟分位图
+  var durs = fdata.map(function(r){{return r.duration_ms||0}}).filter(function(v){{return v>0}}).sort(function(a,b){{return a-b}});
+  if (durs.length > 0) {{
+    var p50 = durs[Math.floor(durs.length * 0.50)];
+    var p95 = durs[Math.floor(durs.length * 0.95)];
+    var p99 = durs[Math.floor(durs.length * 0.99)];
+    var pmax = Math.max(p99, 1);
+    var bars = [
+      {{v: p50, pct: '50', color: '#2a9d8f', label: 'P50'}},
+      {{v: p95, pct: '95', color: '#f4a261', label: 'P95'}},
+      {{v: p99, pct: '99', color: '#e76f51', label: 'P99'}},
+    ];
+    var svg = document.getElementById('latencyChart');
+    var h = '';
+    bars.forEach(function(b, i) {{
+      var w = Math.max(b.v / pmax * 580, 2);
+      var y = 8 + i * 18;
+      var fmtV = b.v >= 60000 ? Math.round(b.v/60000)+'分' : Math.round(b.v/1000)+'秒';
+      h += '<text x="0" y="' + (y + 9) + '" fill="var(--text)" font-size="10">' + b.label + '</text>';
+      h += '<rect x="36" y="' + y + '" width="' + w + '" height="12" rx="2" fill="' + b.color + '" opacity="0.75"/>';
+      h += '<text x="' + (w + 40) + '" y="' + (y + 10) + '" fill="' + b.color + '" font-size="9" font-weight="600">' + fmtV + '</text>';
+    }});
+    svg.innerHTML = h;
+    document.getElementById('latencyLabel').textContent = durs.length + ' 个任务 | 最快 ' + (durs[0]>=1000?Math.round(durs[0]/1000)+'s':durs[0]+'ms') + ' | 最慢 ' + (p99>=60000?Math.round(p99/60000)+'分':Math.round(p99/1000)+'秒');
+    document.getElementById('latencyCard').style.display = '';
+  }} else {{
+    document.getElementById('latencyCard').style.display = 'none';
+  }}
 
   // Trigger 表
   var thtml='';
