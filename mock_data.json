@@ -1,0 +1,5132 @@
+[
+  {
+    "task_id": "task_0001",
+    "timestamp": "2026-06-22 03:01:47",
+    "duration_ms": 2547,
+    "tool_calls_count": 18,
+    "tokens_used": 4415,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0002",
+    "timestamp": "2026-06-22 18:27:02",
+    "duration_ms": 2464,
+    "tool_calls_count": 1,
+    "tokens_used": 3745,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0003",
+    "timestamp": "2026-06-22 06:45:41",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 2793,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0004",
+    "timestamp": "2026-06-22 00:48:51",
+    "duration_ms": 573,
+    "tool_calls_count": 7,
+    "tokens_used": 2565,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0005",
+    "timestamp": "2026-06-22 10:06:05",
+    "duration_ms": 838,
+    "tool_calls_count": 9,
+    "tokens_used": 3066,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0006",
+    "timestamp": "2026-06-22 01:46:29",
+    "duration_ms": 3922,
+    "tool_calls_count": 18,
+    "tokens_used": 1754,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0007",
+    "timestamp": "2026-06-22 20:39:56",
+    "duration_ms": 2269,
+    "tool_calls_count": 8,
+    "tokens_used": 2532,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0008",
+    "timestamp": "2026-06-22 09:05:54",
+    "duration_ms": 3299,
+    "tool_calls_count": 12,
+    "tokens_used": 2717,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0009",
+    "timestamp": "2026-06-22 11:22:13",
+    "duration_ms": 1095,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0010",
+    "timestamp": "2026-06-22 20:10:34",
+    "duration_ms": 3011,
+    "tool_calls_count": 18,
+    "tokens_used": 3253,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0011",
+    "timestamp": "2026-06-22 21:20:53",
+    "duration_ms": 5487,
+    "tool_calls_count": 11,
+    "tokens_used": 2959,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0012",
+    "timestamp": "2026-06-22 08:04:13",
+    "duration_ms": 3239,
+    "tool_calls_count": 16,
+    "tokens_used": 1085,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0013",
+    "timestamp": "2026-06-22 20:29:09",
+    "duration_ms": 2054,
+    "tool_calls_count": 9,
+    "tokens_used": 3925,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0014",
+    "timestamp": "2026-06-22 18:27:57",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 5936,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0015",
+    "timestamp": "2026-06-22 15:05:48",
+    "duration_ms": 4169,
+    "tool_calls_count": 14,
+    "tokens_used": 3340,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0016",
+    "timestamp": "2026-06-22 02:24:24",
+    "duration_ms": 508,
+    "tool_calls_count": 18,
+    "tokens_used": 2227,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0017",
+    "timestamp": "2026-06-22 00:43:46",
+    "duration_ms": 4498,
+    "tool_calls_count": 11,
+    "tokens_used": 343,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0018",
+    "timestamp": "2026-06-22 09:27:10",
+    "duration_ms": 5914,
+    "tool_calls_count": 9,
+    "tokens_used": 1123,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0019",
+    "timestamp": "2026-06-22 05:32:58",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0020",
+    "timestamp": "2026-06-22 06:09:23",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 1362,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0021",
+    "timestamp": "2026-06-22 19:20:31",
+    "duration_ms": 5707,
+    "tool_calls_count": 10,
+    "tokens_used": 672,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0022",
+    "timestamp": "2026-06-22 01:15:56",
+    "duration_ms": 4855,
+    "tool_calls_count": 3,
+    "tokens_used": 3155,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0023",
+    "timestamp": "2026-06-23 04:08:42",
+    "duration_ms": 506,
+    "tool_calls_count": 20,
+    "tokens_used": 1637,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0024",
+    "timestamp": "2026-06-23 06:59:34",
+    "duration_ms": 834,
+    "tool_calls_count": 13,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0025",
+    "timestamp": "2026-06-23 20:23:28",
+    "duration_ms": 3033,
+    "tool_calls_count": 11,
+    "tokens_used": 2737,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0026",
+    "timestamp": "2026-06-23 18:35:14",
+    "duration_ms": 5134,
+    "tool_calls_count": 2,
+    "tokens_used": 2106,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0027",
+    "timestamp": "2026-06-23 02:57:02",
+    "duration_ms": 390,
+    "tool_calls_count": 16,
+    "tokens_used": 1892,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0028",
+    "timestamp": "2026-06-23 17:08:46",
+    "duration_ms": 675,
+    "tool_calls_count": 16,
+    "tokens_used": 1484,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0029",
+    "timestamp": "2026-06-23 13:12:06",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 2660,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0030",
+    "timestamp": "2026-06-23 23:03:43",
+    "duration_ms": 1570,
+    "tool_calls_count": 11,
+    "tokens_used": 1578,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0031",
+    "timestamp": "2026-06-23 03:15:12",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 2498,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0032",
+    "timestamp": "2026-06-23 07:55:59",
+    "duration_ms": 3403,
+    "tool_calls_count": 4,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0033",
+    "timestamp": "2026-06-23 20:34:53",
+    "duration_ms": 4788,
+    "tool_calls_count": 8,
+    "tokens_used": 3388,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0034",
+    "timestamp": "2026-06-23 13:31:30",
+    "duration_ms": 1434,
+    "tool_calls_count": 13,
+    "tokens_used": 2303,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0035",
+    "timestamp": "2026-06-23 12:16:59",
+    "duration_ms": 1321,
+    "tool_calls_count": 18,
+    "tokens_used": 4260,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0036",
+    "timestamp": "2026-06-23 22:31:09",
+    "duration_ms": 2139,
+    "tool_calls_count": 18,
+    "tokens_used": 2510,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0037",
+    "timestamp": "2026-06-23 23:20:03",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 2489,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0038",
+    "timestamp": "2026-06-23 01:32:05",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 735,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0039",
+    "timestamp": "2026-06-23 03:56:36",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 833,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0040",
+    "timestamp": "2026-06-23 18:36:33",
+    "duration_ms": 1798,
+    "tool_calls_count": 11,
+    "tokens_used": 4227,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0041",
+    "timestamp": "2026-06-23 08:25:08",
+    "duration_ms": 1461,
+    "tool_calls_count": 3,
+    "tokens_used": 3243,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0042",
+    "timestamp": "2026-06-23 14:39:36",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 1582,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0043",
+    "timestamp": "2026-06-24 07:23:18",
+    "duration_ms": 3566,
+    "tool_calls_count": 20,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0044",
+    "timestamp": "2026-06-24 20:33:00",
+    "duration_ms": 200,
+    "tool_calls_count": 4,
+    "tokens_used": 830,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0045",
+    "timestamp": "2026-06-24 08:07:56",
+    "duration_ms": 493,
+    "tool_calls_count": 20,
+    "tokens_used": 1607,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0046",
+    "timestamp": "2026-06-24 22:21:13",
+    "duration_ms": 3429,
+    "tool_calls_count": 9,
+    "tokens_used": 579,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0047",
+    "timestamp": "2026-06-24 01:05:40",
+    "duration_ms": 1971,
+    "tool_calls_count": 5,
+    "tokens_used": 2124,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0048",
+    "timestamp": "2026-06-24 08:10:47",
+    "duration_ms": 1294,
+    "tool_calls_count": 4,
+    "tokens_used": 149,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0049",
+    "timestamp": "2026-06-24 22:57:09",
+    "duration_ms": 3339,
+    "tool_calls_count": 5,
+    "tokens_used": 290,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0050",
+    "timestamp": "2026-06-24 04:02:19",
+    "duration_ms": 6887,
+    "tool_calls_count": 2,
+    "tokens_used": 361,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0051",
+    "timestamp": "2026-06-24 06:43:15",
+    "duration_ms": 446,
+    "tool_calls_count": 14,
+    "tokens_used": 3528,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0052",
+    "timestamp": "2026-06-24 23:09:59",
+    "duration_ms": 5608,
+    "tool_calls_count": 14,
+    "tokens_used": 1592,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0053",
+    "timestamp": "2026-06-24 05:47:59",
+    "duration_ms": 5265,
+    "tool_calls_count": 8,
+    "tokens_used": 862,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0054",
+    "timestamp": "2026-06-24 05:50:44",
+    "duration_ms": 4746,
+    "tool_calls_count": 8,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0055",
+    "timestamp": "2026-06-24 14:22:19",
+    "duration_ms": 2497,
+    "tool_calls_count": 13,
+    "tokens_used": 4171,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0056",
+    "timestamp": "2026-06-25 02:49:17",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 1866,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0057",
+    "timestamp": "2026-06-25 00:07:56",
+    "duration_ms": 200,
+    "tool_calls_count": 2,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0058",
+    "timestamp": "2026-06-25 19:27:22",
+    "duration_ms": 936,
+    "tool_calls_count": 17,
+    "tokens_used": 3886,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0059",
+    "timestamp": "2026-06-25 12:57:36",
+    "duration_ms": 4057,
+    "tool_calls_count": 17,
+    "tokens_used": 2441,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0060",
+    "timestamp": "2026-06-25 17:43:46",
+    "duration_ms": 1499,
+    "tool_calls_count": 11,
+    "tokens_used": 2430,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0061",
+    "timestamp": "2026-06-25 10:42:54",
+    "duration_ms": 3925,
+    "tool_calls_count": 14,
+    "tokens_used": 951,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0062",
+    "timestamp": "2026-06-25 12:44:18",
+    "duration_ms": 3056,
+    "tool_calls_count": 13,
+    "tokens_used": 4071,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0063",
+    "timestamp": "2026-06-25 23:57:11",
+    "duration_ms": 1206,
+    "tool_calls_count": 1,
+    "tokens_used": 3794,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0064",
+    "timestamp": "2026-06-25 09:13:27",
+    "duration_ms": 739,
+    "tool_calls_count": 15,
+    "tokens_used": 614,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0065",
+    "timestamp": "2026-06-25 06:32:30",
+    "duration_ms": 1114,
+    "tool_calls_count": 20,
+    "tokens_used": 969,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0066",
+    "timestamp": "2026-06-25 02:52:48",
+    "duration_ms": 656,
+    "tool_calls_count": 5,
+    "tokens_used": 4525,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0067",
+    "timestamp": "2026-06-25 01:15:30",
+    "duration_ms": 2255,
+    "tool_calls_count": 19,
+    "tokens_used": 357,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0068",
+    "timestamp": "2026-06-25 22:44:24",
+    "duration_ms": 2110,
+    "tool_calls_count": 1,
+    "tokens_used": 4189,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0069",
+    "timestamp": "2026-06-25 03:49:27",
+    "duration_ms": 3029,
+    "tool_calls_count": 15,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0070",
+    "timestamp": "2026-06-25 17:15:58",
+    "duration_ms": 3495,
+    "tool_calls_count": 17,
+    "tokens_used": 3246,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0071",
+    "timestamp": "2026-06-25 19:20:48",
+    "duration_ms": 3676,
+    "tool_calls_count": 14,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0072",
+    "timestamp": "2026-06-26 14:57:10",
+    "duration_ms": 470,
+    "tool_calls_count": 8,
+    "tokens_used": 2184,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0073",
+    "timestamp": "2026-06-26 20:17:49",
+    "duration_ms": 527,
+    "tool_calls_count": 15,
+    "tokens_used": 2107,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0074",
+    "timestamp": "2026-06-26 22:18:15",
+    "duration_ms": 942,
+    "tool_calls_count": 5,
+    "tokens_used": 3693,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0075",
+    "timestamp": "2026-06-26 07:24:44",
+    "duration_ms": 2464,
+    "tool_calls_count": 11,
+    "tokens_used": 3513,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0076",
+    "timestamp": "2026-06-26 14:26:03",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 3564,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0077",
+    "timestamp": "2026-06-26 00:54:56",
+    "duration_ms": 1841,
+    "tool_calls_count": 12,
+    "tokens_used": 2111,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0078",
+    "timestamp": "2026-06-26 12:54:57",
+    "duration_ms": 200,
+    "tool_calls_count": 20,
+    "tokens_used": 1418,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0079",
+    "timestamp": "2026-06-26 15:14:17",
+    "duration_ms": 3780,
+    "tool_calls_count": 13,
+    "tokens_used": 2246,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0080",
+    "timestamp": "2026-06-26 05:53:29",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 1304,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0081",
+    "timestamp": "2026-06-26 21:01:05",
+    "duration_ms": 3464,
+    "tool_calls_count": 2,
+    "tokens_used": 3257,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0082",
+    "timestamp": "2026-06-26 12:20:13",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 4631,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0083",
+    "timestamp": "2026-06-26 13:16:53",
+    "duration_ms": 4471,
+    "tool_calls_count": 12,
+    "tokens_used": 2226,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0084",
+    "timestamp": "2026-06-26 20:04:49",
+    "duration_ms": 2130,
+    "tool_calls_count": 7,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0085",
+    "timestamp": "2026-06-26 00:39:09",
+    "duration_ms": 1027,
+    "tool_calls_count": 7,
+    "tokens_used": 2122,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0086",
+    "timestamp": "2026-06-26 22:16:49",
+    "duration_ms": 200,
+    "tool_calls_count": 4,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0087",
+    "timestamp": "2026-06-26 05:19:06",
+    "duration_ms": 4362,
+    "tool_calls_count": 13,
+    "tokens_used": 1151,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0088",
+    "timestamp": "2026-06-26 22:12:04",
+    "duration_ms": 2723,
+    "tool_calls_count": 10,
+    "tokens_used": 1021,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0089",
+    "timestamp": "2026-06-26 21:38:51",
+    "duration_ms": 5476,
+    "tool_calls_count": 12,
+    "tokens_used": 1734,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0090",
+    "timestamp": "2026-06-26 13:42:23",
+    "duration_ms": 1808,
+    "tool_calls_count": 14,
+    "tokens_used": 1808,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0091",
+    "timestamp": "2026-06-26 15:06:27",
+    "duration_ms": 1433,
+    "tool_calls_count": 17,
+    "tokens_used": 453,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0092",
+    "timestamp": "2026-06-27 19:51:58",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 2166,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0093",
+    "timestamp": "2026-06-27 10:54:15",
+    "duration_ms": 1604,
+    "tool_calls_count": 15,
+    "tokens_used": 3615,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0094",
+    "timestamp": "2026-06-27 19:42:24",
+    "duration_ms": 227,
+    "tool_calls_count": 16,
+    "tokens_used": 2047,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0095",
+    "timestamp": "2026-06-27 11:51:16",
+    "duration_ms": 4270,
+    "tool_calls_count": 9,
+    "tokens_used": 407,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0096",
+    "timestamp": "2026-06-27 00:33:12",
+    "duration_ms": 1567,
+    "tool_calls_count": 8,
+    "tokens_used": 293,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0097",
+    "timestamp": "2026-06-27 15:41:45",
+    "duration_ms": 2235,
+    "tool_calls_count": 8,
+    "tokens_used": 1361,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0098",
+    "timestamp": "2026-06-27 22:15:19",
+    "duration_ms": 272,
+    "tool_calls_count": 12,
+    "tokens_used": 3396,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0099",
+    "timestamp": "2026-06-27 23:35:21",
+    "duration_ms": 360,
+    "tool_calls_count": 8,
+    "tokens_used": 2367,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0100",
+    "timestamp": "2026-06-27 23:12:20",
+    "duration_ms": 200,
+    "tool_calls_count": 6,
+    "tokens_used": 1431,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0101",
+    "timestamp": "2026-06-27 06:47:30",
+    "duration_ms": 200,
+    "tool_calls_count": 20,
+    "tokens_used": 647,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0102",
+    "timestamp": "2026-06-27 03:53:12",
+    "duration_ms": 911,
+    "tool_calls_count": 18,
+    "tokens_used": 2976,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0103",
+    "timestamp": "2026-06-27 08:02:03",
+    "duration_ms": 1662,
+    "tool_calls_count": 16,
+    "tokens_used": 1262,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0104",
+    "timestamp": "2026-06-27 00:36:18",
+    "duration_ms": 811,
+    "tool_calls_count": 2,
+    "tokens_used": 2349,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0105",
+    "timestamp": "2026-06-27 15:07:52",
+    "duration_ms": 200,
+    "tool_calls_count": 2,
+    "tokens_used": 2101,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0106",
+    "timestamp": "2026-06-27 04:51:36",
+    "duration_ms": 3003,
+    "tool_calls_count": 14,
+    "tokens_used": 1971,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0107",
+    "timestamp": "2026-06-27 19:50:39",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 1767,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0108",
+    "timestamp": "2026-06-28 13:19:36",
+    "duration_ms": 200,
+    "tool_calls_count": 7,
+    "tokens_used": 434,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0109",
+    "timestamp": "2026-06-28 06:16:42",
+    "duration_ms": 2161,
+    "tool_calls_count": 6,
+    "tokens_used": 3897,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0110",
+    "timestamp": "2026-06-28 13:28:44",
+    "duration_ms": 1627,
+    "tool_calls_count": 10,
+    "tokens_used": 3052,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0111",
+    "timestamp": "2026-06-28 14:04:43",
+    "duration_ms": 1676,
+    "tool_calls_count": 19,
+    "tokens_used": 4644,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0112",
+    "timestamp": "2026-06-28 06:27:07",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0113",
+    "timestamp": "2026-06-28 01:10:50",
+    "duration_ms": 1983,
+    "tool_calls_count": 10,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0114",
+    "timestamp": "2026-06-28 03:29:44",
+    "duration_ms": 695,
+    "tool_calls_count": 18,
+    "tokens_used": 2687,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0115",
+    "timestamp": "2026-06-28 14:05:38",
+    "duration_ms": 394,
+    "tool_calls_count": 9,
+    "tokens_used": 2548,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0116",
+    "timestamp": "2026-06-28 02:14:43",
+    "duration_ms": 1650,
+    "tool_calls_count": 9,
+    "tokens_used": 1840,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0117",
+    "timestamp": "2026-06-28 01:48:48",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 1807,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0118",
+    "timestamp": "2026-06-28 18:27:40",
+    "duration_ms": 200,
+    "tool_calls_count": 11,
+    "tokens_used": 2287,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0119",
+    "timestamp": "2026-06-28 03:54:10",
+    "duration_ms": 1428,
+    "tool_calls_count": 13,
+    "tokens_used": 839,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0120",
+    "timestamp": "2026-06-28 17:02:29",
+    "duration_ms": 1985,
+    "tool_calls_count": 13,
+    "tokens_used": 2744,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0121",
+    "timestamp": "2026-06-28 16:52:00",
+    "duration_ms": 200,
+    "tool_calls_count": 7,
+    "tokens_used": 1590,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0122",
+    "timestamp": "2026-06-28 11:39:48",
+    "duration_ms": 1391,
+    "tool_calls_count": 9,
+    "tokens_used": 2173,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0123",
+    "timestamp": "2026-06-28 04:59:18",
+    "duration_ms": 1674,
+    "tool_calls_count": 20,
+    "tokens_used": 1276,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0124",
+    "timestamp": "2026-06-28 07:45:10",
+    "duration_ms": 4040,
+    "tool_calls_count": 8,
+    "tokens_used": 2131,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0125",
+    "timestamp": "2026-06-28 03:29:07",
+    "duration_ms": 4636,
+    "tool_calls_count": 10,
+    "tokens_used": 4869,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0126",
+    "timestamp": "2026-06-28 22:17:26",
+    "duration_ms": 2099,
+    "tool_calls_count": 13,
+    "tokens_used": 3897,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0127",
+    "timestamp": "2026-06-28 19:32:47",
+    "duration_ms": 1419,
+    "tool_calls_count": 14,
+    "tokens_used": 4614,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0128",
+    "timestamp": "2026-06-28 16:17:52",
+    "duration_ms": 1428,
+    "tool_calls_count": 19,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0129",
+    "timestamp": "2026-06-29 04:28:34",
+    "duration_ms": 319,
+    "tool_calls_count": 13,
+    "tokens_used": 4211,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0130",
+    "timestamp": "2026-06-29 10:55:12",
+    "duration_ms": 687,
+    "tool_calls_count": 14,
+    "tokens_used": 1523,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0131",
+    "timestamp": "2026-06-29 10:47:30",
+    "duration_ms": 2743,
+    "tool_calls_count": 5,
+    "tokens_used": 627,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0132",
+    "timestamp": "2026-06-29 01:08:32",
+    "duration_ms": 4782,
+    "tool_calls_count": 15,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0133",
+    "timestamp": "2026-06-29 16:58:29",
+    "duration_ms": 4497,
+    "tool_calls_count": 5,
+    "tokens_used": 4388,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0134",
+    "timestamp": "2026-06-29 15:50:16",
+    "duration_ms": 979,
+    "tool_calls_count": 11,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0135",
+    "timestamp": "2026-06-29 21:54:34",
+    "duration_ms": 704,
+    "tool_calls_count": 16,
+    "tokens_used": 4182,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0136",
+    "timestamp": "2026-06-29 17:02:39",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0137",
+    "timestamp": "2026-06-29 02:27:06",
+    "duration_ms": 1737,
+    "tool_calls_count": 6,
+    "tokens_used": 1338,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0138",
+    "timestamp": "2026-06-29 09:57:01",
+    "duration_ms": 2476,
+    "tool_calls_count": 12,
+    "tokens_used": 802,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0139",
+    "timestamp": "2026-06-29 04:15:33",
+    "duration_ms": 1476,
+    "tool_calls_count": 6,
+    "tokens_used": 1140,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0140",
+    "timestamp": "2026-06-29 19:55:24",
+    "duration_ms": 2254,
+    "tool_calls_count": 5,
+    "tokens_used": 5308,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0141",
+    "timestamp": "2026-06-29 14:40:16",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0142",
+    "timestamp": "2026-06-29 21:34:10",
+    "duration_ms": 7581,
+    "tool_calls_count": 10,
+    "tokens_used": 499,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0143",
+    "timestamp": "2026-06-29 13:44:16",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 7454,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0144",
+    "timestamp": "2026-06-29 07:24:36",
+    "duration_ms": 1118,
+    "tool_calls_count": 1,
+    "tokens_used": 4229,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0145",
+    "timestamp": "2026-06-29 21:25:17",
+    "duration_ms": 4296,
+    "tool_calls_count": 2,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0146",
+    "timestamp": "2026-06-29 23:31:53",
+    "duration_ms": 2232,
+    "tool_calls_count": 12,
+    "tokens_used": 929,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0147",
+    "timestamp": "2026-06-29 20:12:39",
+    "duration_ms": 2119,
+    "tool_calls_count": 5,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0148",
+    "timestamp": "2026-06-30 20:41:02",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 2717,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0149",
+    "timestamp": "2026-06-30 09:20:47",
+    "duration_ms": 3069,
+    "tool_calls_count": 12,
+    "tokens_used": 4511,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0150",
+    "timestamp": "2026-06-30 16:58:17",
+    "duration_ms": 6121,
+    "tool_calls_count": 10,
+    "tokens_used": 147,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0151",
+    "timestamp": "2026-06-30 10:51:07",
+    "duration_ms": 4982,
+    "tool_calls_count": 8,
+    "tokens_used": 3144,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0152",
+    "timestamp": "2026-06-30 21:46:43",
+    "duration_ms": 200,
+    "tool_calls_count": 1,
+    "tokens_used": 3981,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0153",
+    "timestamp": "2026-06-30 17:07:29",
+    "duration_ms": 1990,
+    "tool_calls_count": 13,
+    "tokens_used": 830,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0154",
+    "timestamp": "2026-06-30 20:23:06",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 2371,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0155",
+    "timestamp": "2026-06-30 19:14:41",
+    "duration_ms": 3961,
+    "tool_calls_count": 10,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0156",
+    "timestamp": "2026-06-30 13:07:08",
+    "duration_ms": 8454,
+    "tool_calls_count": 4,
+    "tokens_used": 3152,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0157",
+    "timestamp": "2026-06-30 07:56:34",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 2641,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0158",
+    "timestamp": "2026-06-30 18:47:46",
+    "duration_ms": 1214,
+    "tool_calls_count": 16,
+    "tokens_used": 2349,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0159",
+    "timestamp": "2026-06-30 13:17:02",
+    "duration_ms": 2442,
+    "tool_calls_count": 8,
+    "tokens_used": 3592,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0160",
+    "timestamp": "2026-06-30 11:06:43",
+    "duration_ms": 4346,
+    "tool_calls_count": 2,
+    "tokens_used": 750,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0161",
+    "timestamp": "2026-07-01 06:07:54",
+    "duration_ms": 506,
+    "tool_calls_count": 20,
+    "tokens_used": 165,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0162",
+    "timestamp": "2026-07-01 01:50:21",
+    "duration_ms": 3813,
+    "tool_calls_count": 3,
+    "tokens_used": 3375,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0163",
+    "timestamp": "2026-07-01 17:13:37",
+    "duration_ms": 3219,
+    "tool_calls_count": 5,
+    "tokens_used": 1022,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0164",
+    "timestamp": "2026-07-01 19:00:17",
+    "duration_ms": 4485,
+    "tool_calls_count": 6,
+    "tokens_used": 1853,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0165",
+    "timestamp": "2026-07-01 21:55:01",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 4055,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0166",
+    "timestamp": "2026-07-01 00:11:16",
+    "duration_ms": 1872,
+    "tool_calls_count": 3,
+    "tokens_used": 169,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0167",
+    "timestamp": "2026-07-01 14:49:23",
+    "duration_ms": 3833,
+    "tool_calls_count": 20,
+    "tokens_used": 3123,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0168",
+    "timestamp": "2026-07-01 23:50:58",
+    "duration_ms": 1084,
+    "tool_calls_count": 1,
+    "tokens_used": 4041,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0169",
+    "timestamp": "2026-07-01 15:54:25",
+    "duration_ms": 4458,
+    "tool_calls_count": 15,
+    "tokens_used": 3485,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0170",
+    "timestamp": "2026-07-01 02:20:38",
+    "duration_ms": 3964,
+    "tool_calls_count": 19,
+    "tokens_used": 3495,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0171",
+    "timestamp": "2026-07-01 22:20:24",
+    "duration_ms": 1339,
+    "tool_calls_count": 14,
+    "tokens_used": 3709,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0172",
+    "timestamp": "2026-07-01 22:07:54",
+    "duration_ms": 3820,
+    "tool_calls_count": 7,
+    "tokens_used": 680,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0173",
+    "timestamp": "2026-07-01 14:56:14",
+    "duration_ms": 2943,
+    "tool_calls_count": 4,
+    "tokens_used": 662,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0174",
+    "timestamp": "2026-07-01 13:20:42",
+    "duration_ms": 4918,
+    "tool_calls_count": 16,
+    "tokens_used": 1342,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0175",
+    "timestamp": "2026-07-01 02:53:05",
+    "duration_ms": 4692,
+    "tool_calls_count": 5,
+    "tokens_used": 3401,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0176",
+    "timestamp": "2026-07-01 01:37:35",
+    "duration_ms": 1009,
+    "tool_calls_count": 14,
+    "tokens_used": 647,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0177",
+    "timestamp": "2026-07-02 09:38:19",
+    "duration_ms": 779,
+    "tool_calls_count": 16,
+    "tokens_used": 1512,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0178",
+    "timestamp": "2026-07-02 03:22:54",
+    "duration_ms": 3213,
+    "tool_calls_count": 8,
+    "tokens_used": 2800,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0179",
+    "timestamp": "2026-07-02 13:54:35",
+    "duration_ms": 200,
+    "tool_calls_count": 1,
+    "tokens_used": 591,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0180",
+    "timestamp": "2026-07-02 21:53:44",
+    "duration_ms": 3318,
+    "tool_calls_count": 10,
+    "tokens_used": 4116,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0181",
+    "timestamp": "2026-07-02 11:00:11",
+    "duration_ms": 1582,
+    "tool_calls_count": 1,
+    "tokens_used": 1524,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0182",
+    "timestamp": "2026-07-02 23:33:13",
+    "duration_ms": 878,
+    "tool_calls_count": 10,
+    "tokens_used": 2252,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0183",
+    "timestamp": "2026-07-02 10:49:36",
+    "duration_ms": 2864,
+    "tool_calls_count": 20,
+    "tokens_used": 1416,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0184",
+    "timestamp": "2026-07-02 21:05:17",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 2942,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0185",
+    "timestamp": "2026-07-02 06:48:32",
+    "duration_ms": 523,
+    "tool_calls_count": 19,
+    "tokens_used": 2521,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0186",
+    "timestamp": "2026-07-02 16:42:19",
+    "duration_ms": 200,
+    "tool_calls_count": 1,
+    "tokens_used": 3240,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0187",
+    "timestamp": "2026-07-02 09:13:49",
+    "duration_ms": 1938,
+    "tool_calls_count": 1,
+    "tokens_used": 3336,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0188",
+    "timestamp": "2026-07-02 23:27:11",
+    "duration_ms": 583,
+    "tool_calls_count": 18,
+    "tokens_used": 1779,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0189",
+    "timestamp": "2026-07-03 11:04:25",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 2649,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0190",
+    "timestamp": "2026-07-03 10:36:27",
+    "duration_ms": 1476,
+    "tool_calls_count": 4,
+    "tokens_used": 490,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0191",
+    "timestamp": "2026-07-03 00:20:10",
+    "duration_ms": 200,
+    "tool_calls_count": 12,
+    "tokens_used": 2569,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0192",
+    "timestamp": "2026-07-03 13:54:06",
+    "duration_ms": 200,
+    "tool_calls_count": 13,
+    "tokens_used": 1031,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0193",
+    "timestamp": "2026-07-03 09:47:21",
+    "duration_ms": 2145,
+    "tool_calls_count": 4,
+    "tokens_used": 1412,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0194",
+    "timestamp": "2026-07-03 16:12:57",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 5042,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0195",
+    "timestamp": "2026-07-03 03:09:16",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 479,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0196",
+    "timestamp": "2026-07-03 20:31:29",
+    "duration_ms": 2135,
+    "tool_calls_count": 19,
+    "tokens_used": 365,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0197",
+    "timestamp": "2026-07-03 20:39:20",
+    "duration_ms": 2438,
+    "tool_calls_count": 15,
+    "tokens_used": 2458,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0198",
+    "timestamp": "2026-07-03 09:50:17",
+    "duration_ms": 1530,
+    "tool_calls_count": 15,
+    "tokens_used": 2472,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0199",
+    "timestamp": "2026-07-03 01:03:23",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0200",
+    "timestamp": "2026-07-03 19:32:24",
+    "duration_ms": 200,
+    "tool_calls_count": 2,
+    "tokens_used": 1110,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0201",
+    "timestamp": "2026-07-03 18:41:12",
+    "duration_ms": 869,
+    "tool_calls_count": 2,
+    "tokens_used": 2130,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0202",
+    "timestamp": "2026-07-03 03:51:57",
+    "duration_ms": 769,
+    "tool_calls_count": 8,
+    "tokens_used": 1973,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0203",
+    "timestamp": "2026-07-03 14:28:33",
+    "duration_ms": 3048,
+    "tool_calls_count": 10,
+    "tokens_used": 3217,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0204",
+    "timestamp": "2026-07-03 13:49:21",
+    "duration_ms": 4672,
+    "tool_calls_count": 11,
+    "tokens_used": 2684,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0205",
+    "timestamp": "2026-07-03 10:06:35",
+    "duration_ms": 1316,
+    "tool_calls_count": 20,
+    "tokens_used": 4350,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0206",
+    "timestamp": "2026-07-03 04:21:05",
+    "duration_ms": 3170,
+    "tool_calls_count": 13,
+    "tokens_used": 3080,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0207",
+    "timestamp": "2026-07-03 19:45:05",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 3858,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0208",
+    "timestamp": "2026-07-03 22:53:47",
+    "duration_ms": 4480,
+    "tool_calls_count": 17,
+    "tokens_used": 3238,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0209",
+    "timestamp": "2026-07-03 00:23:19",
+    "duration_ms": 3083,
+    "tool_calls_count": 16,
+    "tokens_used": 5551,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0210",
+    "timestamp": "2026-07-03 07:08:09",
+    "duration_ms": 2516,
+    "tool_calls_count": 18,
+    "tokens_used": 1425,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0211",
+    "timestamp": "2026-07-04 01:42:21",
+    "duration_ms": 3321,
+    "tool_calls_count": 6,
+    "tokens_used": 3069,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0212",
+    "timestamp": "2026-07-04 22:49:39",
+    "duration_ms": 1892,
+    "tool_calls_count": 12,
+    "tokens_used": 1558,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0213",
+    "timestamp": "2026-07-04 23:15:28",
+    "duration_ms": 2052,
+    "tool_calls_count": 8,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0214",
+    "timestamp": "2026-07-04 07:19:51",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 4684,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0215",
+    "timestamp": "2026-07-04 09:49:24",
+    "duration_ms": 962,
+    "tool_calls_count": 7,
+    "tokens_used": 2436,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0216",
+    "timestamp": "2026-07-04 19:08:55",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0217",
+    "timestamp": "2026-07-04 22:54:33",
+    "duration_ms": 3021,
+    "tool_calls_count": 15,
+    "tokens_used": 2445,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0218",
+    "timestamp": "2026-07-04 04:53:27",
+    "duration_ms": 5116,
+    "tool_calls_count": 12,
+    "tokens_used": 526,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0219",
+    "timestamp": "2026-07-04 13:03:25",
+    "duration_ms": 2576,
+    "tool_calls_count": 12,
+    "tokens_used": 6821,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0220",
+    "timestamp": "2026-07-04 00:20:59",
+    "duration_ms": 1602,
+    "tool_calls_count": 5,
+    "tokens_used": 677,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0221",
+    "timestamp": "2026-07-04 01:18:58",
+    "duration_ms": 2124,
+    "tool_calls_count": 20,
+    "tokens_used": 314,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0222",
+    "timestamp": "2026-07-04 02:01:16",
+    "duration_ms": 4802,
+    "tool_calls_count": 20,
+    "tokens_used": 4874,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0223",
+    "timestamp": "2026-07-04 13:07:49",
+    "duration_ms": 1802,
+    "tool_calls_count": 14,
+    "tokens_used": 2445,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0224",
+    "timestamp": "2026-07-04 19:29:04",
+    "duration_ms": 4230,
+    "tool_calls_count": 1,
+    "tokens_used": 865,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0225",
+    "timestamp": "2026-07-04 16:36:15",
+    "duration_ms": 1971,
+    "tool_calls_count": 12,
+    "tokens_used": 2081,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0226",
+    "timestamp": "2026-07-04 18:26:11",
+    "duration_ms": 6656,
+    "tool_calls_count": 3,
+    "tokens_used": 4083,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0227",
+    "timestamp": "2026-07-04 17:32:50",
+    "duration_ms": 6032,
+    "tool_calls_count": 2,
+    "tokens_used": 2388,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0228",
+    "timestamp": "2026-07-04 12:23:16",
+    "duration_ms": 1533,
+    "tool_calls_count": 8,
+    "tokens_used": 2438,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0229",
+    "timestamp": "2026-07-04 21:40:06",
+    "duration_ms": 1832,
+    "tool_calls_count": 2,
+    "tokens_used": 657,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0230",
+    "timestamp": "2026-07-04 17:21:52",
+    "duration_ms": 3470,
+    "tool_calls_count": 16,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0231",
+    "timestamp": "2026-07-05 04:04:45",
+    "duration_ms": 391,
+    "tool_calls_count": 2,
+    "tokens_used": 2328,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0232",
+    "timestamp": "2026-07-05 06:56:02",
+    "duration_ms": 1257,
+    "tool_calls_count": 18,
+    "tokens_used": 3405,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0233",
+    "timestamp": "2026-07-05 08:02:48",
+    "duration_ms": 1104,
+    "tool_calls_count": 2,
+    "tokens_used": 4909,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0234",
+    "timestamp": "2026-07-05 20:21:17",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 4321,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0235",
+    "timestamp": "2026-07-05 10:11:31",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 3983,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0236",
+    "timestamp": "2026-07-05 02:46:27",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 326,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0237",
+    "timestamp": "2026-07-05 10:06:05",
+    "duration_ms": 1385,
+    "tool_calls_count": 14,
+    "tokens_used": 3563,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0238",
+    "timestamp": "2026-07-05 22:28:22",
+    "duration_ms": 1360,
+    "tool_calls_count": 20,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0239",
+    "timestamp": "2026-07-05 08:40:50",
+    "duration_ms": 1029,
+    "tool_calls_count": 17,
+    "tokens_used": 652,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0240",
+    "timestamp": "2026-07-05 23:43:10",
+    "duration_ms": 3749,
+    "tool_calls_count": 15,
+    "tokens_used": 161,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0241",
+    "timestamp": "2026-07-05 04:04:15",
+    "duration_ms": 688,
+    "tool_calls_count": 19,
+    "tokens_used": 3097,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0242",
+    "timestamp": "2026-07-05 19:09:43",
+    "duration_ms": 507,
+    "tool_calls_count": 3,
+    "tokens_used": 3177,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0243",
+    "timestamp": "2026-07-05 04:33:23",
+    "duration_ms": 1105,
+    "tool_calls_count": 4,
+    "tokens_used": 1082,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0244",
+    "timestamp": "2026-07-05 23:11:31",
+    "duration_ms": 2857,
+    "tool_calls_count": 9,
+    "tokens_used": 1611,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0245",
+    "timestamp": "2026-07-06 06:39:18",
+    "duration_ms": 3336,
+    "tool_calls_count": 5,
+    "tokens_used": 1991,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0246",
+    "timestamp": "2026-07-06 02:28:11",
+    "duration_ms": 5647,
+    "tool_calls_count": 11,
+    "tokens_used": 1952,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0247",
+    "timestamp": "2026-07-06 11:45:04",
+    "duration_ms": 1576,
+    "tool_calls_count": 6,
+    "tokens_used": 3226,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0248",
+    "timestamp": "2026-07-06 22:59:44",
+    "duration_ms": 2646,
+    "tool_calls_count": 4,
+    "tokens_used": 278,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0249",
+    "timestamp": "2026-07-06 04:15:50",
+    "duration_ms": 327,
+    "tool_calls_count": 15,
+    "tokens_used": 3499,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0250",
+    "timestamp": "2026-07-06 17:08:39",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 7522,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0251",
+    "timestamp": "2026-07-06 13:49:26",
+    "duration_ms": 3232,
+    "tool_calls_count": 3,
+    "tokens_used": 2928,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0252",
+    "timestamp": "2026-07-06 14:43:33",
+    "duration_ms": 4507,
+    "tool_calls_count": 19,
+    "tokens_used": 188,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0253",
+    "timestamp": "2026-07-06 04:27:32",
+    "duration_ms": 3182,
+    "tool_calls_count": 10,
+    "tokens_used": 419,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0254",
+    "timestamp": "2026-07-06 05:20:59",
+    "duration_ms": 200,
+    "tool_calls_count": 10,
+    "tokens_used": 4937,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0255",
+    "timestamp": "2026-07-06 02:16:12",
+    "duration_ms": 1018,
+    "tool_calls_count": 10,
+    "tokens_used": 1756,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0256",
+    "timestamp": "2026-07-06 17:05:32",
+    "duration_ms": 200,
+    "tool_calls_count": 6,
+    "tokens_used": 921,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0257",
+    "timestamp": "2026-07-06 19:46:57",
+    "duration_ms": 3414,
+    "tool_calls_count": 1,
+    "tokens_used": 385,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0258",
+    "timestamp": "2026-07-06 01:41:49",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0259",
+    "timestamp": "2026-07-06 20:01:31",
+    "duration_ms": 763,
+    "tool_calls_count": 16,
+    "tokens_used": 5641,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0260",
+    "timestamp": "2026-07-06 21:25:19",
+    "duration_ms": 1558,
+    "tool_calls_count": 14,
+    "tokens_used": 1184,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0261",
+    "timestamp": "2026-07-06 14:13:21",
+    "duration_ms": 780,
+    "tool_calls_count": 12,
+    "tokens_used": 4205,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0262",
+    "timestamp": "2026-07-06 04:48:23",
+    "duration_ms": 3168,
+    "tool_calls_count": 4,
+    "tokens_used": 2690,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0263",
+    "timestamp": "2026-07-06 14:15:09",
+    "duration_ms": 1507,
+    "tool_calls_count": 20,
+    "tokens_used": 3430,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0264",
+    "timestamp": "2026-07-07 05:52:20",
+    "duration_ms": 2434,
+    "tool_calls_count": 17,
+    "tokens_used": 2821,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0265",
+    "timestamp": "2026-07-07 15:56:19",
+    "duration_ms": 3687,
+    "tool_calls_count": 15,
+    "tokens_used": 2803,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0266",
+    "timestamp": "2026-07-07 06:37:22",
+    "duration_ms": 1471,
+    "tool_calls_count": 16,
+    "tokens_used": 3984,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0267",
+    "timestamp": "2026-07-07 17:00:54",
+    "duration_ms": 3044,
+    "tool_calls_count": 12,
+    "tokens_used": 2876,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0268",
+    "timestamp": "2026-07-07 12:23:02",
+    "duration_ms": 810,
+    "tool_calls_count": 18,
+    "tokens_used": 1578,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0269",
+    "timestamp": "2026-07-07 02:24:32",
+    "duration_ms": 200,
+    "tool_calls_count": 20,
+    "tokens_used": 1136,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0270",
+    "timestamp": "2026-07-07 19:07:08",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 5155,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0271",
+    "timestamp": "2026-07-07 04:12:38",
+    "duration_ms": 1390,
+    "tool_calls_count": 5,
+    "tokens_used": 1999,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0272",
+    "timestamp": "2026-07-07 10:51:30",
+    "duration_ms": 4508,
+    "tool_calls_count": 5,
+    "tokens_used": 4553,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0273",
+    "timestamp": "2026-07-07 19:20:10",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0274",
+    "timestamp": "2026-07-07 16:53:32",
+    "duration_ms": 1567,
+    "tool_calls_count": 1,
+    "tokens_used": 775,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0275",
+    "timestamp": "2026-07-07 10:43:07",
+    "duration_ms": 482,
+    "tool_calls_count": 1,
+    "tokens_used": 5001,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0276",
+    "timestamp": "2026-07-07 15:16:41",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 876,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0277",
+    "timestamp": "2026-07-07 05:33:40",
+    "duration_ms": 2301,
+    "tool_calls_count": 8,
+    "tokens_used": 550,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0278",
+    "timestamp": "2026-07-07 18:44:07",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 2565,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0279",
+    "timestamp": "2026-07-08 13:32:49",
+    "duration_ms": 200,
+    "tool_calls_count": 2,
+    "tokens_used": 2517,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0280",
+    "timestamp": "2026-07-08 04:33:13",
+    "duration_ms": 4281,
+    "tool_calls_count": 13,
+    "tokens_used": 1979,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0281",
+    "timestamp": "2026-07-08 05:29:58",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 1354,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0282",
+    "timestamp": "2026-07-08 15:12:15",
+    "duration_ms": 570,
+    "tool_calls_count": 10,
+    "tokens_used": 5409,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0283",
+    "timestamp": "2026-07-08 09:45:13",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 2118,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0284",
+    "timestamp": "2026-07-08 23:17:18",
+    "duration_ms": 1130,
+    "tool_calls_count": 13,
+    "tokens_used": 687,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0285",
+    "timestamp": "2026-07-08 11:49:51",
+    "duration_ms": 6813,
+    "tool_calls_count": 3,
+    "tokens_used": 2977,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0286",
+    "timestamp": "2026-07-08 14:41:16",
+    "duration_ms": 2841,
+    "tool_calls_count": 9,
+    "tokens_used": 4742,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0287",
+    "timestamp": "2026-07-08 22:17:08",
+    "duration_ms": 1915,
+    "tool_calls_count": 2,
+    "tokens_used": 892,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0288",
+    "timestamp": "2026-07-08 16:14:40",
+    "duration_ms": 3447,
+    "tool_calls_count": 16,
+    "tokens_used": 2790,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0289",
+    "timestamp": "2026-07-08 21:49:08",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 926,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0290",
+    "timestamp": "2026-07-08 15:30:41",
+    "duration_ms": 3715,
+    "tool_calls_count": 2,
+    "tokens_used": 1703,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0291",
+    "timestamp": "2026-07-08 02:41:36",
+    "duration_ms": 1723,
+    "tool_calls_count": 2,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0292",
+    "timestamp": "2026-07-08 13:56:53",
+    "duration_ms": 7996,
+    "tool_calls_count": 13,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0293",
+    "timestamp": "2026-07-08 15:11:59",
+    "duration_ms": 3149,
+    "tool_calls_count": 2,
+    "tokens_used": 1108,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0294",
+    "timestamp": "2026-07-09 18:38:06",
+    "duration_ms": 704,
+    "tool_calls_count": 18,
+    "tokens_used": 6403,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0295",
+    "timestamp": "2026-07-09 15:56:08",
+    "duration_ms": 1479,
+    "tool_calls_count": 11,
+    "tokens_used": 4700,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0296",
+    "timestamp": "2026-07-09 23:29:41",
+    "duration_ms": 3274,
+    "tool_calls_count": 10,
+    "tokens_used": 4255,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0297",
+    "timestamp": "2026-07-09 21:48:12",
+    "duration_ms": 4638,
+    "tool_calls_count": 14,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0298",
+    "timestamp": "2026-07-09 10:05:25",
+    "duration_ms": 2438,
+    "tool_calls_count": 11,
+    "tokens_used": 2757,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0299",
+    "timestamp": "2026-07-09 00:16:24",
+    "duration_ms": 2117,
+    "tool_calls_count": 10,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0300",
+    "timestamp": "2026-07-09 23:36:00",
+    "duration_ms": 1067,
+    "tool_calls_count": 4,
+    "tokens_used": 2850,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0301",
+    "timestamp": "2026-07-09 09:10:25",
+    "duration_ms": 5704,
+    "tool_calls_count": 10,
+    "tokens_used": 542,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0302",
+    "timestamp": "2026-07-09 03:40:58",
+    "duration_ms": 942,
+    "tool_calls_count": 5,
+    "tokens_used": 1304,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0303",
+    "timestamp": "2026-07-09 04:29:47",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 2955,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0304",
+    "timestamp": "2026-07-09 17:51:42",
+    "duration_ms": 859,
+    "tool_calls_count": 3,
+    "tokens_used": 171,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0305",
+    "timestamp": "2026-07-09 14:33:45",
+    "duration_ms": 2846,
+    "tool_calls_count": 18,
+    "tokens_used": 1636,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0306",
+    "timestamp": "2026-07-09 06:36:34",
+    "duration_ms": 857,
+    "tool_calls_count": 4,
+    "tokens_used": 3603,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0307",
+    "timestamp": "2026-07-09 06:45:37",
+    "duration_ms": 3748,
+    "tool_calls_count": 2,
+    "tokens_used": 1033,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0308",
+    "timestamp": "2026-07-09 04:32:26",
+    "duration_ms": 4083,
+    "tool_calls_count": 10,
+    "tokens_used": 2593,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0309",
+    "timestamp": "2026-07-09 00:25:16",
+    "duration_ms": 1463,
+    "tool_calls_count": 12,
+    "tokens_used": 1784,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0310",
+    "timestamp": "2026-07-10 17:03:59",
+    "duration_ms": 4010,
+    "tool_calls_count": 5,
+    "tokens_used": 2304,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0311",
+    "timestamp": "2026-07-10 20:46:41",
+    "duration_ms": 3961,
+    "tool_calls_count": 13,
+    "tokens_used": 1933,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0312",
+    "timestamp": "2026-07-10 02:43:42",
+    "duration_ms": 946,
+    "tool_calls_count": 6,
+    "tokens_used": 860,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0313",
+    "timestamp": "2026-07-10 12:33:08",
+    "duration_ms": 2028,
+    "tool_calls_count": 1,
+    "tokens_used": 2123,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0314",
+    "timestamp": "2026-07-10 14:43:46",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 1443,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0315",
+    "timestamp": "2026-07-10 11:09:17",
+    "duration_ms": 4411,
+    "tool_calls_count": 2,
+    "tokens_used": 195,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0316",
+    "timestamp": "2026-07-10 21:26:39",
+    "duration_ms": 2264,
+    "tool_calls_count": 7,
+    "tokens_used": 1822,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0317",
+    "timestamp": "2026-07-10 03:38:02",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0318",
+    "timestamp": "2026-07-10 01:25:28",
+    "duration_ms": 2815,
+    "tool_calls_count": 2,
+    "tokens_used": 4931,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0319",
+    "timestamp": "2026-07-10 16:18:14",
+    "duration_ms": 867,
+    "tool_calls_count": 11,
+    "tokens_used": 3838,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0320",
+    "timestamp": "2026-07-10 09:56:09",
+    "duration_ms": 2305,
+    "tool_calls_count": 2,
+    "tokens_used": 3247,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0321",
+    "timestamp": "2026-07-10 18:56:47",
+    "duration_ms": 1417,
+    "tool_calls_count": 12,
+    "tokens_used": 1840,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0322",
+    "timestamp": "2026-07-10 21:24:50",
+    "duration_ms": 1321,
+    "tool_calls_count": 10,
+    "tokens_used": 550,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0323",
+    "timestamp": "2026-07-11 17:30:15",
+    "duration_ms": 2698,
+    "tool_calls_count": 15,
+    "tokens_used": 1346,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0324",
+    "timestamp": "2026-07-11 17:26:26",
+    "duration_ms": 2992,
+    "tool_calls_count": 7,
+    "tokens_used": 2835,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0325",
+    "timestamp": "2026-07-11 20:05:59",
+    "duration_ms": 292,
+    "tool_calls_count": 7,
+    "tokens_used": 3345,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0326",
+    "timestamp": "2026-07-11 08:24:43",
+    "duration_ms": 2753,
+    "tool_calls_count": 19,
+    "tokens_used": 2143,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0327",
+    "timestamp": "2026-07-11 21:35:13",
+    "duration_ms": 3227,
+    "tool_calls_count": 1,
+    "tokens_used": 1012,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0328",
+    "timestamp": "2026-07-11 06:47:07",
+    "duration_ms": 2120,
+    "tool_calls_count": 20,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0329",
+    "timestamp": "2026-07-11 06:25:58",
+    "duration_ms": 1290,
+    "tool_calls_count": 15,
+    "tokens_used": 3101,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0330",
+    "timestamp": "2026-07-11 20:22:19",
+    "duration_ms": 200,
+    "tool_calls_count": 4,
+    "tokens_used": 1858,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0331",
+    "timestamp": "2026-07-11 23:30:48",
+    "duration_ms": 578,
+    "tool_calls_count": 19,
+    "tokens_used": 3125,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0332",
+    "timestamp": "2026-07-11 07:47:09",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 1346,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0333",
+    "timestamp": "2026-07-11 04:12:21",
+    "duration_ms": 640,
+    "tool_calls_count": 18,
+    "tokens_used": 1521,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0334",
+    "timestamp": "2026-07-11 21:21:16",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 2171,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0335",
+    "timestamp": "2026-07-11 05:46:50",
+    "duration_ms": 3603,
+    "tool_calls_count": 6,
+    "tokens_used": 3453,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0336",
+    "timestamp": "2026-07-11 20:03:33",
+    "duration_ms": 4751,
+    "tool_calls_count": 2,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0337",
+    "timestamp": "2026-07-12 13:08:53",
+    "duration_ms": 3041,
+    "tool_calls_count": 7,
+    "tokens_used": 2355,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0338",
+    "timestamp": "2026-07-12 14:23:03",
+    "duration_ms": 616,
+    "tool_calls_count": 16,
+    "tokens_used": 200,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0339",
+    "timestamp": "2026-07-12 15:01:00",
+    "duration_ms": 1688,
+    "tool_calls_count": 9,
+    "tokens_used": 2145,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0340",
+    "timestamp": "2026-07-12 09:01:32",
+    "duration_ms": 3516,
+    "tool_calls_count": 4,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0341",
+    "timestamp": "2026-07-12 16:09:15",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 1543,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0342",
+    "timestamp": "2026-07-12 12:05:23",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 187,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0343",
+    "timestamp": "2026-07-12 21:52:54",
+    "duration_ms": 4893,
+    "tool_calls_count": 2,
+    "tokens_used": 1886,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0344",
+    "timestamp": "2026-07-12 12:24:24",
+    "duration_ms": 2258,
+    "tool_calls_count": 6,
+    "tokens_used": 2071,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0345",
+    "timestamp": "2026-07-12 15:54:27",
+    "duration_ms": 200,
+    "tool_calls_count": 4,
+    "tokens_used": 5601,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0346",
+    "timestamp": "2026-07-12 01:14:13",
+    "duration_ms": 1389,
+    "tool_calls_count": 3,
+    "tokens_used": 2071,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0347",
+    "timestamp": "2026-07-12 08:57:34",
+    "duration_ms": 6499,
+    "tool_calls_count": 11,
+    "tokens_used": 2707,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0348",
+    "timestamp": "2026-07-12 06:37:09",
+    "duration_ms": 1531,
+    "tool_calls_count": 3,
+    "tokens_used": 529,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0349",
+    "timestamp": "2026-07-13 18:15:36",
+    "duration_ms": 896,
+    "tool_calls_count": 13,
+    "tokens_used": 322,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0350",
+    "timestamp": "2026-07-13 23:08:50",
+    "duration_ms": 200,
+    "tool_calls_count": 2,
+    "tokens_used": 1979,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0351",
+    "timestamp": "2026-07-13 13:14:53",
+    "duration_ms": 200,
+    "tool_calls_count": 20,
+    "tokens_used": 729,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0352",
+    "timestamp": "2026-07-13 10:01:40",
+    "duration_ms": 4320,
+    "tool_calls_count": 12,
+    "tokens_used": 1918,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0353",
+    "timestamp": "2026-07-13 12:27:11",
+    "duration_ms": 1549,
+    "tool_calls_count": 20,
+    "tokens_used": 1462,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0354",
+    "timestamp": "2026-07-13 07:45:04",
+    "duration_ms": 3785,
+    "tool_calls_count": 5,
+    "tokens_used": 3950,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0355",
+    "timestamp": "2026-07-13 12:20:23",
+    "duration_ms": 3716,
+    "tool_calls_count": 12,
+    "tokens_used": 2042,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0356",
+    "timestamp": "2026-07-13 08:06:08",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 2804,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0357",
+    "timestamp": "2026-07-13 03:01:05",
+    "duration_ms": 4251,
+    "tool_calls_count": 11,
+    "tokens_used": 3117,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0358",
+    "timestamp": "2026-07-13 12:00:18",
+    "duration_ms": 2585,
+    "tool_calls_count": 18,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0359",
+    "timestamp": "2026-07-13 18:33:10",
+    "duration_ms": 2766,
+    "tool_calls_count": 9,
+    "tokens_used": 3038,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0360",
+    "timestamp": "2026-07-13 04:04:10",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 2821,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0361",
+    "timestamp": "2026-07-13 08:15:46",
+    "duration_ms": 903,
+    "tool_calls_count": 4,
+    "tokens_used": 1449,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0362",
+    "timestamp": "2026-07-13 09:00:25",
+    "duration_ms": 200,
+    "tool_calls_count": 11,
+    "tokens_used": 143,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0363",
+    "timestamp": "2026-07-14 13:52:52",
+    "duration_ms": 3153,
+    "tool_calls_count": 7,
+    "tokens_used": 2995,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0364",
+    "timestamp": "2026-07-14 10:11:25",
+    "duration_ms": 1731,
+    "tool_calls_count": 19,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0365",
+    "timestamp": "2026-07-14 07:20:24",
+    "duration_ms": 2425,
+    "tool_calls_count": 19,
+    "tokens_used": 606,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0366",
+    "timestamp": "2026-07-14 18:34:11",
+    "duration_ms": 200,
+    "tool_calls_count": 15,
+    "tokens_used": 851,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0367",
+    "timestamp": "2026-07-14 06:28:51",
+    "duration_ms": 700,
+    "tool_calls_count": 14,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0368",
+    "timestamp": "2026-07-14 15:08:40",
+    "duration_ms": 1980,
+    "tool_calls_count": 14,
+    "tokens_used": 2867,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0369",
+    "timestamp": "2026-07-14 12:04:28",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 1083,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0370",
+    "timestamp": "2026-07-14 01:50:23",
+    "duration_ms": 3024,
+    "tool_calls_count": 3,
+    "tokens_used": 138,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0371",
+    "timestamp": "2026-07-14 07:42:42",
+    "duration_ms": 1637,
+    "tool_calls_count": 13,
+    "tokens_used": 1639,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0372",
+    "timestamp": "2026-07-14 10:50:27",
+    "duration_ms": 3153,
+    "tool_calls_count": 17,
+    "tokens_used": 2617,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0373",
+    "timestamp": "2026-07-14 18:44:36",
+    "duration_ms": 431,
+    "tool_calls_count": 19,
+    "tokens_used": 3189,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0374",
+    "timestamp": "2026-07-14 16:09:22",
+    "duration_ms": 3642,
+    "tool_calls_count": 3,
+    "tokens_used": 2950,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0375",
+    "timestamp": "2026-07-14 23:09:22",
+    "duration_ms": 691,
+    "tool_calls_count": 16,
+    "tokens_used": 2282,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0376",
+    "timestamp": "2026-07-14 15:06:28",
+    "duration_ms": 1287,
+    "tool_calls_count": 2,
+    "tokens_used": 2164,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0377",
+    "timestamp": "2026-07-14 22:07:01",
+    "duration_ms": 1470,
+    "tool_calls_count": 8,
+    "tokens_used": 1193,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0378",
+    "timestamp": "2026-07-14 05:35:10",
+    "duration_ms": 200,
+    "tool_calls_count": 13,
+    "tokens_used": 2745,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0379",
+    "timestamp": "2026-07-14 05:11:40",
+    "duration_ms": 200,
+    "tool_calls_count": 7,
+    "tokens_used": 3496,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0380",
+    "timestamp": "2026-07-15 13:24:00",
+    "duration_ms": 2916,
+    "tool_calls_count": 3,
+    "tokens_used": 4409,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0381",
+    "timestamp": "2026-07-15 03:51:55",
+    "duration_ms": 1118,
+    "tool_calls_count": 4,
+    "tokens_used": 2742,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0382",
+    "timestamp": "2026-07-15 21:55:31",
+    "duration_ms": 269,
+    "tool_calls_count": 20,
+    "tokens_used": 449,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0383",
+    "timestamp": "2026-07-15 18:07:22",
+    "duration_ms": 812,
+    "tool_calls_count": 10,
+    "tokens_used": 2241,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0384",
+    "timestamp": "2026-07-15 18:05:43",
+    "duration_ms": 3260,
+    "tool_calls_count": 6,
+    "tokens_used": 2863,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0385",
+    "timestamp": "2026-07-15 22:09:32",
+    "duration_ms": 200,
+    "tool_calls_count": 14,
+    "tokens_used": 882,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0386",
+    "timestamp": "2026-07-15 15:40:34",
+    "duration_ms": 200,
+    "tool_calls_count": 18,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0387",
+    "timestamp": "2026-07-15 15:18:08",
+    "duration_ms": 3518,
+    "tool_calls_count": 12,
+    "tokens_used": 253,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0388",
+    "timestamp": "2026-07-15 15:08:12",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 1940,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0389",
+    "timestamp": "2026-07-15 22:53:28",
+    "duration_ms": 2434,
+    "tool_calls_count": 8,
+    "tokens_used": 2186,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0390",
+    "timestamp": "2026-07-15 01:17:14",
+    "duration_ms": 3087,
+    "tool_calls_count": 16,
+    "tokens_used": 3444,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0391",
+    "timestamp": "2026-07-15 16:07:36",
+    "duration_ms": 2585,
+    "tool_calls_count": 12,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0392",
+    "timestamp": "2026-07-15 01:48:46",
+    "duration_ms": 2413,
+    "tool_calls_count": 8,
+    "tokens_used": 3547,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0393",
+    "timestamp": "2026-07-15 01:28:16",
+    "duration_ms": 2875,
+    "tool_calls_count": 4,
+    "tokens_used": 526,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0394",
+    "timestamp": "2026-07-15 07:13:51",
+    "duration_ms": 517,
+    "tool_calls_count": 20,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0395",
+    "timestamp": "2026-07-15 13:10:39",
+    "duration_ms": 2366,
+    "tool_calls_count": 2,
+    "tokens_used": 2983,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0396",
+    "timestamp": "2026-07-15 11:34:17",
+    "duration_ms": 4727,
+    "tool_calls_count": 10,
+    "tokens_used": 5633,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0397",
+    "timestamp": "2026-07-15 18:17:54",
+    "duration_ms": 4975,
+    "tool_calls_count": 5,
+    "tokens_used": 382,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0398",
+    "timestamp": "2026-07-15 13:58:03",
+    "duration_ms": 1679,
+    "tool_calls_count": 5,
+    "tokens_used": 1236,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0399",
+    "timestamp": "2026-07-15 10:53:15",
+    "duration_ms": 963,
+    "tool_calls_count": 19,
+    "tokens_used": 444,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0400",
+    "timestamp": "2026-07-15 08:40:26",
+    "duration_ms": 5165,
+    "tool_calls_count": 3,
+    "tokens_used": 3219,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0401",
+    "timestamp": "2026-07-16 23:17:44",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 2487,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0402",
+    "timestamp": "2026-07-16 23:05:46",
+    "duration_ms": 4096,
+    "tool_calls_count": 13,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0403",
+    "timestamp": "2026-07-16 13:52:13",
+    "duration_ms": 1278,
+    "tool_calls_count": 18,
+    "tokens_used": 3098,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0404",
+    "timestamp": "2026-07-16 04:36:54",
+    "duration_ms": 316,
+    "tool_calls_count": 2,
+    "tokens_used": 3889,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0405",
+    "timestamp": "2026-07-16 03:40:50",
+    "duration_ms": 4805,
+    "tool_calls_count": 15,
+    "tokens_used": 4084,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0406",
+    "timestamp": "2026-07-16 00:27:12",
+    "duration_ms": 3251,
+    "tool_calls_count": 9,
+    "tokens_used": 1142,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0407",
+    "timestamp": "2026-07-16 20:23:16",
+    "duration_ms": 519,
+    "tool_calls_count": 2,
+    "tokens_used": 135,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0408",
+    "timestamp": "2026-07-16 20:19:46",
+    "duration_ms": 2290,
+    "tool_calls_count": 4,
+    "tokens_used": 4178,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0409",
+    "timestamp": "2026-07-16 06:30:04",
+    "duration_ms": 2449,
+    "tool_calls_count": 1,
+    "tokens_used": 4239,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0410",
+    "timestamp": "2026-07-16 22:21:52",
+    "duration_ms": 3967,
+    "tool_calls_count": 16,
+    "tokens_used": 224,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0411",
+    "timestamp": "2026-07-16 07:24:05",
+    "duration_ms": 3387,
+    "tool_calls_count": 10,
+    "tokens_used": 2780,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0412",
+    "timestamp": "2026-07-16 12:49:52",
+    "duration_ms": 6217,
+    "tool_calls_count": 5,
+    "tokens_used": 5504,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0413",
+    "timestamp": "2026-07-16 16:36:00",
+    "duration_ms": 2955,
+    "tool_calls_count": 7,
+    "tokens_used": 3196,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0414",
+    "timestamp": "2026-07-16 23:09:58",
+    "duration_ms": 460,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0415",
+    "timestamp": "2026-07-16 04:48:07",
+    "duration_ms": 200,
+    "tool_calls_count": 11,
+    "tokens_used": 4567,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0416",
+    "timestamp": "2026-07-16 04:15:17",
+    "duration_ms": 2031,
+    "tool_calls_count": 20,
+    "tokens_used": 4033,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0417",
+    "timestamp": "2026-07-16 22:01:54",
+    "duration_ms": 2755,
+    "tool_calls_count": 7,
+    "tokens_used": 3970,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0418",
+    "timestamp": "2026-07-16 12:18:41",
+    "duration_ms": 5986,
+    "tool_calls_count": 16,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0419",
+    "timestamp": "2026-07-16 03:15:31",
+    "duration_ms": 5780,
+    "tool_calls_count": 1,
+    "tokens_used": 3356,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0420",
+    "timestamp": "2026-07-16 10:08:24",
+    "duration_ms": 200,
+    "tool_calls_count": 6,
+    "tokens_used": 2899,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0421",
+    "timestamp": "2026-07-17 02:01:37",
+    "duration_ms": 1956,
+    "tool_calls_count": 2,
+    "tokens_used": 2426,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0422",
+    "timestamp": "2026-07-17 12:32:18",
+    "duration_ms": 200,
+    "tool_calls_count": 13,
+    "tokens_used": 1989,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0423",
+    "timestamp": "2026-07-17 20:34:34",
+    "duration_ms": 1704,
+    "tool_calls_count": 17,
+    "tokens_used": 3272,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0424",
+    "timestamp": "2026-07-17 04:34:20",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0425",
+    "timestamp": "2026-07-17 22:27:46",
+    "duration_ms": 2793,
+    "tool_calls_count": 14,
+    "tokens_used": 2226,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0426",
+    "timestamp": "2026-07-17 14:39:38",
+    "duration_ms": 525,
+    "tool_calls_count": 6,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0427",
+    "timestamp": "2026-07-17 00:45:08",
+    "duration_ms": 4548,
+    "tool_calls_count": 17,
+    "tokens_used": 5179,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0428",
+    "timestamp": "2026-07-17 23:16:10",
+    "duration_ms": 1994,
+    "tool_calls_count": 4,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0429",
+    "timestamp": "2026-07-17 00:21:51",
+    "duration_ms": 455,
+    "tool_calls_count": 19,
+    "tokens_used": 1825,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0430",
+    "timestamp": "2026-07-17 02:31:29",
+    "duration_ms": 5723,
+    "tool_calls_count": 6,
+    "tokens_used": 3014,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0431",
+    "timestamp": "2026-07-17 05:16:49",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 923,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0432",
+    "timestamp": "2026-07-17 16:00:02",
+    "duration_ms": 2077,
+    "tool_calls_count": 13,
+    "tokens_used": 3693,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0433",
+    "timestamp": "2026-07-17 05:59:54",
+    "duration_ms": 3036,
+    "tool_calls_count": 14,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0434",
+    "timestamp": "2026-07-17 10:15:26",
+    "duration_ms": 1892,
+    "tool_calls_count": 12,
+    "tokens_used": 2598,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0435",
+    "timestamp": "2026-07-17 16:43:57",
+    "duration_ms": 2403,
+    "tool_calls_count": 2,
+    "tokens_used": 3780,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0436",
+    "timestamp": "2026-07-17 02:56:29",
+    "duration_ms": 815,
+    "tool_calls_count": 1,
+    "tokens_used": 3683,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0437",
+    "timestamp": "2026-07-17 06:18:36",
+    "duration_ms": 2089,
+    "tool_calls_count": 16,
+    "tokens_used": 3436,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0438",
+    "timestamp": "2026-07-17 06:46:57",
+    "duration_ms": 2325,
+    "tool_calls_count": 14,
+    "tokens_used": 1178,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0439",
+    "timestamp": "2026-07-17 07:34:22",
+    "duration_ms": 1903,
+    "tool_calls_count": 11,
+    "tokens_used": 1804,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0440",
+    "timestamp": "2026-07-18 12:54:47",
+    "duration_ms": 3951,
+    "tool_calls_count": 8,
+    "tokens_used": 3119,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0441",
+    "timestamp": "2026-07-18 15:03:09",
+    "duration_ms": 5760,
+    "tool_calls_count": 17,
+    "tokens_used": 3866,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0442",
+    "timestamp": "2026-07-18 22:57:23",
+    "duration_ms": 1965,
+    "tool_calls_count": 17,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0443",
+    "timestamp": "2026-07-18 20:52:25",
+    "duration_ms": 200,
+    "tool_calls_count": 5,
+    "tokens_used": 1337,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0444",
+    "timestamp": "2026-07-18 09:16:54",
+    "duration_ms": 2975,
+    "tool_calls_count": 11,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0445",
+    "timestamp": "2026-07-18 14:17:14",
+    "duration_ms": 3018,
+    "tool_calls_count": 19,
+    "tokens_used": 4495,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0446",
+    "timestamp": "2026-07-18 04:06:10",
+    "duration_ms": 1602,
+    "tool_calls_count": 12,
+    "tokens_used": 2700,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0447",
+    "timestamp": "2026-07-18 06:28:19",
+    "duration_ms": 2522,
+    "tool_calls_count": 10,
+    "tokens_used": 1477,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0448",
+    "timestamp": "2026-07-18 22:44:38",
+    "duration_ms": 2916,
+    "tool_calls_count": 3,
+    "tokens_used": 853,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0449",
+    "timestamp": "2026-07-18 07:22:25",
+    "duration_ms": 1314,
+    "tool_calls_count": 6,
+    "tokens_used": 955,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0450",
+    "timestamp": "2026-07-18 12:54:28",
+    "duration_ms": 1151,
+    "tool_calls_count": 4,
+    "tokens_used": 1792,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0451",
+    "timestamp": "2026-07-18 04:07:00",
+    "duration_ms": 2274,
+    "tool_calls_count": 7,
+    "tokens_used": 956,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0452",
+    "timestamp": "2026-07-18 12:23:43",
+    "duration_ms": 376,
+    "tool_calls_count": 9,
+    "tokens_used": 436,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0453",
+    "timestamp": "2026-07-18 02:01:04",
+    "duration_ms": 200,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0454",
+    "timestamp": "2026-07-18 10:07:02",
+    "duration_ms": 3287,
+    "tool_calls_count": 13,
+    "tokens_used": 3704,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0455",
+    "timestamp": "2026-07-18 00:24:43",
+    "duration_ms": 200,
+    "tool_calls_count": 9,
+    "tokens_used": 4604,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0456",
+    "timestamp": "2026-07-18 14:56:09",
+    "duration_ms": 899,
+    "tool_calls_count": 10,
+    "tokens_used": 1233,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0457",
+    "timestamp": "2026-07-18 13:56:35",
+    "duration_ms": 3674,
+    "tool_calls_count": 14,
+    "tokens_used": 2771,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0458",
+    "timestamp": "2026-07-18 20:56:51",
+    "duration_ms": 200,
+    "tool_calls_count": 1,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0459",
+    "timestamp": "2026-07-18 22:22:30",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 2318,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0460",
+    "timestamp": "2026-07-18 12:17:11",
+    "duration_ms": 1600,
+    "tool_calls_count": 9,
+    "tokens_used": 1790,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0461",
+    "timestamp": "2026-07-18 15:33:22",
+    "duration_ms": 7402,
+    "tool_calls_count": 4,
+    "tokens_used": 1989,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0462",
+    "timestamp": "2026-07-19 07:17:34",
+    "duration_ms": 2428,
+    "tool_calls_count": 19,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0463",
+    "timestamp": "2026-07-19 12:22:59",
+    "duration_ms": 3200,
+    "tool_calls_count": 12,
+    "tokens_used": 3797,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0464",
+    "timestamp": "2026-07-19 00:45:44",
+    "duration_ms": 991,
+    "tool_calls_count": 7,
+    "tokens_used": 1657,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0465",
+    "timestamp": "2026-07-19 15:34:19",
+    "duration_ms": 2660,
+    "tool_calls_count": 20,
+    "tokens_used": 2120,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0466",
+    "timestamp": "2026-07-19 00:33:30",
+    "duration_ms": 3166,
+    "tool_calls_count": 5,
+    "tokens_used": 1503,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0467",
+    "timestamp": "2026-07-19 22:11:58",
+    "duration_ms": 3052,
+    "tool_calls_count": 5,
+    "tokens_used": 2309,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0468",
+    "timestamp": "2026-07-19 03:54:33",
+    "duration_ms": 200,
+    "tool_calls_count": 13,
+    "tokens_used": 4552,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0469",
+    "timestamp": "2026-07-19 03:21:19",
+    "duration_ms": 5209,
+    "tool_calls_count": 14,
+    "tokens_used": 1632,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0470",
+    "timestamp": "2026-07-19 20:31:41",
+    "duration_ms": 1316,
+    "tool_calls_count": 20,
+    "tokens_used": 141,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0471",
+    "timestamp": "2026-07-19 11:14:42",
+    "duration_ms": 2773,
+    "tool_calls_count": 10,
+    "tokens_used": 3145,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0472",
+    "timestamp": "2026-07-19 05:46:00",
+    "duration_ms": 200,
+    "tool_calls_count": 19,
+    "tokens_used": 5035,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0473",
+    "timestamp": "2026-07-19 05:38:20",
+    "duration_ms": 2469,
+    "tool_calls_count": 16,
+    "tokens_used": 3904,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0474",
+    "timestamp": "2026-07-19 10:47:04",
+    "duration_ms": 3205,
+    "tool_calls_count": 3,
+    "tokens_used": 1899,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0475",
+    "timestamp": "2026-07-19 22:42:40",
+    "duration_ms": 1844,
+    "tool_calls_count": 7,
+    "tokens_used": 2194,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0476",
+    "timestamp": "2026-07-19 22:04:22",
+    "duration_ms": 2078,
+    "tool_calls_count": 13,
+    "tokens_used": 2047,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0477",
+    "timestamp": "2026-07-19 23:26:10",
+    "duration_ms": 3370,
+    "tool_calls_count": 13,
+    "tokens_used": 1056,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0478",
+    "timestamp": "2026-07-19 15:50:55",
+    "duration_ms": 2074,
+    "tool_calls_count": 15,
+    "tokens_used": 928,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0479",
+    "timestamp": "2026-07-19 01:18:01",
+    "duration_ms": 2749,
+    "tool_calls_count": 6,
+    "tokens_used": 1823,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0480",
+    "timestamp": "2026-07-19 05:46:04",
+    "duration_ms": 2709,
+    "tool_calls_count": 20,
+    "tokens_used": 1603,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0481",
+    "timestamp": "2026-07-19 15:45:01",
+    "duration_ms": 443,
+    "tool_calls_count": 14,
+    "tokens_used": 313,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0482",
+    "timestamp": "2026-07-19 01:06:21",
+    "duration_ms": 3138,
+    "tool_calls_count": 18,
+    "tokens_used": 4155,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0483",
+    "timestamp": "2026-07-19 21:18:19",
+    "duration_ms": 4479,
+    "tool_calls_count": 16,
+    "tokens_used": 2599,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0484",
+    "timestamp": "2026-07-20 11:00:27",
+    "duration_ms": 3254,
+    "tool_calls_count": 16,
+    "tokens_used": 121,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0485",
+    "timestamp": "2026-07-20 03:01:13",
+    "duration_ms": 1785,
+    "tool_calls_count": 4,
+    "tokens_used": 2598,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0486",
+    "timestamp": "2026-07-20 12:30:31",
+    "duration_ms": 4106,
+    "tool_calls_count": 6,
+    "tokens_used": 3018,
+    "status": "failed",
+    "error_type": "rate_limit",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0487",
+    "timestamp": "2026-07-20 12:23:11",
+    "duration_ms": 1813,
+    "tool_calls_count": 8,
+    "tokens_used": 3672,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0488",
+    "timestamp": "2026-07-20 08:36:03",
+    "duration_ms": 1702,
+    "tool_calls_count": 12,
+    "tokens_used": 1361,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0489",
+    "timestamp": "2026-07-20 17:26:48",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 1049,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0490",
+    "timestamp": "2026-07-20 17:43:55",
+    "duration_ms": 3674,
+    "tool_calls_count": 3,
+    "tokens_used": 845,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0491",
+    "timestamp": "2026-07-20 22:02:32",
+    "duration_ms": 200,
+    "tool_calls_count": 20,
+    "tokens_used": 1794,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0492",
+    "timestamp": "2026-07-20 03:48:28",
+    "duration_ms": 7326,
+    "tool_calls_count": 7,
+    "tokens_used": 1606,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0493",
+    "timestamp": "2026-07-20 01:27:05",
+    "duration_ms": 3106,
+    "tool_calls_count": 5,
+    "tokens_used": 4663,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0494",
+    "timestamp": "2026-07-20 19:16:20",
+    "duration_ms": 4178,
+    "tool_calls_count": 18,
+    "tokens_used": 2994,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0495",
+    "timestamp": "2026-07-20 08:33:29",
+    "duration_ms": 2635,
+    "tool_calls_count": 17,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "agent_invoke"
+  },
+  {
+    "task_id": "task_0496",
+    "timestamp": "2026-07-21 03:26:09",
+    "duration_ms": 200,
+    "tool_calls_count": 4,
+    "tokens_used": 673,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0497",
+    "timestamp": "2026-07-21 18:49:06",
+    "duration_ms": 4992,
+    "tool_calls_count": 9,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "auth_error",
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0498",
+    "timestamp": "2026-07-21 20:31:36",
+    "duration_ms": 3561,
+    "tool_calls_count": 5,
+    "tokens_used": 2280,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0499",
+    "timestamp": "2026-07-21 19:43:44",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 3877,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0500",
+    "timestamp": "2026-07-21 23:30:58",
+    "duration_ms": 736,
+    "tool_calls_count": 10,
+    "tokens_used": 2978,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0501",
+    "timestamp": "2026-07-21 08:53:31",
+    "duration_ms": 3417,
+    "tool_calls_count": 10,
+    "tokens_used": 1814,
+    "status": "failed",
+    "error_type": "timeout",
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0502",
+    "timestamp": "2026-07-21 14:49:52",
+    "duration_ms": 1637,
+    "tool_calls_count": 3,
+    "tokens_used": 100,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0503",
+    "timestamp": "2026-07-21 14:13:58",
+    "duration_ms": 2239,
+    "tool_calls_count": 2,
+    "tokens_used": 100,
+    "status": "failed",
+    "error_type": "parse_error",
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0504",
+    "timestamp": "2026-07-21 05:04:19",
+    "duration_ms": 200,
+    "tool_calls_count": 17,
+    "tokens_used": 3490,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0505",
+    "timestamp": "2026-07-21 00:11:12",
+    "duration_ms": 2787,
+    "tool_calls_count": 15,
+    "tokens_used": 1029,
+    "status": "failed",
+    "error_type": "api_error",
+    "tool_name": "read_file"
+  },
+  {
+    "task_id": "task_0506",
+    "timestamp": "2026-07-21 11:45:12",
+    "duration_ms": 3057,
+    "tool_calls_count": 4,
+    "tokens_used": 407,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0507",
+    "timestamp": "2026-07-21 00:15:23",
+    "duration_ms": 200,
+    "tool_calls_count": 16,
+    "tokens_used": 3266,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  },
+  {
+    "task_id": "task_0508",
+    "timestamp": "2026-07-21 17:22:22",
+    "duration_ms": 4620,
+    "tool_calls_count": 3,
+    "tokens_used": 465,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "bash_exec"
+  },
+  {
+    "task_id": "task_0509",
+    "timestamp": "2026-07-21 00:24:03",
+    "duration_ms": 200,
+    "tool_calls_count": 8,
+    "tokens_used": 297,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0510",
+    "timestamp": "2026-07-21 07:43:13",
+    "duration_ms": 1660,
+    "tool_calls_count": 1,
+    "tokens_used": 2162,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_search"
+  },
+  {
+    "task_id": "task_0511",
+    "timestamp": "2026-07-21 04:41:11",
+    "duration_ms": 3523,
+    "tool_calls_count": 10,
+    "tokens_used": 2060,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "grep_search"
+  },
+  {
+    "task_id": "task_0512",
+    "timestamp": "2026-07-21 22:41:17",
+    "duration_ms": 678,
+    "tool_calls_count": 9,
+    "tokens_used": 2973,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "write_file"
+  },
+  {
+    "task_id": "task_0513",
+    "timestamp": "2026-07-21 14:19:43",
+    "duration_ms": 200,
+    "tool_calls_count": 1,
+    "tokens_used": 606,
+    "status": "success",
+    "error_type": null,
+    "tool_name": "web_fetch"
+  }
+]
