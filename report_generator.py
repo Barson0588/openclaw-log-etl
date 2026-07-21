@@ -936,27 +936,28 @@ function renderOverview() {{
         {{label: '任务量', cur: today.total, prev: yesterday.total, fmt: function(v){{return v+'条'}}, better: 'neutral'}},
         {{label: '成功率', cur: today.total>0?Math.round(today.success/today.total*1000)/10:0,
          prev: yesterday.total>0?Math.round(yesterday.success/yesterday.total*1000)/10:0, fmt: function(v){{return v+'%'}}, better: 'up'}},
-        {{label: 'Token', cur: today.tokens, prev: yesterday.tokens, fmt: function(v){{return v>1000?Math.round(v/1000)+'K':v}}, better: 'neutral'}},
+        {{label: 'Token消耗', cur: today.tokens, prev: yesterday.tokens, fmt: function(v){{return v>1000?Math.round(v/1000)+'K':v}}, better: 'neutral'}},
         {{label: '平均耗时', cur: today.total>0?Math.round(today.dur/today.total):0,
          prev: yesterday.total>0?Math.round(yesterday.dur/yesterday.total):0, fmt: function(v){{return v>=1000?Math.round(v/1000)+'s':v+'ms'}}, better: 'down'}},
       ];
 
-      var ch = '';
+      var ch = '<div style="width:100%;margin-bottom:2px;font-size:.7rem;color:var(--muted);">日环比 ' + yd + ' → ' + td + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;width:100%;">';
       items.forEach(function(m) {{
         var d = delta(m.cur, m.prev);
         var absPct = Math.abs(d.pct);
-        var arrow = d.dir === 'up' ? '&#9650;' : (d.dir === 'down' ? '&#9660;' : '&#9644;');
+        var arrow = d.dir === 'up' ? '↑' : (d.dir === 'down' ? '↓' : '→');
         var tc;
         if (absPct <= 5 || m.better === 'neutral') tc = 'var(--muted)';
         else if (m.better === 'up') tc = d.dir === 'up' ? '#2a9d8f' : '#e76f51';
         else if (m.better === 'down') tc = d.dir === 'down' ? '#2a9d8f' : '#e76f51';
-        ch += '<div style="background:var(--card-bg);border-radius:8px;padding:8px 14px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1;min-width:120px;">';
-        ch += '<div style="font-size:.68rem;color:var(--muted);margin-bottom:2px;">' + m.label + ' (' + yd + '→' + td + ')</div>';
-        ch += '<div style="font-size:1rem;font-weight:700;">' + m.fmt(m.cur) + ' <span style="font-size:.7rem;color:' + tc + ';">' + arrow + ' ' + absPct + '%</span></div>';
+        ch += '<div style="background:var(--card-bg);border-radius:8px;padding:6px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1;min-width:100px;overflow:hidden;">';
+        ch += '<div style="font-size:.65rem;color:var(--muted);">' + m.label + '</div>';
+        ch += '<div style="font-size:.95rem;font-weight:700;white-space:nowrap;">' + m.fmt(m.cur) + ' <span style="font-size:.65rem;color:' + tc + ';">' + arrow + absPct + '%</span></div>';
         ch += '</div>';
       }});
+      ch += '</div>';
       document.getElementById('dailyCompare').innerHTML = ch;
-      document.getElementById('dailyCompare').style.display = 'flex';
+      document.getElementById('dailyCompare').style.display = 'block';
     }} else {{
       document.getElementById('dailyCompare').style.display = 'none';
     }}
