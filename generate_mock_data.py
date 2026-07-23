@@ -55,7 +55,8 @@ for day_offset in range(DAYS):
         records.append(record)
         task_counter += 1
 
-output_path = "/Users/wuqqi/projects/openclaw-log-etl/mock_data.json"
+import os
+output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "mock_data.json")
 with open(output_path, "w", encoding="utf-8") as f:
     json.dump(records, f, ensure_ascii=False, indent=2)
 

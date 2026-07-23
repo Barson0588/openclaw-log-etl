@@ -111,15 +111,18 @@ class LogAnalyzer:
         """
         logger.info("加载数据: %s", self.csv_path)
 
-        # encoding='utf-8-sig' 兼容带 BOM 的 CSV（Excel 保存的常见格式）
-        self.df = pd.read_csv(
-            self.csv_path,
-            parse_dates=["timestamp"],
-            encoding="utf-8-sig",
-        )
-        logger.info("数据加载完成: %d 条记录, %d 个字段", len(self.df), len(self.df.columns))
+        try:
+            self.df = pd.read_csv(
+                self.csv_path,
+                parse_dates=["timestamp"],
+                encoding="utf-8-sig",
+            )
+        except FileNotFoundError:
+            raise FileNotFoundError(f"CSV 文件不存在: {self.csv_path}")
+        except Exception as e:
+            raise ValueError(f"CSV 文件读取失败: {self.csv_path} — {e}") from e
 
-        # 快速数据概览 log，方便核查
+        logger.info("数据加载完成: %d 条记录, %d 个字段", len(self.df), len(self.df.columns))
         logger.info(
             "数据概况 ─ 时间范围: %s ~ %s, 成功率: %.1f%%",
             self.df["timestamp"].min().strftime("%Y-%m-%d"),
@@ -215,7 +218,14 @@ class LogAnalyzer:
             logger.info("无失败任务，跳过错误类型饼图")
             return None
 
-        fig, ax = plt.subplots(figsize=(7, 7))
+        # 限制显示的错误类型数，其余归入"其他"
+        max_slices = 8
+        if len(error_counts) > max_slices:
+            other_count = error_counts.iloc[max_slices:].sum()
+            error_counts = error_counts.iloc[:max_slices].copy()
+            error_counts["其他"] = other_count
+
+        fig, ax = plt.subplots(figsize=(9, 7))
         wedges, texts, autotexts = ax.pie(
             error_counts.values,
             labels=error_counts.index,
@@ -227,10 +237,10 @@ class LogAnalyzer:
 
         # 调整百分比文字颜色和大小
         for at in autotexts:
-            at.set_fontsize(10)
+            at.set_fontsize(9)
             at.set_color("white")
 
-        plt.tight_layout()
+        plt.tight_layout(pad=1.5)
 
         path = os.path.join(self.charts_dir, "error_type_pie.png")
         fig.savefig(path, dpi=150)
@@ -395,20 +405,13 @@ class LogAnalyzer:
             ),
             # tool_name 可能全为空/NaN（CSV 回读时 "" 变 NaN，或无工具调用的 session）
             "top_tool": (
+                lambda ts: ts.index[0] if len(ts) > 0 else "N/A"
+            )(
                 self.df["tool_name"]
                 .fillna("none")
                 .replace("", "none")
                 .pipe(lambda s: s[s != "none"])
                 .value_counts()
-                .index[0]
-                if len(
-                    self.df["tool_name"]
-                    .fillna("none")
-                    .replace("", "none")
-                    .pipe(lambda s: s[s != "none"])
-                    .value_counts()
-                ) > 0
-                else "N/A"
             ),
         }
 
@@ -440,54 +443,47 @@ class LogAnalyzer:
     # =================================================================
 
     def _get_failure_details(self):
-        """获取所有失败任务的明细列表，按时间倒序。
-
-        Returns:
-            list[dict]: 每个失败任务的详细信息
-        """
+        """获取所有失败任务的明细列表，按时间倒序。"""
         failed = self.df[self.df["status"] == "failed"].copy()
         if failed.empty:
             return []
 
         failed = failed.sort_values("timestamp", ascending=False)
         records = []
-        for _, row in failed.iterrows():
-            ts = row["timestamp"]
+        for r in failed.to_dict(orient="records"):
+            ts = r["timestamp"]
             records.append({
-                "task_id": str(row["task_id"]),
-                "task_id_short": str(row["task_id"])[:20] + "...",
+                "task_id": str(r["task_id"]),
+                "task_id_short": str(r["task_id"])[:20] + "...",
                 "timestamp": ts.strftime("%Y-%m-%d %H:%M") if hasattr(ts, "strftime") else str(ts),
                 "date": ts.strftime("%Y-%m-%d") if hasattr(ts, "strftime") else str(ts)[:10],
                 "hour": int(ts.hour) if hasattr(ts, "hour") else 0,
-                "error_type": str(row["error_type"]) if row.get("error_type") and str(row["error_type"]) not in ("", "nan") else "unknown",
-                "duration_sec": round(row["duration_ms"] / 1000, 1),
-                "tokens_used": int(row["tokens_used"]),
-                "tool_calls_count": int(row["tool_calls_count"]),
-                "tool_name": str(row["tool_name"]) if str(row["tool_name"]) not in ("", "nan", "none") else "",
-                "trigger": str(row.get("trigger", "unknown")),
+                "error_type": str(r["error_type"]) if r.get("error_type") and str(r["error_type"]) not in ("", "nan") else "unknown",
+                "duration_sec": round(r["duration_ms"] / 1000, 1),
+                "tokens_used": int(r["tokens_used"]),
+                "tool_calls_count": int(r["tool_calls_count"]),
+                "tool_name": str(r["tool_name"]) if str(r["tool_name"]) not in ("", "nan", "none") else "",
+                "trigger": str(r.get("trigger", "unknown")),
             })
         return records
 
     def _get_raw_data(self):
-        """获取全量数据的精简版，供前端交互查询。
-
-        Returns:
-            list[dict]: 每条记录的关键字段
-        """
+        """获取全量数据的精简版，供前端交互查询。"""
         records = []
-        for _, row in self.df.iterrows():
+        for r in self.df.to_dict(orient="records"):
+            ts = r["timestamp"]
             records.append({
-                "task_id": str(row["task_id"])[:20] + "...",
-                "timestamp": row["timestamp"].strftime("%Y-%m-%d %H:%M") if hasattr(row["timestamp"], "strftime") else str(row["timestamp"]),
-                "date": row["timestamp"].strftime("%Y-%m-%d") if hasattr(row["timestamp"], "strftime") else str(row["timestamp"])[:10],
-                "hour": int(row["timestamp"].hour) if hasattr(row["timestamp"], "hour") else 0,
-                "status": str(row["status"]),
-                "error_type": str(row["error_type"]) if row.get("error_type") and str(row["error_type"]) not in ("", "nan") else "",
-                "duration_ms": int(row["duration_ms"]),
-                "tokens_used": int(row["tokens_used"]),
-                "tool_calls_count": int(row["tool_calls_count"]),
-                "tool_name": str(row["tool_name"]) if str(row["tool_name"]) not in ("", "nan", "none") else "",
-                "trigger": str(row.get("trigger", "unknown")),
+                "task_id": str(r["task_id"])[:20] + "...",
+                "timestamp": ts.strftime("%Y-%m-%d %H:%M") if hasattr(ts, "strftime") else str(ts),
+                "date": ts.strftime("%Y-%m-%d") if hasattr(ts, "strftime") else str(ts)[:10],
+                "hour": int(ts.hour) if hasattr(ts, "hour") else 0,
+                "status": str(r["status"]),
+                "error_type": str(r["error_type"]) if r.get("error_type") and str(r["error_type"]) not in ("", "nan") else "",
+                "duration_ms": int(r["duration_ms"]),
+                "tokens_used": int(r["tokens_used"]),
+                "tool_calls_count": int(r["tool_calls_count"]),
+                "tool_name": str(r["tool_name"]) if str(r["tool_name"]) not in ("", "nan", "none") else "",
+                "trigger": str(r.get("trigger", "unknown")),
             })
         return records
 
@@ -613,8 +609,8 @@ class LogAnalyzer:
 
         # 按 trigger 分组
         groups = defaultdict(list)
-        for _, row in failed.iterrows():
-            groups[str(row.get("trigger", "unknown"))].append(row)
+        for r in failed.to_dict(orient="records"):
+            groups[str(r.get("trigger", "unknown"))].append(r)
 
         storms = []
         for trigger, rows in groups.items():

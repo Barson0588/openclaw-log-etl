@@ -21,7 +21,10 @@ import argparse
 import logging
 import sys
 import time
+from datetime import datetime
 
+import numpy as np
+import pandas as pd
 import schedule
 
 from data_pipeline import DataPipeline
@@ -43,6 +46,67 @@ def setup_logging():
             logging.StreamHandler(sys.stdout),
         ],
     )
+
+
+def _build_interactions_from_df(df):
+    """从清洗后的 DataFrame 构建交互记录列表。
+
+    用于 mock 模式 — mock 数据缺少 trigger / user_prompt / model_id，
+    这里用可用字段填充，缺失字段设为合理默认值。
+    """
+    interactions = []
+    for _, row in df.iterrows():
+        ts = row.get("timestamp", "")
+        ts_str = str(ts) if ts else ""
+        # 解析日期和小时
+        date_str = ts_str[:10] if len(ts_str) >= 10 else ""
+        hour = 0
+        try:
+            hour = datetime.strptime(ts_str[:13], "%Y-%m-%d %H").hour
+        except Exception:
+            pass
+
+        # 判断触发类型 — mock 数据中按 task_id hash 分配 cron/user
+        trigger = ""
+        if "trigger" in df.columns and not pd.isna(row.get("trigger")):
+            trigger = str(row.get("trigger"))
+        if not trigger:
+            # 基于 task_id 的确定性分配，让触发类型看起来更真实
+            tid = str(row.get("task_id", ""))
+            trigger = "cron" if (hash(tid) % 3 != 0) else "user"
+
+        status = str(row.get("status", "unknown"))
+        error_type = row.get("error_type", "")
+        if error_type is None or (isinstance(error_type, float) and np.isnan(error_type)):
+            error_type = ""
+        else:
+            error_type = str(error_type)
+
+        tool_name = str(row.get("tool_name", "")) if not pd.isna(row.get("tool_name", "none")) else "none"
+
+        interactions.append({
+            "task_id": str(row.get("task_id", "")),
+            "task_id_short": str(row.get("task_id", ""))[:8] + "...",
+            "timestamp": ts_str,
+            "date": date_str,
+            "hour": hour,
+            "trigger": trigger,
+            "user_prompt": "(Mock 数据 — 无原始提问内容)",
+            "prompt_preview": "(Mock 数据)",
+            "model_id": row.get("model_id", "mock-model") if "model_id" in df.columns else "mock-model",
+            "provider": "mock",
+            "status": status,
+            "error_type": error_type,
+            "duration_ms": int(row.get("duration_ms", 0)) if not pd.isna(row.get("duration_ms", 0)) else 0,
+            "tokens_used": int(row.get("tokens_used", 0)) if not pd.isna(row.get("tokens_used", 0)) else 0,
+            "tool_calls_count": int(row.get("tool_calls_count", 0)) if not pd.isna(row.get("tool_calls_count", 0)) else 0,
+            "tool_name": tool_name,
+            "tool_names": [tool_name] if tool_name and tool_name != "none" else [],
+        })
+
+    # 按时间倒序排列
+    interactions.sort(key=lambda x: x.get("timestamp", ""), reverse=True)
+    return interactions
 
 
 def run_pipeline(api_url=None, mock_data_path="mock_data.json",
@@ -76,11 +140,9 @@ def run_pipeline(api_url=None, mock_data_path="mock_data.json",
 
     interactions = None
     if use_real_data:
-        df = pipeline.fetch_from_openclaw(sessions_dir=sessions_dir)
-        # 提取完整交互记录（含用户提问内容）
         from openclaw_adapter import OpenClawAdapter
         adapter = OpenClawAdapter(sessions_dir)
-        interactions = adapter.extract_interactions()
+        df, interactions = adapter.load_all()
         logger.info("[Step 1/3] 交互记录: %d 条", len(interactions))
     else:
         df = pipeline.fetch_logs()
@@ -88,6 +150,11 @@ def run_pipeline(api_url=None, mock_data_path="mock_data.json",
     df = pipeline.clean(df)
     csv_path = pipeline.save(df)
     logger.info("[Step 1/3] 完成 — CSV: %s", csv_path)
+
+    # Mock 模式下从清洗数据构建交互记录
+    if not use_real_data and interactions is None:
+        interactions = _build_interactions_from_df(df)
+        logger.info("[Step 1/3] 交互记录 (从 mock 构建): %d 条", len(interactions))
 
     # ---- Step 2: 统计分析与可视化 ----
     logger.info("[Step 2/3] 统计分析与可视化")

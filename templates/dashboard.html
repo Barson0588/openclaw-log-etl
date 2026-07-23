@@ -1,0 +1,2018 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenClaw 监控日报 — {today}</title>
+<style>
+  :root {{
+    --bg: #f0f2f5; --card-bg: #ffffff; --text: #1e293b; --muted: #64748b;
+    --accent: #0d9488; --danger: #ef4444; --warn: #f59e0b;
+    --border: #e2e8f0; --radius: 12px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.06);
+    --shadow: 0 1px 3px rgba(0,0,0,.04), 0 4px 12px rgba(0,0,0,.06);
+    --shadow-lg: 0 4px 6px rgba(0,0,0,.04), 0 12px 28px rgba(0,0,0,.08);
+    --shadow-xl: 0 8px 16px rgba(0,0,0,.06), 0 20px 48px rgba(0,0,0,.1);
+    --sidebar-w: 220px;
+    --card-highlight: rgba(255,255,255,.8);
+    --glass-bg: rgba(255,255,255,.72);
+  }}
+  body {{
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+                 "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(13,148,136,.04) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(245,158,11,.03) 0%, transparent 50%);
+    background-attachment: fixed;
+    color: var(--text); line-height: 1.6;
+    margin: 0; overflow-x: hidden;
+    transition: background .3s, color .3s;
+  }}
+  body.dark {{
+    --bg: #0f1119; --card-bg: #1a1d2e; --text: #e2e8f0; --muted: #8892b0;
+    --border: #252840; --shadow-sm: 0 1px 2px rgba(0,0,0,.2);
+    --shadow: 0 1px 3px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.25);
+    --shadow-lg: 0 4px 6px rgba(0,0,0,.3), 0 12px 28px rgba(0,0,0,.35);
+    --shadow-xl: 0 8px 16px rgba(0,0,0,.35), 0 20px 48px rgba(0,0,0,.4);
+    --card-highlight: rgba(255,255,255,.03);
+    --glass-bg: rgba(26,29,46,.82);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(13,148,136,.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 100%, rgba(239,68,68,.04) 0%, transparent 50%);
+  }}
+  *,*::before,*::after{{margin:0;padding:0;box-sizing:border-box;}}
+  strong,h1,h2,h3,h4{{color:inherit;}}
+  h1,h2,h3,h4{{word-break:break-word;overflow-wrap:break-word;}}
+
+  /* 侧边栏 — glass morphism */
+  .sidebar {{
+    position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w);
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px) saturate(140%);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    border-right: 1px solid var(--border);
+    display: flex; flex-direction: column; z-index: 100;
+    overflow-y: auto; transition: transform .25s;
+  }}
+  .sidebar-header {{
+    padding: 20px 18px 16px; border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card-highlight) 0%, transparent 100%);
+  }}
+  .sidebar-header h2 {{ font-size: .95rem; font-weight: 700; word-break: break-word; overflow: hidden; text-overflow: ellipsis; }}
+  .sidebar-header .sub {{ font-size: .7rem; color: var(--muted); margin-top: 2px; }}
+  .sidebar-nav {{ flex: 1; padding: 10px 0; }}
+  .sidebar-nav a {{ overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    display: flex; align-items: center; gap: 10px; padding: 10px 18px;
+    color: var(--text); text-decoration: none; font-size: .84rem;
+    transition: all .15s; border-left: 3px solid transparent;
+    cursor: pointer; margin: 1px 8px; border-radius: 0 8px 8px 0;
+  }}
+  .sidebar-nav a:hover {{ background: var(--bg); transform: translateX(2px); }}
+  .sidebar-nav a.active {{
+    background: var(--bg); border-left-color: var(--accent);
+    color: var(--accent); font-weight: 600;
+    box-shadow: inset 0 0 0 1px rgba(13,148,136,.1);
+  }}
+  .sidebar-nav a .ico {{ font-size: 1rem; width: 22px; text-align: center; flex-shrink: 0; }}
+  .sidebar-nav a .badge-dot {{
+    margin-left: auto; width: 8px; height: 8px; border-radius: 50%;
+    background: var(--danger); flex-shrink: 0;
+  }}
+  .sidebar-footer {{ padding: 12px 18px; border-top: 1px solid var(--border); }}
+
+  /* 侧边栏拖拽调整宽度 */
+  .sidebar-resize-handle {{
+    position: absolute; top: 0; right: 0; bottom: 0; width: 5px;
+    cursor: col-resize; z-index: 10; background: transparent;
+    transition: background .15s;
+  }}
+  .sidebar-resize-handle:hover,
+  .sidebar-resize-handle.dragging {{
+    background: var(--accent); opacity: 0.4;
+  }}
+  .sidebar-footer .btn {{
+    display: block; width: 100%; padding: 8px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: var(--card-bg); color: var(--text);
+    cursor: pointer; font-size: .78rem; font-family: inherit; text-align: center; font-weight: 500;
+    margin-bottom: 6px; transition: all .15s;
+  }}
+  .sidebar-footer .btn:hover {{ border-color: var(--accent); box-shadow: var(--shadow-sm); background: rgba(13,148,136,.04); }}
+
+  /* 主内容区 */
+  .main {{
+    margin-left: var(--sidebar-w); padding: 28px 32px 64px;
+    max-width: calc(1280px - var(--sidebar-w)); min-height: 100vh;
+  }}
+  .page {{ display: none; }}
+  .page.active {{ display: block; }}
+
+  /* 筛选条 */
+  .filter-bar {{
+    background: var(--card-bg); border-radius: var(--radius); padding: 12px 16px;
+    box-shadow: var(--shadow-sm); margin-bottom: 20px;
+    display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card-highlight) 0%, var(--card-bg) 40%);
+  }}
+  .filter-bar label {{ font-size: .78rem; color: var(--muted); white-space: nowrap; font-weight: 500; }}
+  .filter-bar input[type="date"] {{
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: .8rem; font-family: inherit; background: var(--card-bg); color: var(--text);
+    transition: border-color .15s, box-shadow .15s;
+  }}
+  .filter-bar input[type="date"]:focus {{
+    outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,.12);
+  }}
+  .filter-bar .preset {{
+    padding: 5px 12px; border-radius: 6px; border: 1px solid var(--border);
+    background: var(--card-bg); color: var(--text); cursor: pointer;
+    font-size: .75rem; font-family: inherit; font-weight: 500;
+    transition: all .15s;
+  }}
+  .filter-bar .preset:hover {{ border-color: var(--accent); box-shadow: var(--shadow-sm); }}
+  .filter-bar .preset.active {{ background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 2px 8px rgba(13,148,136,.25); }}
+  .filter-info {{ font-size: .75rem; color: var(--muted); margin-left: auto; }}
+
+  /* 卡片 */
+  .kpi-grid {{
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+    gap: 10px; margin-bottom: 20px;
+  }}
+  .kpi-card {{
+    background: var(--card-bg); border-radius: var(--radius);
+    padding: 14px 16px; box-shadow: var(--shadow);
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card-highlight) 0%, var(--card-bg) 50%);
+    transition: all .2s cubic-bezier(.4,0,.2,1);
+  }}
+  .kpi-card:hover {{
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }}
+  .kpi-card .label {{ font-size: .73rem; color: var(--muted); margin-bottom: 6px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; }}
+  .kpi-card .value {{ font-size: 1.2rem; font-weight: 700; line-height: 1.2; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }}
+  .value.good {{ color: var(--accent); }} .value.warn {{ color: var(--warn); }} .value.bad {{ color: var(--danger); }}
+  .kpi-card .unit {{ font-size: .68rem; color: var(--muted); font-weight: 400; }}
+  .kpi-card-clickable:hover {{ box-shadow: var(--shadow-lg); transform: translateY(-2px); border-color: var(--accent); }}
+
+  /* 可折叠区块 */
+  .collapsible {{
+    background: var(--card-bg); border-radius: var(--radius);
+    box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card-highlight) 0%, var(--card-bg) 30%);
+    transition: box-shadow .2s;
+  }}
+  .collapsible:hover {{ box-shadow: var(--shadow-lg); }}
+  .collapsible .sec-header {{
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px 18px; cursor: pointer; user-select: none;
+    border-bottom: 1px solid transparent; transition: background .15s;
+  }}
+  .collapsible .sec-header:hover {{ background: var(--bg); }}
+  .collapsible.open .sec-header {{ border-bottom-color: var(--border); }}
+  .collapsible .sec-header h3 {{ font-size: .9rem; font-weight: 600; }}
+  .collapsible .sec-header .arrow {{
+    font-size: .7rem; color: var(--muted); transition: transform .2s;
+  }}
+  .collapsible.open .sec-header .arrow {{ transform: rotate(180deg); }}
+  .collapsible .sec-body {{ display: none; padding: 16px 18px; }}
+  .collapsible.open .sec-body {{ display: block; }}
+
+  /* 图表区 */
+  .chart-grid {{
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 14px;
+  }}
+  .chart-card {{
+    background: var(--card-bg); border-radius: var(--radius); padding: 16px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--card-highlight) 0%, var(--card-bg) 40%);
+    transition: box-shadow .2s;
+  }}
+  .chart-card:hover {{ box-shadow: var(--shadow-lg); }}
+  .chart-card h4 {{ font-size: .85rem; margin-bottom: 4px; }}
+  .chart-card .desc {{ font-size: .75rem; color: var(--muted); margin-bottom: 10px; }}
+  .chart-card img {{ width: 100%; height: auto; border-radius: 6px; display: block; }}
+
+  /* 图表导出按钮 */
+  .chart-card-header {{
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  }}
+  .chart-export-btn {{
+    flex-shrink: 0; padding: 3px 10px; border: 1px solid var(--border);
+    border-radius: 6px; background: var(--card-bg); color: var(--muted);
+    font-size: .68rem; cursor: pointer; font-family: inherit; font-weight: 500;
+    transition: all .15s; white-space: nowrap;
+  }}
+  .chart-export-btn:hover {{ border-color: var(--accent); color: var(--accent); background: rgba(13,148,136,.06); box-shadow: var(--shadow-sm); }}
+  .chart-empty {{ background: var(--card-bg); border-radius: var(--radius);
+    padding: 32px 20px; text-align: center; color: var(--muted); box-shadow: var(--shadow); }}
+
+  /* 对比卡片 */
+  .compare-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }}
+  .compare-card {{
+    background: var(--card-bg); border-radius: var(--radius); padding: 16px 18px;
+    box-shadow: var(--shadow); border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    background: linear-gradient(135deg, var(--card-highlight) 0%, var(--card-bg) 50%);
+    transition: all .2s cubic-bezier(.4,0,.2,1);
+  }}
+  .compare-card:hover {{ box-shadow: var(--shadow-lg); transform: translateY(-1px); }}
+  .compare-card.cron {{ border-left-color: #457b9d; }}
+  .compare-card.user {{ border-left-color: var(--warn); }}
+  .compare-card h4 {{ font-size: .82rem; margin-bottom: 8px; word-break: break-word; }}
+  .compare-card strong {{ color: var(--text); word-break: break-word; }}
+  body.dark .compare-card strong {{ color: var(--text); }}
+
+  /* 表格 */
+  .tbl-wrap {{ overflow-x: auto; }}
+  table {{ width: 100%; border-collapse: collapse; font-size: .8rem; }}
+  th,td {{ padding: 8px 12px; text-align: left; border-bottom: 1px solid var(--border); white-space: nowrap; }}
+  th {{ background: var(--bg); color: var(--muted); font-weight: 600; font-size: .75rem; position: sticky; top: 0; cursor: pointer; letter-spacing: .02em; text-transform: uppercase; }}
+  th:hover {{ color: var(--accent); }}
+  tr {{ transition: background .12s; }}
+  tr:hover td {{ background: linear-gradient(90deg, rgba(13,148,136,.03) 0%, transparent 60%); }}
+  td {{ color: var(--text); }}
+  body.dark td {{ color: var(--text); }}
+  body.dark .kpi-card .value {{ color: var(--text); }}
+  body.dark .value.good {{ color: var(--accent); }}
+  body.dark .value.warn {{ color: var(--warn); }}
+  body.dark .value.bad {{ color: var(--danger); }}
+  .badge-sm {{ display: inline-block; padding: 2px 7px; border-radius: 10px; font-size: .7rem; font-weight: 600; }}
+  .badge-sm.good {{ background: #d4edda; color: #155724; }}
+  .badge-sm.warn {{ background: #fff3cd; color: #856404; }}
+  .badge-sm.bad  {{ background: #f8d7da; color: #721c24; }}
+  body.dark .badge-sm.good {{ background: #1a3a2a; color: #5dbe7e; }}
+  body.dark .badge-sm.bad  {{ background: #3a1a1a; color: #e07070; }}
+  body.dark .badge-sm.warn {{ background: #2a2010; color: #d4a843; }}
+
+  /* 分页 & 搜索 */
+  .page-controls {{ display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: .78rem; color: var(--muted); margin-top: 10px; }}
+  .page-controls button {{
+    padding: 5px 12px; border: 1px solid var(--border); border-radius: 6px;
+    background: var(--card-bg); color: var(--text); cursor: pointer;
+    font-family: inherit; font-size: .75rem; font-weight: 500;
+    transition: all .15s;
+  }}
+  .page-controls button:hover:not(:disabled) {{ border-color: var(--accent); box-shadow: var(--shadow-sm); }}
+  .page-controls button:disabled {{ opacity: .35; cursor: default; }}
+  .page-controls button.active {{ background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 2px 8px rgba(13,148,136,.25); }}
+  .search-box {{
+    padding: 6px 12px; border: 1px solid var(--border); border-radius: 8px;
+    font-size: .8rem; font-family: inherit; background: var(--card-bg); color: var(--text); width: 200px;
+    transition: border-color .15s, box-shadow .15s;
+  }}
+  .search-box:focus {{ outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(13,148,136,.12); }}
+
+  /* 热力图 */
+  .heatmap-cell {{
+    width: 34px; height: 34px; border-radius: 4px; margin: 2px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: .62rem; color: #fff; cursor: default; transition: transform .15s;
+  }}
+  .heatmap-cell:hover {{ transform: scale(1.15); z-index: 2; }}
+
+  /* 模态弹窗 */
+  .modal-overlay {{ display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,.45); z-index: 9999; align-items: center; justify-content: center; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }}
+  .modal-overlay.show {{ display: flex; }}
+  .modal {{ background: var(--card-bg); border-radius: var(--radius); padding: 24px 28px; max-width: 560px; width: 92%; max-height: 80vh; overflow-y: auto; box-shadow: var(--shadow-xl); position: relative; border: 1px solid var(--border); }}
+  .modal .close {{ position: absolute; top: 12px; right: 16px; background: none; border: none; font-size: 1.3rem; cursor: pointer; color: var(--muted); }}
+  .modal .close:hover {{ color: var(--danger); }}
+  .modal .detail-row {{ display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: .8rem; flex-wrap: wrap; gap: 4px; }}
+  .modal .detail-row .k {{ color: var(--muted); }} .modal .detail-row .v {{ font-family: monospace; font-size: .76rem; word-break: break-all; text-align: right; }}
+
+  /* 告警 */
+  .token-alert {{ display: inline-block; padding: 2px 7px; border-radius: 4px; background: #f8d7da; color: #721c24; font-size: .7rem; font-weight: 600; margin-left: 4px; animation: pulse 2s infinite; }}
+  body.dark .token-alert {{ background: #3a1a1a; color: #e07070; }}
+  @keyframes pulse {{ 0%,100%{{opacity:1}} 50%{{opacity:.5}} }}
+  .storm-alert {{ background: #fff3cd; border: 1px solid #ffc107; border-radius: 8px; padding: 10px 14px; margin-bottom: 8px; font-size: .8rem; }}
+  body.dark .storm-alert {{ background: #2a2010; border-color: #8a6d14; }}
+
+  .footer {{ text-align: center; color: var(--muted); font-size: .75rem; margin-top: 28px; }}
+
+  /* 引导提示 */
+  .onboarding-banner {{
+    background: linear-gradient(135deg, rgba(13,148,136,.06) 0%, rgba(139,92,246,.04) 100%);
+    border: 1px solid rgba(13,148,136,.2); border-radius: var(--radius);
+    padding: 16px 20px; margin-bottom: 20px;
+    font-size: .8rem; color: var(--text); line-height: 1.8;
+    display: flex; align-items: flex-start; gap: 12px;
+    box-shadow: var(--shadow-sm);
+  }}
+  .onboarding-banner .hint-icon {{ font-size: 1.2rem; flex-shrink: 0; }}
+  .onboarding-banner .close-hint {{
+    margin-left: auto; background: none; border: none; cursor: pointer;
+    font-size: 1rem; color: var(--muted); padding: 0 4px; flex-shrink: 0;
+  }}
+  .onboarding-banner .close-hint:hover {{ color: var(--danger); }}
+  .onboarding-banner .hint-tag {{
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    background: var(--accent); color: #fff; font-size: .7rem; margin: 0 2px;
+  }}
+
+  /* 回到顶部 */
+  .back-to-top {{
+    position: fixed; bottom: 32px; right: 32px; z-index: 500;
+    width: 44px; height: 44px; border-radius: 50%;
+    background: var(--accent); color: #fff; border: none;
+    font-size: 1.1rem; cursor: pointer;
+    box-shadow: 0 4px 16px rgba(13,148,136,.3), 0 2px 4px rgba(0,0,0,.1);
+    opacity: 0; transform: translateY(16px); pointer-events: none;
+    transition: opacity .3s, transform .3s cubic-bezier(.4,0,.2,1), box-shadow .2s;
+  }}
+  .back-to-top.show {{ opacity: 1; transform: translateY(0); pointer-events: auto; }}
+  .back-to-top:hover {{
+    box-shadow: 0 6px 20px rgba(13,148,136,.4), 0 4px 8px rgba(0,0,0,.15);
+    transform: translateY(-3px);
+  }}
+
+  /* 自定义 Tooltip */
+  .chart-tooltip {{
+    position: fixed; z-index: 9999; pointer-events: none;
+    background: rgba(15,23,42,.92); color: #f1f5f9;
+    padding: 8px 14px; border-radius: 8px; font-size: .76rem;
+    line-height: 1.6; white-space: nowrap;
+    box-shadow: 0 8px 24px rgba(0,0,0,.3), 0 2px 6px rgba(0,0,0,.15);
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .12s, transform .12s;
+    max-width: 380px; white-space: normal;
+    border: 1px solid rgba(255,255,255,.08);
+  }}
+  .chart-tooltip.show {{ opacity: 1; transform: translateY(0); }}
+  body.dark .chart-tooltip {{ background: rgba(241,245,249,.94); color: #0f172a; border-color: rgba(0,0,0,.06); box-shadow: 0 8px 24px rgba(0,0,0,.2); }}
+
+  /* 图表 hover 动画 */
+  .chart-bar, .chart-dot, .chart-slice, .chart-cell {{
+    transition: transform .12s, filter .12s, opacity .12s;
+    cursor: pointer;
+  }}
+  .chart-bar:hover, .chart-dot:hover, .chart-slice:hover, .chart-cell:hover {{
+    filter: brightness(1.2);
+  }}
+
+  /* 移动端：侧边栏缩为顶部汉堡菜单 */
+  @media (max-width: 768px) {{
+    .sidebar {{ transform: translateX(-100%); }}
+    .sidebar.open {{ transform: translateX(0); }}
+    .sidebar-resize-handle {{ display: none; }}
+    .main {{ margin-left: 0; padding: 16px 12px 40px; }}
+    .main .mobile-menu-btn {{
+      display: inline-block; padding: 6px 12px; margin-bottom: 14px;
+      border: 1px solid var(--border); border-radius: 6px;
+      background: var(--card-bg); color: var(--text); font-size: .85rem; cursor: pointer;
+    }}
+    .filter-bar {{ flex-direction: column; align-items: stretch; }}
+    .filter-bar .filter-info {{ margin-left: 0; }}
+    .kpi-grid {{ grid-template-columns: repeat(2, 1fr); gap: 8px; }}
+    .chart-grid {{ grid-template-columns: 1fr; }}
+    .compare-grid {{ grid-template-columns: 1fr; }}
+  }}
+  @media (min-width: 769px) {{ .main .mobile-menu-btn {{ display: none; }} }}
+  body.dark svg text {{ fill: #c0c0d0 !important; }}
+  body.dark svg line {{ stroke: #3a3a5a !important; }}
+
+  /* ===== 欢迎动画 ===== */
+  .welcome-overlay {{
+    position: fixed; inset: 0; z-index: 10000;
+    display: none; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.38);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    transition: opacity .55s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity: 1;
+  }}
+  .welcome-overlay.show {{ display: flex; }}
+  .welcome-card {{
+    background: rgba(255,255,255,.88);
+    border-radius: 24px;
+    padding: 48px 52px 40px;
+    max-width: 520px; width: 90%;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
+    animation: welcomeCardIn .7s cubic-bezier(0.16, 1, 0.3, 1) both;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }}
+  body.dark .welcome-card {{
+    background: rgba(26,29,46,.88);
+    box-shadow: 0 8px 32px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.2);
+  }}
+  @keyframes welcomeCardIn {{
+    0% {{ opacity: 0; transform: translateY(24px) scale(.97); }}
+    100% {{ opacity: 1; transform: translateY(0) scale(1); }}
+  }}
+  .welcome-title {{
+    font-size: 2.1rem; font-weight: 700;
+    letter-spacing: -.02em;
+    color: var(--text);
+    margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif;
+    animation: welcomeFadeUp .65s .08s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }}
+  .welcome-subtitle {{
+    font-size: .95rem; color: var(--muted);
+    font-weight: 450;
+    margin-bottom: 32px;
+    line-height: 1.5;
+    animation: welcomeFadeUp .65s .16s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }}
+  @keyframes welcomeFadeUp {{
+    0% {{ opacity: 0; transform: translateY(14px); }}
+    100% {{ opacity: 1; transform: translateY(0); }}
+  }}
+  .welcome-features {{
+    display: flex; flex-direction: column; gap: 10px;
+    margin-bottom: 36px;
+    animation: welcomeFadeUp .65s .24s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }}
+  .welcome-feature {{
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 16px;
+    background: rgba(13,148,136,.06);
+    border-radius: 10px;
+    font-size: .88rem; color: var(--text);
+    text-align: left;
+  }}
+  body.dark .welcome-feature {{ background: rgba(13,148,136,.1); }}
+  .welcome-feature-dot {{
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent); flex-shrink: 0;
+  }}
+  .welcome-btn {{
+    display: inline-block;
+    padding: 12px 40px;
+    background: var(--accent); color: #fff;
+    border: none; border-radius: 12px;
+    font-size: .95rem; font-weight: 600;
+    cursor: pointer;
+    transition: all .2s ease;
+    animation: welcomeFadeUp .65s .32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    font-family: inherit;
+    letter-spacing: .01em;
+  }}
+  .welcome-btn:hover {{ opacity: .88; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(13,148,136,.35); }}
+  .welcome-skip {{
+    display: block; margin-top: 14px;
+    font-size: .8rem; color: var(--muted);
+    cursor: pointer;
+    background: none; border: none;
+    animation: welcomeFadeUp .65s .38s cubic-bezier(0.16, 1, 0.3, 1) both;
+    font-family: inherit;
+    transition: color .2s;
+  }}
+  .welcome-skip:hover {{ color: var(--text); }}
+
+  .replay-welcome {{
+    display: inline-block; width: 18px; height: 18px; line-height: 18px;
+    text-align: center; border-radius: 50%;
+    font-size: 11px; font-weight: 600;
+    color: var(--muted); background: var(--bg);
+    cursor: pointer; margin-left: 6px;
+    transition: all .2s; vertical-align: middle;
+    font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+  }}
+  .replay-welcome:hover {{ color: #fff; background: var(--accent); }}
+</style>
+</head>
+<body>
+
+<!-- ===== 欢迎动画 ===== -->
+<div class="welcome-overlay show" id="welcomeOverlay">
+  <div class="welcome-card">
+    <div class="welcome-title">OpenClaw 动态监控</div>
+    <div class="welcome-subtitle">智能体任务轨迹实时洞察<br>多维度性能分析 · 一键定位异常</div>
+    <div class="welcome-features">
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>成功率趋势与 KPI 概览</div>
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>交互记录检索与详情查看</div>
+      <div class="welcome-feature"><span class="welcome-feature-dot"></span>错误分类、热力图与 Token 分析</div>
+    </div>
+    <button class="welcome-btn" onclick="dismissWelcome()">进入仪表盘</button>
+    <button class="welcome-skip" onclick="dismissWelcome()">跳过介绍</button>
+  </div>
+</div>
+
+<!-- 侧边栏 -->
+<nav class="sidebar" id="sidebar">
+  <div class="sidebar-resize-handle" id="sidebarResizeHandle"></div>
+  <div class="sidebar-header">
+    <h2 style="cursor:default;">OpenClaw 监控<span class="replay-welcome" onclick="event.stopPropagation();replayWelcome();" title="重播欢迎动画">?</span></h2>
+    <div class="sub">{today}</div>
+    <div class="sub" style="margin-top:4px;font-size:.65rem;" id="refreshTime"></div>
+  </div>
+  <div class="sidebar-nav">
+    <a class="active" data-page="overview" onclick="switchPage('overview')">
+      <span class="ico">&#9679;</span> 仪表盘概览
+    </a>
+    <a data-page="failures" onclick="switchPage('failures')">
+      <span class="ico">&#10007;</span> 失败明细
+      <span class="badge-dot" id="failureBadge" style="display:none"></span>
+    </a>
+    <a data-page="tokens" onclick="switchPage('tokens')">
+      <span class="ico">&#9733;</span> Token 分析
+    </a>
+    <a data-page="errors" onclick="switchPage('errors')">
+      <span class="ico">&#9783;</span> 错误趋势
+    </a>
+    <a data-page="heatmap" onclick="switchPage('heatmap')">
+      <span class="ico">&#9637;</span> 时段热力图
+    </a>
+    <a data-page="interactions" onclick="switchPage('interactions')">
+      <span class="ico">&#9993;</span> 交互记录
+    </a>
+  </div>
+  <div class="sidebar-footer">
+    <button class="btn" onclick="toggleTheme()" id="themeToggle">暗色模式</button>
+    <button class="btn" onclick="exportCSV()">导出 CSV</button>
+  </div>
+</nav>
+
+<!-- 主内容区 -->
+<div class="main" id="mainContent">
+  <button class="mobile-menu-btn" onclick="toggleSidebar()">&#9776; 菜单</button>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <label>起始</label><input type="date" id="dateFrom">
+    <label>结束</label><input type="date" id="dateTo">
+    <button class="preset" data-days="1" onclick="setPreset(1)">今日</button>
+    <button class="preset" data-days="7" onclick="setPreset(7)">近 7 天</button>
+    <button class="preset" data-days="30" onclick="setPreset(30)">近 30 天</button>
+    <button class="preset active" data-days="0" onclick="setPreset(0)">全部</button>
+    <span class="filter-info" id="filterInfo"></span>
+  </div>
+
+  <!-- ====== 页面：仪表盘概览 ====== -->
+  <div class="page active" id="page-overview">
+    <div class="onboarding-banner" id="onboardingBanner" style="display:none;">
+      <span class="hint-icon">&#128161;</span>
+      <div style="flex:1;">
+        <strong>快速上手</strong><br>
+        <span class="hint-tag">hover</span> 悬停图表查看详细数据 &nbsp;
+        <span class="hint-tag">点击</span> KPI 卡片"最高频错误"可快速跳转筛选 &nbsp;
+        <span class="hint-tag">拖拽</span> 侧边栏边缘调整宽度 &nbsp;
+        <span class="hint-tag">快捷键</span> 123456 切换页面 &nbsp;
+        <span class="hint-tag">D</span> 切换暗色模式<br>
+        图表右上角 <span class="hint-tag">PNG</span> 按钮可导出图片
+      </div>
+      <button class="close-hint" onclick="dismissOnboarding()" title="关闭">&times;</button>
+    </div>
+    <div id="dailyCompare" style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:12px;"></div>
+
+    <div class="kpi-grid" id="kpiGrid"></div>
+
+    <div id="latencyCard" style="background:var(--card-bg);border-radius:10px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-weight:600;font-size:.82rem;">延迟分位分布 (P50 / P95 / P99)</span>
+        <span style="font-size:.68rem;color:var(--muted);" id="latencyLabel"></span>
+      </div>
+      <svg id="latencyChart" viewBox="0 0 600 72" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;"></svg>
+    </div>
+
+    <div class="compare-grid" id="triggerCompare" style="margin-bottom:14px;"></div>
+
+    <div class="collapsible open" id="sec-charts">
+      <div class="sec-header" onclick="toggleSection('sec-charts')">
+        <h3>可视化分析图表（随筛选联动）</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div class="chart-grid">
+        <div class="chart-card"><div class="chart-card-header"><div><h4>每日任务成功率</h4><div class="desc">反映系统稳定性趋势，波动过大时需关注</div></div><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('chartSuccessRate'),'成功率趋势')" title="导出 PNG">&#128190; PNG</button></div><svg class="svg-chart" id="chartSuccessRate" viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet"></svg></div>
+        <div class="chart-card"><div class="chart-card-header"><div><h4>错误类型占比</h4><div class="desc">帮助定位主要故障原因</div></div><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('chartErrorDonut'),'错误类型占比')" title="导出 PNG">&#128190; PNG</button></div><svg class="svg-chart" id="chartErrorDonut" viewBox="0 0 400 320" preserveAspectRatio="xMidYMid meet"></svg></div>
+        <div class="chart-card"><div class="chart-card-header"><div><h4>工具使用频次 Top 5</h4><div class="desc">反映智能体最常用的能力</div></div><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('chartToolBar'),'工具使用频次')" title="导出 PNG">&#128190; PNG</button></div><svg class="svg-chart" id="chartToolBar" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet"></svg></div>
+        <div class="chart-card"><div class="chart-card-header"><div><h4>Token 消耗分布</h4><div class="desc">了解单次任务的资源消耗水平和离群情况</div></div><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('chartTokenHist'),'Token消耗分布')" title="导出 PNG">&#128190; PNG</button></div><svg class="svg-chart" id="chartTokenHist" viewBox="0 0 600 300" preserveAspectRatio="xMidYMid meet"></svg></div>
+      </div></div>
+    </div>
+
+    <div class="collapsible" id="sec-trigger">
+      <div class="sec-header" onclick="toggleSection('sec-trigger')">
+        <h3>Trigger 类型统计</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div class="tbl-wrap"><table id="triggerTable"><thead><tr><th>Trigger</th><th>总数</th><th>成功</th><th>失败</th><th>成功率</th><th>平均 Token</th><th>平均耗时(s)</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+
+    <div class="collapsible" id="sec-storms">
+      <div class="sec-header" onclick="toggleSection('sec-storms')">
+        <h3>重试风暴检测</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div id="retryStormsContent"></div></div>
+    </div>
+
+    <div class="collapsible" id="sec-assessment">
+      <div class="sec-header" onclick="toggleSection('sec-assessment')">
+        <h3>综合评估与建议</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div id="assessment"></div></div>
+    </div>
+  </div>
+
+  <!-- ====== 页面：失败明细 ====== -->
+  <div class="page" id="page-failures">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+      <input type="text" class="search-box" id="failureSearch" placeholder="搜索 error_type / task_id..." oninput="renderFailures()">
+      <span style="font-size:.78rem;color:var(--muted);" id="failureCount"></span>
+    </div>
+    <div class="tbl-wrap"><table id="failureTable"><thead><tr>
+      <th data-sort="timestamp" onclick="sortFailures('timestamp')" style="color:var(--accent)">时间 <span class="sort-arrow">&#9650;</span></th>
+      <th data-sort="task_id" onclick="sortFailures('task_id')">Task ID <span class="sort-arrow"></span></th>
+      <th data-sort="error_type" onclick="sortFailures('error_type')">错误类型 <span class="sort-arrow"></span></th>
+      <th data-sort="duration_sec" onclick="sortFailures('duration_sec')">耗时(s) <span class="sort-arrow"></span></th>
+      <th data-sort="tokens_used" onclick="sortFailures('tokens_used')">Token <span class="sort-arrow"></span></th>
+      <th data-sort="trigger" onclick="sortFailures('trigger')">Trigger <span class="sort-arrow"></span></th>
+    </tr></thead><tbody></tbody></table></div>
+    <div class="page-controls" id="failurePagination"></div>
+  </div>
+
+  <!-- ====== 页面：Token 分析 ====== -->
+  <div class="page" id="page-tokens">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px;" id="tokenSummary"></div>
+    <div class="collapsible open" id="sec-token-trend">
+      <div class="sec-header" onclick="toggleSection('sec-token-trend')">
+        <h3>每日 Token 消耗趋势</h3><div style="display:flex;align-items:center;gap:8px;"><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('tokenTrendChart'),'Token消耗趋势')" title="导出 PNG" style="font-size:.68rem;">&#128190; PNG</button><span class="arrow">&#9660;</span></div>
+      </div>
+      <div class="sec-body">
+        <svg class="svg-chart" id="tokenTrendChart" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet" style="width:100%;"></svg>
+      </div>
+    </div>
+    <div class="collapsible" id="sec-token-top">
+      <div class="sec-header" onclick="toggleSection('sec-token-top')">
+        <h3>Token 消耗 Top 10 任务</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div class="tbl-wrap"><table id="topTokensTable"><thead><tr><th>时间</th><th>Task ID</th><th>Status</th><th>Token</th><th>耗时(s)</th><th>工具调用</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- ====== 页面：错误趋势 ====== -->
+  <div class="page" id="page-errors">
+    <div class="collapsible open" id="sec-error-chart">
+      <div class="sec-header" onclick="toggleSection('sec-error-chart')">
+        <h3>每日错误类型分布（堆叠面积图）</h3><div style="display:flex;align-items:center;gap:8px;"><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('errorTrendChart'),'错误趋势')" title="导出 PNG" style="font-size:.68rem;">&#128190; PNG</button><span class="arrow">&#9660;</span></div>
+      </div>
+      <div class="sec-body">
+        <svg class="svg-chart" id="errorTrendChart" viewBox="0 0 800 360" preserveAspectRatio="xMidYMid meet" style="width:100%;"></svg>
+      </div>
+    </div>
+    <div class="collapsible" id="sec-error-summary">
+      <div class="sec-header" onclick="toggleSection('sec-error-summary')">
+        <h3>各错误类型汇总</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div class="tbl-wrap"><table id="errorSummaryTable"><thead><tr><th>错误类型</th><th>总次数</th><th>占比</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- ====== 页面：时段热力图 ====== -->
+  <div class="page" id="page-heatmap">
+    <div class="collapsible open" id="sec-heatmap-chart">
+      <div class="sec-header" onclick="toggleSection('sec-heatmap-chart')">
+        <h3>24 小时 × 日期 — 任务失败率热力图</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div id="heatmapChart"></div></div>
+    </div>
+    <div class="collapsible" id="sec-hourly-summary">
+      <div class="sec-header" onclick="toggleSection('sec-hourly-summary')">
+        <h3>各时段汇总统计</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body"><div class="tbl-wrap"><table id="hourlySummaryTable"><thead><tr><th>时段</th><th>总任务</th><th>成功</th><th>失败</th><th>失败率</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+  </div>
+
+  <!-- 交互记录页 -->
+  <div class="page" id="page-interactions">
+    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:12px;">
+      <input type="text" id="interactSearch" placeholder="搜索提问内容..." oninput="interactPage=0;renderInteractions()"
+             style="flex:1;min-width:200px;padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.82rem;">
+      <select id="interactStatus" onchange="interactPage=0;renderInteractions()"
+              style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.82rem;">
+        <option value="all">全部状态</option>
+        <option value="success">成功</option>
+        <option value="failed">失败</option>
+      </select>
+      <select id="interactTrigger" onchange="interactPage=0;renderInteractions()"
+              style="padding:8px 12px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);font-size:.82rem;">
+        <option value="all">全部触发</option>
+        <option value="cron">Cron</option>
+        <option value="user">User</option>
+      </select>
+      <span style="color:var(--muted);font-size:.78rem;" id="interactInfo"></span>
+    </div>
+    <div class="tbl-wrap"><table id="interactTable"><thead><tr>
+      <th style="width:140px;">时间</th>
+      <th style="width:55px;">触发</th>
+      <th>提问内容</th>
+      <th style="width:65px;">状态</th>
+      <th style="width:75px;">耗时</th>
+      <th style="width:70px;">Tokens</th>
+    </tr></thead><tbody></tbody></table></div>
+    <div style="display:flex;justify-content:center;gap:6px;margin-top:12px;" id="interactPages"></div>
+  </div>
+
+  <div class="footer">报表由 OpenClaw ETL 管线自动生成 &nbsp;|&nbsp; {today} &nbsp;|&nbsp; <span style="cursor:help;" title="1-6 切换页面 · D 暗色模式 · Esc 关闭弹窗">快捷键 ?</span></div>
+</div>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({{top:0,behavior:'smooth'}})" title="回到顶部">&#9650;</button>
+
+<!-- 图表 Tooltip -->
+<div class="chart-tooltip" id="chartTooltip"></div>
+
+<!-- 会话详情弹窗 -->
+<div class="modal-overlay" id="detailModal">
+  <div class="modal">
+    <button class="close" onclick="closeModal()">&times;</button>
+    <h3 id="modalTitle" style="font-size:.95rem;margin-bottom:12px;padding-right:24px;word-break:break-all;">任务详情</h3>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- 提问内容弹窗 -->
+<div class="modal-overlay" id="promptModal">
+  <div class="modal" style="max-width:650px;">
+    <button class="close" onclick="closePromptModal()">&times;</button>
+    <h3 id="promptModalTitle" style="font-size:.95rem;margin-bottom:12px;">提问内容</h3>
+    <div id="promptContent" style="max-height:60vh;overflow-y:auto;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text);word-break:break-word;"></div>
+  </div>
+</div>
+
+<script>
+// ===== 欢迎动画 =====
+function dismissWelcome() {{
+  var overlay = document.getElementById('welcomeOverlay');
+  if (!overlay) return;
+  overlay.style.opacity = '0';
+  overlay.style.pointerEvents = 'none';
+  try {{ localStorage.setItem('openclaw-welcome-done', '1'); }} catch(e) {{}}
+  setTimeout(function() {{ overlay.style.display = 'none'; overlay.classList.remove('show'); }}, 550);
+}}
+function replayWelcome() {{
+  var overlay = document.getElementById('welcomeOverlay');
+  if (!overlay) return;
+  try {{ localStorage.removeItem('openclaw-welcome-done'); }} catch(e) {{}}
+  overlay.style.display = 'flex';
+  overlay.classList.add('show');
+  overlay.style.opacity = '1';
+  overlay.style.pointerEvents = 'auto';
+}}
+(function() {{
+  var done = false;
+  try {{ done = localStorage.getItem('openclaw-welcome-done') === '1'; }} catch(e) {{}}
+  if (done) {{
+    var overlay = document.getElementById('welcomeOverlay');
+    if (overlay) {{ overlay.style.display = 'none'; overlay.classList.remove('show'); }}
+  }}
+}})();
+
+var RAW_DATA = {raw_data_json};
+var FAILURE_DETAILS = {failure_details_json};
+var TRIGGER_STATS = {trigger_stats_json};
+var HOURLY_PATTERN = {hourly_pattern_json};
+var ERROR_TREND = {error_trend_json};
+var RETRY_STORMS = {retry_storms_json};
+var DAILY_SUMMARY = {daily_summary_json};
+var CHART_IMAGES = {chart_paths_json};
+var GLOBAL_STATS = {stats_json};
+var INTERACTIONS = {interactions_json};
+var TOKEN_COST_PER_1M = 4;
+var TOKEN_ALERT_PER_TASK = 50000;
+var TOKEN_ALERT_DAILY = 500000;
+
+var dateFrom = null, dateTo = null, currentPage = 'overview';
+var failureSortKey = 'timestamp', failureSortAsc = false, failurePage = 0, PAGE_SIZE = 20;
+var darkMode = false;
+
+// ===== 自定义 Tooltip =====
+var tooltipEl = document.getElementById('chartTooltip');
+var tooltipTimer = null;
+function showTooltip(e, html) {{
+  if (!tooltipEl) return;
+  tooltipEl.innerHTML = html;
+  tooltipEl.classList.add('show');
+  clearTimeout(tooltipTimer);
+  positionTooltip(e);
+}}
+function positionTooltip(e) {{
+  if (!tooltipEl) return;
+  var x = e.clientX + 14, y = e.clientY - 10;
+  var tw = tooltipEl.offsetWidth, th = tooltipEl.offsetHeight;
+  if (x + tw > window.innerWidth - 10) x = e.clientX - tw - 14;
+  if (y + th > window.innerHeight - 10) y = e.clientY - th - 10;
+  if (x < 4) x = 4;
+  if (y < 4) y = 4;
+  tooltipEl.style.left = x + 'px';
+  tooltipEl.style.top = y + 'px';
+}}
+function hideTooltip() {{
+  if (!tooltipEl) return;
+  tooltipTimer = setTimeout(function() {{ tooltipEl.classList.remove('show'); }}, 80);
+}}
+// 事件委托：所有 .chart-bar / .chart-dot / .chart-slice / .chart-cell 统一处理 hover
+document.addEventListener('mouseover', function(e) {{
+  var el = e.target.closest('.chart-bar, .chart-dot, .chart-slice, .chart-cell');
+  if (!el) return;
+  var tip = el.getAttribute('data-tooltip');
+  if (tip) showTooltip(e, tip);
+}});
+document.addEventListener('mouseout', function(e) {{
+  var el = e.target.closest('.chart-bar, .chart-dot, .chart-slice, .chart-cell');
+  if (el) hideTooltip();
+}});
+document.addEventListener('mousemove', function(e) {{
+  if (tooltipEl && tooltipEl.classList.contains('show')) positionTooltip(e);
+}});
+
+// ===== 工具函数 =====
+function parseDate(s) {{
+  if (!s) return null;
+  var p = s.split('-');
+  if (p.length >= 3) return new Date(+p[0], +p[1] - 1, +p[2]);
+  var d = new Date(s); return isNaN(d.getTime()) ? null : d;
+}}
+function fmtDate(d) {{ return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }}
+function escHtml(s) {{ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }}
+function inRange(r) {{
+  if (!dateFrom && !dateTo) return true;
+  var d = parseDate(r.date || r.timestamp);
+  if (!d) return true;
+  if (dateFrom && d < dateFrom) return false;
+  if (dateTo && d > dateTo) return false;
+  return true;
+}}
+function filteredData() {{
+  return RAW_DATA.filter(inRange);
+}}
+// 缓存 filteredData 结果，同一渲染周期内避免重复 O(n) 过滤
+var _fdataCache = null;
+function cachedFilteredData() {{
+  if (_fdataCache === null) _fdataCache = RAW_DATA.filter(inRange);
+  return _fdataCache;
+}}
+function filteredFailures() {{ return FAILURE_DETAILS.filter(inRange); }}
+
+// ===== 侧边栏 & 页面切换 =====
+function switchPage(name) {{
+  currentPage = name;
+  document.querySelectorAll('.sidebar-nav a').forEach(function(a) {{ a.classList.toggle('active', a.dataset.page === name); }});
+  document.querySelectorAll('.page').forEach(function(p) {{ p.classList.toggle('active', p.id === 'page-' + name); }});
+  renderCurrentPage();
+  // 移动端自动关闭侧边栏
+  if (window.innerWidth <= 768) document.getElementById('sidebar').classList.remove('open');
+}}
+function toggleSidebar() {{ document.getElementById('sidebar').classList.toggle('open'); }}
+
+// ===== 侧边栏拖拽调整宽度 =====
+(function() {{
+  var handle = document.getElementById('sidebarResizeHandle');
+  var sidebar = document.getElementById('sidebar');
+  var main = document.getElementById('mainContent');
+  if (!handle || !sidebar || !main) return;
+  var startX, startW;
+  var MIN_W = 160, MAX_W = 450;
+
+  function onDown(e) {{
+    e.preventDefault();
+    startX = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    startW = sidebar.offsetWidth;
+    handle.classList.add('dragging');
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'col-resize';
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, {{passive: false}});
+    document.addEventListener('touchend', onUp);
+  }}
+
+  function onMove(e) {{
+    var cx = e.clientX || (e.touches && e.touches[0].clientX) || 0;
+    var newW = Math.min(MAX_W, Math.max(MIN_W, startW + (cx - startX)));
+    sidebar.style.width = newW + 'px';
+    main.style.marginLeft = newW + 'px';
+    document.documentElement.style.setProperty('--sidebar-w', newW + 'px');
+  }}
+
+  function onUp() {{
+    handle.classList.remove('dragging');
+    document.body.style.userSelect = '';
+    document.body.style.cursor = '';
+    document.removeEventListener('mousemove', onMove);
+    document.removeEventListener('mouseup', onUp);
+    document.removeEventListener('touchmove', onMove);
+    document.removeEventListener('touchend', onUp);
+    // 持久化宽度
+    try {{ localStorage.setItem('openclaw-sidebar-w', sidebar.offsetWidth); }} catch(e) {{}}
+  }}
+
+  handle.addEventListener('mousedown', onDown);
+  handle.addEventListener('touchstart', onDown, {{passive: false}});
+
+  // 恢复上次保存的宽度（仅桌面端）
+  (function() {{
+    if (window.innerWidth <= 768) return;
+    try {{
+      var saved = localStorage.getItem('openclaw-sidebar-w');
+      if (saved) {{
+        var w = parseInt(saved);
+        if (w >= MIN_W && w <= MAX_W) {{
+          sidebar.style.width = w + 'px';
+          main.style.marginLeft = w + 'px';
+          document.documentElement.style.setProperty('--sidebar-w', w + 'px');
+        }}
+      }}
+    }} catch(e) {{}}
+  }})();
+}})();
+// 点击主内容区关闭侧边栏
+document.addEventListener('click', function(e) {{
+  var sb = document.getElementById('sidebar');
+  var mc = document.getElementById('mainContent');
+  if (sb.classList.contains('open') && !sb.contains(e.target) && mc.contains(e.target)) {{
+    sb.classList.remove('open');
+  }}
+}});
+function toggleSection(id) {{ document.getElementById(id).classList.toggle('open'); }}
+
+// ===== 筛选 =====
+function applyFilter() {{
+  var fe = document.getElementById('dateFrom'), te = document.getElementById('dateTo');
+  dateFrom = fe.value ? new Date(fe.value + 'T00:00:00') : null;
+  dateTo = te.value ? new Date(te.value + 'T23:59:59') : null;
+  interactPage = 0;
+  _fdataCache = null;  // 清除缓存，强制重新过滤
+  document.querySelectorAll('.preset').forEach(function(b) {{ b.classList.remove('active'); }});
+  var fdata = filteredData();
+  document.getElementById('filterInfo').textContent = '筛选: ' + fdata.length + ' / ' + RAW_DATA.length + ' 条';
+  // 显示/隐藏失败标记
+  var failedCount = filteredFailures().length;
+  var badge = document.getElementById('failureBadge');
+  badge.style.display = failedCount > 0 ? 'inline-block' : 'none';
+  renderCurrentPage();
+}}
+function setPreset(days) {{
+  var fe = document.getElementById('dateFrom'), te = document.getElementById('dateTo');
+  if (days === 0) {{ fe.value = ''; te.value = ''; }}
+  else if (days === 1) {{
+    var today = new Date();
+    te.value = fmtDate(today); fe.value = fmtDate(today);
+  }}
+  else {{
+    var end = new Date(), start = new Date();
+    start.setDate(start.getDate() - days + 1);
+    te.value = fmtDate(end); fe.value = fmtDate(start);
+  }}
+  document.querySelectorAll('.preset').forEach(function(b) {{ b.classList.toggle('active', parseInt(b.dataset.days) === days); }});
+  applyFilter();
+}}
+
+function renderCurrentPage() {{
+  switch (currentPage) {{
+    case 'overview': renderOverview(); break;
+    case 'failures': renderFailures(); break;
+    case 'tokens': renderTokens(); break;
+    case 'errors': renderErrorTrend(); break;
+    case 'heatmap': renderHeatmap(); break;
+    case 'interactions': renderInteractions(); break;
+  }}
+}}
+
+// ===== 概览页 =====
+function renderOverview() {{
+  var fdata = cachedFilteredData();
+  var total = fdata.length, success = fdata.filter(function(r){{return r.status==='success'}}).length;
+  var failed = total - success, rate = total > 0 ? Math.round(success/total*10000)/100 : 0;
+  var totalTokens = fdata.reduce(function(s,r){{return s+(r.tokens_used||0)}},0);
+  var avgTokens = total > 0 ? Math.round(totalTokens/total) : 0;
+  var totalDur = fdata.reduce(function(s,r){{return s+(r.duration_ms||0)}},0);
+  var avgDur = total > 0 ? Math.round(totalDur/total) : 0;
+
+  // ===== 日环比摘要条 =====
+  (function() {{
+    var byDate = {{}};
+    fdata.forEach(function(r) {{
+      var d = r.date || (r.timestamp || '').slice(0, 10);
+      if (!byDate[d]) byDate[d] = {{total:0, success:0, tokens:0, dur:0}};
+      byDate[d].total++;
+      if (r.status === 'success') byDate[d].success++;
+      byDate[d].tokens += (r.tokens_used || 0);
+      byDate[d].dur += (r.duration_ms || 0);
+    }});
+    var dates = Object.keys(byDate).sort();
+    if (dates.length >= 2) {{
+      var today = byDate[dates[dates.length - 1]];
+      var yesterday = byDate[dates[dates.length - 2]];
+      var td = dates[dates.length - 1].slice(5);
+      var yd = dates[dates.length - 2].slice(5);
+
+      function delta(cur, prev) {{
+        if (!prev || prev === 0) return {{pct: 0, dir: 'flat'}};
+        return {{pct: Math.round((cur - prev) / prev * 1000) / 10, dir: cur > prev ? 'up' : 'down'}};
+      }}
+
+      var items = [
+        {{label: '任务量', cur: today.total, prev: yesterday.total, fmt: function(v){{return v+'条'}}, better: 'neutral'}},
+        {{label: '成功率', cur: today.total>0?Math.round(today.success/today.total*1000)/10:0,
+         prev: yesterday.total>0?Math.round(yesterday.success/yesterday.total*1000)/10:0, fmt: function(v){{return v+'%'}}, better: 'up'}},
+        {{label: 'Token消耗', cur: today.tokens, prev: yesterday.tokens, fmt: function(v){{return v>1000?Math.round(v/1000)+'K':v}}, better: 'neutral'}},
+        {{label: '平均耗时', cur: today.total>0?Math.round(today.dur/today.total):0,
+         prev: yesterday.total>0?Math.round(yesterday.dur/yesterday.total):0, fmt: function(v){{return v>=1000?Math.round(v/1000)+'s':v+'ms'}}, better: 'down'}},
+      ];
+
+      var ch = '<div style="width:100%;margin-bottom:2px;font-size:.7rem;color:var(--muted);">日环比 ' + yd + ' → ' + td + '</div><div style="display:flex;gap:10px;flex-wrap:wrap;width:100%;">';
+      items.forEach(function(m) {{
+        var d = delta(m.cur, m.prev);
+        var absPct = Math.abs(d.pct);
+        var arrow = d.dir === 'up' ? '↑' : (d.dir === 'down' ? '↓' : '→');
+        var tc;
+        if (absPct <= 5 || m.better === 'neutral') tc = 'var(--muted)';
+        else if (m.better === 'up') tc = d.dir === 'up' ? '#2a9d8f' : '#e76f51';
+        else if (m.better === 'down') tc = d.dir === 'down' ? '#2a9d8f' : '#e76f51';
+        ch += '<div style="background:var(--card-bg);border-radius:8px;padding:6px 12px;box-shadow:0 1px 2px rgba(0,0,0,.04);flex:1;min-width:100px;overflow:hidden;">';
+        ch += '<div style="font-size:.65rem;color:var(--muted);">' + m.label + '</div>';
+        ch += '<div style="font-size:.95rem;font-weight:700;white-space:nowrap;">' + m.fmt(m.cur) + ' <span style="font-size:.65rem;color:' + tc + ';">' + arrow + absPct + '%</span></div>';
+        ch += '</div>';
+      }});
+      ch += '</div>';
+      document.getElementById('dailyCompare').innerHTML = ch;
+      document.getElementById('dailyCompare').style.display = 'block';
+    }} else {{
+      document.getElementById('dailyCompare').style.display = 'none';
+    }}
+  }})();
+
+  var errCounts = {{}};
+  fdata.forEach(function(r){{ if(r.status==='failed'&&r.error_type){{ var k=r.error_type; errCounts[k]=(errCounts[k]||0)+1; }} }});
+  var topErr='N/A', topMax=0;
+  Object.keys(errCounts).forEach(function(k){{ if(errCounts[k]>topMax){{topErr=k;topMax=errCounts[k];}} }});
+
+  var toolCounts = {{}};
+  fdata.forEach(function(r){{ if(r.tool_name){{ var k=r.tool_name; toolCounts[k]=(toolCounts[k]||0)+1; }} }});
+  var topTool='N/A', topMax2=0;
+  Object.keys(toolCounts).forEach(function(k){{ if(toolCounts[k]>topMax2){{topTool=k;topMax2=toolCounts[k];}} }});
+
+  // KPI 对比箭头: 比较筛选期与前一个等长周期
+  var cmpData = DAILY_SUMMARY || [];
+  var cmpRate = null, cmpTokens = null, cmpTotal = null, cmpDur = null;
+  if (dateFrom && dateTo && cmpData.length > 0) {{
+    var rangeDays = Math.round((dateTo - dateFrom) / 86400000) + 1;
+    var prevEnd = new Date(dateFrom.getTime() - 86400000);
+    var prevStart = new Date(prevEnd.getTime() - (rangeDays - 1) * 86400000);
+    var prevData = cmpData.filter(function(d) {{
+      var p = parseDate(d.date); return p && p >= prevStart && p <= prevEnd;
+    }});
+    if (prevData.length > 0) {{
+      var pTotal = prevData.reduce(function(s,d){{return s+d.total;}},0);
+      var pSuccess = prevData.reduce(function(s,d){{return s+d.success;}},0);
+      var pTokens = prevData.reduce(function(s,d){{return s+d.tokens;}},0);
+      var pDur = prevData.reduce(function(s,d){{return s+(d.avg_duration_sec||0)*1000*d.total;}},0);
+      cmpRate = Math.round(pSuccess/pTotal*10000)/100;
+      cmpTokens = pTokens;
+      cmpTotal = pTotal;
+      cmpDur = pTotal > 0 ? Math.round(pDur/pTotal) : null;
+    }}
+  }} else if (cmpData.length >= 2) {{
+    var last = cmpData[cmpData.length - 1];
+    var prev = cmpData[cmpData.length - 2];
+    cmpRate = prev.success_rate;
+    cmpTokens = prev.tokens;
+    cmpTotal = prev.total;
+    cmpDur = prev.avg_duration_sec ? Math.round(prev.avg_duration_sec * 1000) : null;
+  }}
+  function arrow2(cur, prev, unit, invert) {{
+    if (prev == null || prev === 0) return '';
+    var diff = cur - prev;
+    var pct = Math.round(Math.abs(diff) / prev * 1000) / 10;
+    if (Math.abs(pct) < 0.5) return ' <span style="font-size:.65rem;color:var(--muted);">&#9644;</span>';
+    var up = invert ? (diff < 0) : (diff > 0);
+    var color = up ? 'var(--accent)' : 'var(--danger)';
+    var arrow = up ? '&#9650;' : '&#9660;';
+    return ' <span style="font-size:.65rem;color:'+color+';">'+arrow+' '+pct+'%</span>';
+  }}
+
+  var tone = rate>=95?'good':(rate>=85?'warn':'bad');
+  var cards = [
+    ['任务总数',String(total),'', 'neutral', cmpTotal ? arrow2(total, cmpTotal, '', false) : ''],
+    ['成功率',String(rate),'%', tone, cmpRate ? arrow2(rate, cmpRate, '', false) : ''],
+    ['Token 总消耗',totalTokens.toLocaleString(),'', 'neutral', cmpTokens ? arrow2(totalTokens, cmpTokens, '', false) : ''],
+    ['平均 Token',String(avgTokens),'', 'neutral', ''],
+    ['总耗时',Math.round(totalDur/1000).toLocaleString(),'秒', 'neutral', cmpDur ? arrow2(avgDur, cmpDur, 'ms', true) : ''],
+    ['平均耗时',String(avgDur),'ms', 'neutral', cmpDur ? arrow2(avgDur, cmpDur, 'ms', true) : ''],
+    ['最高频错误',topErr,'', 'neutral', ''],
+    ['最高频工具',topTool,'', 'neutral', ''],
+  ];
+
+  var h='';
+  cards.forEach(function(c){{
+    var cls = c[3]!=='neutral'?'value '+c[3]:'value';
+    var extra = '', style = '';
+    if (c[0] === '最高频错误' && c[1] !== 'N/A') {{
+      extra = ' data-action="error" data-value="' + c[1] + '"';
+      style = 'cursor:pointer;';
+    }} else if (c[0] === '最高频工具' && c[1] !== 'N/A') {{
+      extra = ' data-action="tool" data-value="' + c[1] + '"';
+      style = 'cursor:pointer;';
+    }}
+    h += '<div class="kpi-card' + (extra ? ' kpi-card-clickable' : '') + '" style="' + style + '"' + extra + (extra ? ' title="点击查看详情"' : '') + '><div class="label">' + c[0] + '</div><div class="' + cls + '">' + c[1] + '<span class="unit">' + c[2] + '</span>' + (c[4]||'') + '</div></div>';
+  }});
+  document.getElementById('kpiGrid').innerHTML = h;
+
+  // Token 告警
+  var maxSingle = fdata.length>0?Math.max.apply(null,fdata.map(function(r){{return r.tokens_used||0}})):0;
+  if (maxSingle>TOKEN_ALERT_PER_TASK||totalTokens>TOKEN_ALERT_DAILY) {{
+    var ah='';
+    if(maxSingle>TOKEN_ALERT_PER_TASK) ah+='<span class="token-alert">单任务超阈值 '+maxSingle.toLocaleString()+' > '+TOKEN_ALERT_PER_TASK.toLocaleString()+'</span> ';
+    if(totalTokens>TOKEN_ALERT_DAILY) ah+='<span class="token-alert">日总超阈值 '+totalTokens.toLocaleString()+' > '+TOKEN_ALERT_DAILY.toLocaleString()+'</span>';
+    document.getElementById('kpiGrid').insertAdjacentHTML('beforeend','<div class="kpi-card" style="grid-column:1/-1"><div class="label">Token 成本告警</div><div style="font-size:.8rem;">'+ah+'</div></div>');
+  }}
+
+  // Cron vs User 对比
+  var cron=fdata.filter(function(r){{return r.trigger==='cron'}}), user=fdata.filter(function(r){{return r.trigger==='user'}});
+  var other=fdata.filter(function(r){{return r.trigger!=='cron'&&r.trigger!=='user'}});
+  function cc(label,cls,arr){{
+    if(arr.length===0)return'';
+    var s=arr.filter(function(r){{return r.status==='success'}}).length;
+    var rt=Math.round(s/arr.length*1000)/10;
+    var tk=arr.reduce(function(s,r){{return s+(r.tokens_used||0)}},0);
+    var ad=arr.length>0?Math.round(arr.reduce(function(s,r){{return s+(r.duration_ms||0)}},0)/arr.length):0;
+    var t2=rt>=95?'good':(rt>=85?'warn':'bad');
+    return'<div class="compare-card '+cls+'"><h4>'+label+' ('+arr.length+' 条)</h4><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:.78rem;"><div><span class="value '+t2+'">'+rt+'%</span><br><span style="color:var(--muted)">成功率</span></div><div><strong>'+Math.round(ad)+'</strong>ms<br><span style="color:var(--muted)">平均耗时</span></div><div><strong>'+tk.toLocaleString()+'</strong><br><span style="color:var(--muted)">Token</span></div><div><strong>'+s+'/'+arr.length+'</strong><br><span style="color:var(--muted)">成功/总数</span></div></div></div>';
+  }}
+  document.getElementById('triggerCompare').innerHTML=cc('Cron 定时','cron',cron)+cc('User 手动','user',user)+cc('其他','',other);
+
+  // 延迟分位图
+  var durs = fdata.map(function(r){{return r.duration_ms||0}}).filter(function(v){{return v>0}}).sort(function(a,b){{return a-b}});
+  if (durs.length > 0) {{
+    var p50 = durs[Math.floor(durs.length * 0.50)];
+    var p95 = durs[Math.floor(durs.length * 0.95)];
+    var p99 = durs[Math.floor(durs.length * 0.99)];
+    var pmax = Math.max(p99, 1);
+    var bars = [
+      {{v: p50, pct: '50', color: '#2a9d8f', label: 'P50'}},
+      {{v: p95, pct: '95', color: '#f4a261', label: 'P95'}},
+      {{v: p99, pct: '99', color: '#e76f51', label: 'P99'}},
+    ];
+    var svg = document.getElementById('latencyChart');
+    var h = '';
+
+    // 渐变定义
+    h += '<defs>';
+    bars.forEach(function(b) {{
+      h += '<linearGradient id="latGrad' + b.label + '" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="' + b.color + '" stop-opacity="0.88"/><stop offset="100%" stop-color="' + b.color + '" stop-opacity="0.55"/></linearGradient>';
+    }});
+    h += '</defs>';
+
+    bars.forEach(function(b, i) {{
+      var w = Math.max(b.v / pmax * 554, 2);
+      var y = 8 + i * 20;
+      var fmtV = b.v >= 60000 ? Math.round(b.v/60000) + '分' : (b.v >= 1000 ? (b.v/1000).toFixed(1) + '秒' : b.v + 'ms');
+      h += '<text x="0" y="' + (y + 10) + '" fill="var(--text)" font-size="11" font-weight="600" font-family="inherit">' + b.label + '</text>';
+      h += '<rect class="chart-bar" x="38" y="' + y + '" width="' + w + '" height="14" rx="3" fill="url(#latGrad' + b.label + ')" opacity="0.92" data-tooltip="<b>' + b.label + '</b><br>耗时: <b>' + fmtV + '</b>"/>';
+      h += '<text x="' + (w + 44) + '" y="' + (y + 11) + '" fill="' + b.color + '" font-size="10" font-weight="600" font-family="inherit">' + fmtV + '</text>';
+    }});
+    svg.innerHTML = h;
+    document.getElementById('latencyLabel').textContent = durs.length + ' 个任务 | 最快 ' + (durs[0]>=1000?Math.round(durs[0]/1000)+'s':durs[0]+'ms') + ' | 最慢 ' + (p99>=60000?Math.round(p99/60000)+'分':Math.round(p99/1000)+'秒');
+    document.getElementById('latencyCard').style.display = '';
+  }} else {{
+    document.getElementById('latencyCard').style.display = 'none';
+  }}
+
+  // Trigger 表
+  var thtml='';
+  TRIGGER_STATS.forEach(function(t){{
+    var r2=t.success_rate, t2=r2>=95?'good':(r2>=85?'warn':'bad');
+    thtml+='<tr><td><strong>'+t.trigger+'</strong></td><td>'+t.total+'</td><td>'+t.success+'</td><td>'+t.failed+'</td><td class="value '+t2+'">'+r2+'%</td><td>'+t.avg_tokens.toLocaleString()+'</td><td>'+t.avg_duration_sec+'</td></tr>';
+  }});
+  document.querySelector('#triggerTable tbody').innerHTML=thtml||'<tr><td colspan="7" style="color:var(--muted)">无数据</td></tr>';
+
+  // 重试风暴
+  var fstorms=RETRY_STORMS.filter(function(s){{
+    if(!dateFrom&&!dateTo)return true;
+    var sd=parseDate(s.start_time); if(!sd)return true;
+    if(dateFrom&&sd<dateFrom)return false;
+    if(dateTo&&sd>dateTo)return false;
+    return true;
+  }});
+  var sc=document.getElementById('sec-storms');
+  if(fstorms.length>0){{
+    sc.style.display='block';
+    var sh='';
+    fstorms.forEach(function(s){{
+      sh+='<div class="storm-alert"><div style="font-weight:600;margin-bottom:2px;">'+s.trigger+' — '+s.count+' 次连续失败 (窗口: '+s.window_minutes+' 分钟)</div><div>时间: '+s.start_time+' ~ '+s.end_time+'</div><div>错误: '+(s.error_types||[]).join(', ')+' | Token: '+s.total_tokens.toLocaleString()+'</div></div>';
+    }});
+    document.getElementById('retryStormsContent').innerHTML=sh;
+  }} else {{ sc.style.display='none'; }}
+
+  // 评估
+  var level,sug;
+  if(rate>=95){{level='良好';sug='系统运行稳定。';}}
+  else if(rate>=85){{level='一般';sug='建议关注失败任务，优先排查 <strong>'+topErr+'</strong>。';}}
+  else{{level='需要关注';sug='成功率偏低('+rate+'%)，建议排查 <strong>'+topErr+'</strong>。';}}
+  var dailyTokens=total>0?Math.round(totalTokens/total):0;
+  document.getElementById('assessment').innerHTML='<p style="margin-bottom:6px"><strong>健康评级: '+level+'</strong></p><p>'+sug+'</p><ul style="margin-top:8px;color:var(--muted);font-size:.82rem;"><li>Token 消耗: 日均 '+dailyTokens.toLocaleString()+'，预估成本 $'+(totalTokens/1000000*4).toFixed(2)+'</li><li>耗时: 平均 '+avgDur+'ms，总耗时 '+Math.round(totalDur/1000).toLocaleString()+' 秒</li><li>分布: '+success+' 成功 / '+failed+' 失败 (共 '+total+' 条)</li></ul>';
+  drawCharts();
+}}
+
+// ===== 失败明细 =====
+function sortFailures(key) {{
+  if(failureSortKey===key){{failureSortAsc=!failureSortAsc;}}else{{failureSortKey=key;failureSortAsc=false;}}
+  failurePage=0;
+  updateSortHeaders();
+  renderFailures();
+}}
+function updateSortHeaders() {{
+  document.querySelectorAll('#failureTable th').forEach(function(th) {{
+    var k = th.dataset.sort, arrow = th.querySelector('.sort-arrow');
+    if (!k || !arrow) return;
+    if (k === failureSortKey) {{
+      arrow.innerHTML = failureSortAsc ? '&#9650;' : '&#9660;';
+      th.style.color = 'var(--accent)';
+    }} else {{
+      arrow.innerHTML = '';
+      th.style.color = '';
+    }}
+  }});
+}}
+function renderFailures() {{
+  var data=filteredFailures();
+  var search=(document.getElementById('failureSearch').value||'').toLowerCase();
+  if(search){{data=data.filter(function(r){{return(r.error_type||'').toLowerCase().indexOf(search)>=0||(r.task_id||'').toLowerCase().indexOf(search)>=0||(r.trigger||'').toLowerCase().indexOf(search)>=0;}});}}
+  data.sort(function(a,b){{var va=a[failureSortKey],vb=b[failureSortKey];if(va==null)va='';if(vb==null)vb='';if(typeof va==='number')return failureSortAsc?va-vb:vb-va;va=String(va);vb=String(vb);return failureSortAsc?va.localeCompare(vb):vb.localeCompare(va);}});
+  document.getElementById('failureCount').textContent='共 '+data.length+' 条失败记录';
+  var tp=Math.ceil(data.length/PAGE_SIZE);
+  if(failurePage>=tp)failurePage=Math.max(0,tp-1);
+  var start=failurePage*PAGE_SIZE, page=data.slice(start,start+PAGE_SIZE);
+  var h='';
+  page.forEach(function(r,i){{h+='<tr style="cursor:pointer;" onclick="openModal('+(start+i)+')" title="点击查看详情"><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id_short||r.task_id||'')+'</td><td><span class="badge-sm bad">'+(r.error_type||'unknown')+'</span></td><td>'+(r.duration_sec!=null?r.duration_sec:'')+'</td><td>'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'')+'</td><td>'+(r.trigger||'')+'</td></tr>';}});
+  document.querySelector('#failureTable tbody').innerHTML=h||'<tr><td colspan="6" style="color:var(--muted)">无匹配记录</td></tr>';
+  var ph='<span>第 '+(data.length>0?failurePage+1:0)+'/'+Math.max(1,tp)+' 页</span>';
+  ph+='<button onclick="failurePage=0;renderFailures()" '+(failurePage===0?'disabled':'')+'>首页</button>';
+  ph+='<button onclick="failurePage=Math.max(0,failurePage-1);renderFailures()" '+(failurePage===0?'disabled':'')+'>上一页</button>';
+  for(var i=Math.max(0,failurePage-2);i<Math.min(tp,failurePage+3);i++){{ph+='<button class="'+(i===failurePage?'active':'')+'" onclick="failurePage='+i+';renderFailures()">'+(i+1)+'</button>';}}
+  ph+='<button onclick="failurePage=Math.min(tp-1,failurePage+1);renderFailures()" '+(failurePage>=tp-1?'disabled':'')+'>下一页</button>';
+  ph+='<button onclick="failurePage='+Math.max(0,tp-1)+';renderFailures()" '+(failurePage>=tp-1?'disabled':'')+'>末页</button>';
+  document.getElementById('failurePagination').innerHTML=ph;
+}}
+
+// ===== 弹窗 =====
+function openModal(idx) {{
+  var allF=filteredFailures();
+  var search=(document.getElementById('failureSearch').value||'').toLowerCase();
+  if(search){{allF=allF.filter(function(r){{return(r.error_type||'').toLowerCase().indexOf(search)>=0||(r.task_id||'').toLowerCase().indexOf(search)>=0;}});}}
+  var r=allF[idx]; if(!r)return;
+  document.getElementById('modalTitle').textContent='任务详情 — '+(r.task_id_short||r.task_id);
+  document.getElementById('modalContent').innerHTML=
+    '<div class="detail-row"><span class="k">Task ID</span><span class="v">'+(r.task_id||'')+'</span></div>'+
+    '<div class="detail-row"><span class="k">时间</span><span class="v">'+(r.timestamp||'')+'</span></div>'+
+    '<div class="detail-row"><span class="k">错误类型</span><span class="v" style="color:var(--danger)">'+(r.error_type||'unknown')+'</span></div>'+
+    '<div class="detail-row"><span class="k">耗时(s)</span><span class="v">'+(r.duration_sec!=null?r.duration_sec:'N/A')+'</span></div>'+
+    '<div class="detail-row"><span class="k">Token</span><span class="v">'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'N/A')+'</span></div>'+
+    '<div class="detail-row"><span class="k">工具调用</span><span class="v">'+(r.tool_calls_count!=null?r.tool_calls_count:'N/A')+'</span></div>'+
+    '<div class="detail-row"><span class="k">主要工具</span><span class="v">'+(r.tool_name||'N/A')+'</span></div>'+
+    '<div class="detail-row"><span class="k">Trigger</span><span class="v">'+(r.trigger||'unknown')+'</span></div>';
+  document.getElementById('detailModal').classList.add('show');
+}}
+function closeModal() {{ document.getElementById('detailModal').classList.remove('show'); }}
+
+// ===== Token 分析 =====
+function renderTokens() {{
+  var fdata=filteredData();
+  var totalTokens=fdata.reduce(function(s,r){{return s+(r.tokens_used||0)}},0);
+  var avgT=fdata.length>0?Math.round(totalTokens/fdata.length):0;
+  var maxT=fdata.length>0?Math.max.apply(null,fdata.map(function(r){{return r.tokens_used||0}})):0;
+  var sorted=fdata.map(function(r){{return r.tokens_used||0}}).sort(function(a,b){{return a-b}});
+  var med=0; if(sorted.length>0){{var mid=Math.floor(sorted.length/2);med=sorted.length%2===0?Math.round((sorted[mid-1]+sorted[mid])/2):sorted[mid];}}
+  document.getElementById('tokenSummary').innerHTML=
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">总消耗</div><div style="font-size:1.05rem;font-weight:700;">'+totalTokens.toLocaleString()+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">均值</div><div style="font-size:1.05rem;font-weight:700;">'+avgT.toLocaleString()+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">中位数</div><div style="font-size:1.05rem;font-weight:700;">'+med.toLocaleString()+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">峰值</div><div style="font-size:1.05rem;font-weight:700;">'+maxT.toLocaleString()+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">预估成本</div><div style="font-size:1.05rem;font-weight:700;">$'+(totalTokens/1000000*4).toFixed(2)+'</div></div>';
+
+  var dailyMap={{}};
+  fdata.forEach(function(r){{var d=r.date||(r.timestamp||'').slice(0,10);if(!d)return;if(!dailyMap[d])dailyMap[d]={{tokens:0,count:0}};dailyMap[d].tokens+=r.tokens_used||0;dailyMap[d].count+=1;}});
+  drawTokenTrend(Object.keys(dailyMap).sort(), dailyMap);
+
+  var top10=fdata.slice().sort(function(a,b){{return(b.tokens_used||0)-(a.tokens_used||0)}}).slice(0,10);
+  var th='';
+  top10.forEach(function(r){{var cls=r.status==='success'?'badge-sm good':'badge-sm bad';th+='<tr><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id||'')+'</td><td><span class="'+cls+'">'+r.status+'</span></td><td>'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'')+'</td><td>'+(r.duration_ms!=null?Math.round(r.duration_ms/1000):'')+'</td><td>'+(r.tool_calls_count||0)+'</td></tr>';}});
+  document.querySelector('#topTokensTable tbody').innerHTML=th||'<tr><td colspan="6" style="color:var(--muted)">无数据</td></tr>';
+}}
+function drawTokenTrend(days,dm){{
+  var svg=document.getElementById('tokenTrendChart');
+  if(days.length===0){{
+    svg.innerHTML='<text x="400" y="165" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无数据</text>';
+    svg.setAttribute('viewBox','0 0 800 330');
+    return;
+  }}
+  var W=800,H=330,padL=64,padR=32,padT=18,padB=60, pw=W-padL-padR, ph=H-padT-padB;
+  var vals=days.map(function(d){{return dm[d].tokens;}}), maxV=Math.max.apply(null,vals)||1;
+  var barW=Math.max(4,Math.min(28,pw/days.length-2));
+  var h='';
+
+  // 渐变定义
+  h+='<defs><linearGradient id="trendBarGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.92"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0.48"/></linearGradient></defs>';
+
+  // Y轴 + X轴基线
+  h+='<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+ph)+'" stroke="var(--border)" stroke-width="1"/>';
+  h+='<line x1="'+padL+'" y1="'+(padT+ph)+'" x2="'+(W-padR)+'" y2="'+(padT+ph)+'" stroke="var(--border)" stroke-width="1"/>';
+
+  // Y轴网格 + 标签
+  for(var i=0;i<=4;i++){{
+    var y=padT+(ph*i/4),v=Math.round(maxV*(1-i/4));
+    h+='<line x1="'+(padL+1)+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>';
+    h+='<text x="'+(padL-8)+'" y="'+(y+5)+'" text-anchor="end" fill="var(--muted)" font-size="10" font-family="inherit">'+v.toLocaleString()+'</text>';
+  }}
+
+  days.forEach(function(d,idx){{
+    var v=dm[d].tokens,bh=Math.max(1,(v/maxV)*ph),x=padL+idx*(pw/days.length)+(pw/days.length-barW)/2,y=padT+ph-bh;
+    var tipHtml4='<b>'+d+'</b><br>Token: <b>'+v.toLocaleString()+'</b><br>任务数: <b>'+dm[d].count+'</b>';
+    h+='<rect class="chart-bar" x="'+x+'" y="'+y+'" width="'+barW+'" height="'+bh+'" rx="2.5" fill="url(#trendBarGrad)" opacity="0.88" data-tooltip="'+tipHtml4+'"/>';
+    // X轴日期标签 — 旋转
+    if(days.length<=30||idx%Math.ceil(days.length/18)===0){{
+      h+='<text x="'+(x+barW/2)+'" y="'+(H-padB+32)+'" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="inherit" transform="rotate(-28,'+(x+barW/2)+','+(H-padB+32)+')">'+d.slice(5)+'</text>';
+    }}
+  }});
+
+  svg.innerHTML=h;
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+}}
+
+// ===== 错误趋势 =====
+function renderErrorTrend() {{
+  var trend=ERROR_TREND;
+  if(dateFrom||dateTo){{trend=trend.filter(function(d){{var p=parseDate(d.date);if(!p)return true;if(dateFrom&&p<dateFrom)return false;if(dateTo&&p>dateTo)return false;return true;}});}}
+  var eTypes=[]; if(trend.length>0){{var first=trend[0];Object.keys(first).forEach(function(k){{if(k!=='date'&&k!=='success')eTypes.push(k);}});}}
+  var sum={{}}; eTypes.forEach(function(et){{sum[et]=0;}});
+  trend.forEach(function(d){{eTypes.forEach(function(et){{sum[et]+=(d[et]||0);}});}});
+  var totalE=0; Object.values(sum).forEach(function(v){{totalE+=v;}});
+  var sArr=eTypes.map(function(et){{return{{name:et,count:sum[et]}};}}).sort(function(a,b){{return b.count-a.count;}});
+  var sh=''; sArr.forEach(function(s){{var pct=totalE>0?Math.round(s.count/totalE*1000)/10:0;sh+='<tr><td><strong>'+s.name+'</strong></td><td>'+s.count+'</td><td>'+pct+'%</td></tr>';}});
+  document.querySelector('#errorSummaryTable tbody').innerHTML=sh||'<tr><td colspan="3" style="color:var(--muted)">无数据</td></tr>';
+  var svg=document.getElementById('errorTrendChart');
+  if(trend.length===0||eTypes.length===0){{
+    svg.innerHTML='<text x="400" y="185" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无错误数据</text>';
+    svg.setAttribute('viewBox','0 0 800 370');
+    return;
+  }}
+  var W=800,H=370,padL=60,padR=36,padT=18,padB=52, pw=W-padL-padR, ph=H-padT-padB;
+  var colors=['#e76f51','#f4a261','#e9c46a','#2a9d8f','#457b9d','#6d597a','#b56576','#264653','#8ecae6','#355070'];
+  var dates=trend.map(function(d){{return d.date;}});
+  var stacks=[], maxStack=0;
+  eTypes.forEach(function(et,ei){{
+    var top=new Array(trend.length).fill(0), bot=new Array(trend.length).fill(0);
+    for(var i=0;i<=ei;i++){{var et2=eTypes[i];for(var j=0;j<trend.length;j++)top[j]+=(trend[j][et2]||0);}}
+    for(var i2=0;i2<ei;i2++){{var et3=eTypes[i2];for(var j2=0;j2<trend.length;j2++)bot[j2]+=(trend[j2][et3]||0);}}
+    stacks.push({{name:et,top:top,bot:bot,color:colors[ei%colors.length]}});
+    maxStack=Math.max(maxStack,Math.max.apply(null,top));
+  }});
+  if(maxStack===0)maxStack=1;
+  var h='';
+
+  // 渐变定义
+  h+='<defs>';
+  stacks.forEach(function(st,si){{
+    h+='<linearGradient id="errorGrad'+si+'" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="'+st.color+'" stop-opacity="0.82"/><stop offset="100%" stop-color="'+st.color+'" stop-opacity="0.65"/></linearGradient>';
+  }});
+  h+='</defs>';
+
+  // Y轴 + X轴基线
+  h+='<line x1="'+padL+'" y1="'+padT+'" x2="'+padL+'" y2="'+(padT+ph)+'" stroke="var(--border)" stroke-width="1"/>';
+  h+='<line x1="'+padL+'" y1="'+(padT+ph)+'" x2="'+(W-padR)+'" y2="'+(padT+ph)+'" stroke="var(--border)" stroke-width="1"/>';
+
+  // Y轴网格 + 标签
+  for(var i=0;i<=4;i++){{
+    var y=padT+(ph*i/4),v=Math.round(maxStack*(1-i/4));
+    h+='<line x1="'+(padL+1)+'" y1="'+y+'" x2="'+(W-padR)+'" y2="'+y+'" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>';
+    h+='<text x="'+(padL-8)+'" y="'+(y+5)+'" text-anchor="end" fill="var(--muted)" font-size="10" font-family="inherit">'+v+'</text>';
+  }}
+
+  // 堆叠区域
+  var stepX=pw/Math.max(1,dates.length-1);
+  for(var si=stacks.length-1;si>=0;si--){{
+    var st=stacks[si], ptsTop='', ptsBot='';
+    for(var j=0;j<dates.length;j++){{
+      var cx=padL+j*stepX,cyTop=padT+ph-(st.top[j]/maxStack)*ph,cyBot=padT+ph-(st.bot[j]/maxStack)*ph;
+      ptsTop+=cx+','+cyTop+' ';ptsBot=cx+','+cyBot+' '+ptsBot;
+    }}
+    h+='<polygon class="chart-slice" points="'+ptsTop+ptsBot+'" fill="url(#errorGrad'+si+')" stroke="'+st.color+'" stroke-width="0.8" stroke-opacity="0.5" data-tooltip="<b>'+st.name+'</b>"/>';
+  }}
+
+  // X轴日期标签
+  var ls=Math.max(1,Math.floor(dates.length/18));
+  for(var j=0;j<dates.length;j++){{
+    if(j%ls===0){{
+      var cx=padL+j*stepX;
+      h+='<text x="'+cx+'" y="'+(H-padB+30)+'" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="inherit" transform="rotate(-28,'+cx+','+(H-padB+30)+')">'+dates[j].slice(5)+'</text>';
+    }}
+  }}
+
+  // 图例
+  var legendX=W-padR-160;
+  for(var si=0;si<Math.min(stacks.length,8);si++){{
+    var ly=padT+si*19;
+    h+='<rect x="'+legendX+'" y="'+ly+'" width="10" height="10" rx="3" fill="'+stacks[si].color+'" opacity="0.82"/>';
+    h+='<text x="'+(legendX+15)+'" y="'+(ly+9)+'" fill="var(--muted)" font-size="10" font-family="inherit">'+stacks[si].name+'</text>';
+  }}
+
+  svg.innerHTML=h;
+  svg.setAttribute('viewBox','0 0 '+W+' '+H);
+}}
+
+// ===== 热力图 =====
+function renderHeatmap() {{
+  var fdata=filteredData();
+  var map={{}}, allDates=new Set();
+  fdata.forEach(function(r){{var d=r.date||(r.timestamp||'').slice(0,10),h=r.hour;if(!d||h==null)return;allDates.add(d);var k=d+'|'+h;if(!map[k])map[k]={{total:0,failed:0}};map[k].total+=1;if(r.status==='failed')map[k].failed+=1;}});
+  var dates=Array.from(allDates).sort(); if(dates.length>60)dates=dates.slice(-60);
+  if(dates.length===0){{document.getElementById('heatmapChart').innerHTML='<p style="color:var(--muted);text-align:center;padding:20px;">无数据</p>';renderHourlySummary();return;}}
+  var h='<div style="overflow-x:auto;"><div style="display:flex;gap:0;font-size:.68rem;color:var(--muted);margin-bottom:4px;min-width:'+(dates.length*40)+'px;"><div style="width:50px;flex-shrink:0;"></div>';
+  dates.forEach(function(d){{h+='<div style="width:34px;text-align:center;margin:0 2px;overflow:hidden;">'+d.slice(5)+'</div>';}});h+='</div>';
+  for(var hr=0;hr<24;hr++){{
+    h+='<div style="display:flex;gap:0;align-items:center;margin-bottom:2px;"><div style="width:50px;flex-shrink:0;font-size:.68rem;color:var(--muted);text-align:right;padding-right:6px;">'+String(hr).padStart(2,'0')+':00</div>';
+    dates.forEach(function(d){{var key=d+'|'+hr,cell=map[key];
+      if(!cell||cell.total===0)h+='<div class="heatmap-cell chart-cell" style="background:#eee;color:#999;" data-tooltip="<b>'+d+' '+hr+':00</b><br>无任务">-</div>';
+      else{{var rate=cell.failed/cell.total,hue=rate>0.5?0:(rate>0.2?25:120),sat=Math.round(rate*100),light=85-Math.round(rate*45);h+='<div class="heatmap-cell chart-cell" style="background:hsl('+hue+','+sat+'%,'+light+'%);" data-tooltip="<b>'+d+' '+hr+':00</b><br>失败率: <b>'+Math.round(rate*100)+'%</b><br>失败: '+cell.failed+' / 总数: '+cell.total+'">'+Math.round(rate*100)+'</div>';}}
+    }});h+='</div>';
+  }}
+  h+='</div><div style="display:flex;gap:6px;align-items:center;margin-top:8px;font-size:.7rem;color:var(--muted);"><span>低</span><span style="width:14px;height:14px;border-radius:3px;background:hsl(120,60%,80%);"></span><span style="width:14px;height:14px;border-radius:3px;background:hsl(25,50%,65%);"></span><span style="width:14px;height:14px;border-radius:3px;background:hsl(0,80%,50%);"></span><span>高</span></div>';
+  document.getElementById('heatmapChart').innerHTML=h; renderHourlySummary();
+}}
+function renderHourlySummary() {{
+  var fdata=filteredData(), hourly=[];
+  for(var h=0;h<24;h++){{var hd=fdata.filter(function(r){{return r.hour===h;}}),t=hd.length,f=hd.filter(function(r){{return r.status==='failed';}}).length;hourly.push({{hour:h,total:t,failed:f,success:t-f,rate:t>0?Math.round(f/t*1000)/10:0}});}}
+  var maxF=Math.max.apply(null,hourly.map(function(h){{return h.rate;}}))||1, hh='';
+  hourly.forEach(function(hr){{var hue=120-(hr.rate/maxF)*120,bg=hr.total>0?'hsla('+hue+',60%,70%,0.3)':'transparent';hh+='<tr style="background:'+bg+'"><td><strong>'+String(hr.hour).padStart(2,'0')+':00</strong></td><td>'+hr.total+'</td><td>'+hr.success+'</td><td>'+hr.failed+'</td><td>'+hr.rate+'%</td></tr>';}});
+  document.querySelector('#hourlySummaryTable tbody').innerHTML=hh;
+}}
+
+// ===== 暗色模式 =====
+function toggleTheme() {{
+  darkMode = !darkMode;
+  applyTheme();
+}}
+function applyTheme() {{
+  document.body.classList.toggle('dark', darkMode);
+  document.getElementById('themeToggle').textContent = darkMode ? '亮色模式' : '暗色模式';
+  try {{ localStorage.setItem('openclaw-dark-mode', darkMode ? '1' : '0'); }} catch(e) {{}}
+}}
+// 初始化：优先 localStorage，其次系统偏好
+(function() {{
+  var saved = null;
+  try {{ saved = localStorage.getItem('openclaw-dark-mode'); }} catch(e) {{}}
+  if (saved === '1') darkMode = true;
+  else if (saved === '0') darkMode = false;
+  else darkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  applyTheme();
+}})();
+
+// ===== SVG 图表绘制 =====
+function drawCharts() {{
+  drawSuccessRateChart();
+  drawErrorDonut();
+  drawToolBarChart();
+  drawTokenHistogram();
+}}
+
+function drawSuccessRateChart() {{
+  var svg = document.getElementById('chartSuccessRate');
+  var data = DAILY_SUMMARY || [];
+  if (dateFrom || dateTo) {{
+    data = data.filter(function(d) {{
+      var p = parseDate(d.date); if (!p) return true;
+      if (dateFrom && p < dateFrom) return false;
+      if (dateTo && p > dateTo) return false;
+      return true;
+    }});
+  }}
+  if (data.length === 0) {{
+    svg.innerHTML = '<text x="350" y="160" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无数据</text>';
+    return;
+  }}
+  var W = 700, H = 320, padL = 50, padR = 24, padT = 16, padB = 44;
+  var pw = W - padL - padR, ph = H - padT - padB;
+  var rates = data.map(function(d) {{ return d.success_rate; }});
+  var minR = Math.max(0, Math.min.apply(null, rates) - 8);
+  var maxR = Math.min(105, Math.max.apply(null, rates) + 5);
+  var h = '';
+
+  // 渐变定义
+  h += '<defs><linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.18"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0.01"/></linearGradient></defs>';
+
+  // Y轴细线
+  h += '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+  // X轴基线
+  h += '<line x1="' + padL + '" y1="' + (padT+ph) + '" x2="' + (W-padR) + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+
+  // Y轴网格 + 标签
+  var ySteps = 5;
+  for (var i = 0; i <= ySteps; i++) {{
+    var y = padT + (ph * i / ySteps);
+    var v = Math.round(maxR - (maxR - minR) * i / ySteps);
+    h += '<line x1="' + (padL+1) + '" y1="' + y + '" x2="' + (W-padR) + '" y2="' + y + '" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>';
+    h += '<text x="' + (padL-8) + '" y="' + (y+4) + '" text-anchor="end" fill="var(--muted)" font-size="10" font-family="inherit">' + v + '%</text>';
+  }}
+
+  // 95% 参考线
+  var y95 = padT + ph - ((95 - minR) / (maxR - minR)) * ph;
+  if (y95 > padT && y95 < padT + ph) {{
+    h += '<line x1="' + padL + '" y1="' + y95 + '" x2="' + (W-padR) + '" y2="' + y95 + '" stroke="var(--muted)" stroke-width="0.8" stroke-dasharray="2,4" opacity="0.5"/>';
+    h += '<text x="' + (padL+5) + '" y="' + (y95-5) + '" fill="var(--muted)" font-size="9" font-family="inherit" opacity="0.7">95%</text>';
+  }}
+
+  // 均值线
+  var avg = Math.round(rates.reduce(function(a,b){{return a+b;}},0) / rates.length * 10) / 10;
+  var avgY = padT + ph - ((avg - minR) / (maxR - minR)) * ph;
+  h += '<line x1="' + padL + '" y1="' + avgY + '" x2="' + (W-padR) + '" y2="' + avgY + '" stroke="var(--warn)" stroke-width="1.2" stroke-dasharray="5,3" opacity="0.7"/>';
+  h += '<text x="' + (W-padR-4) + '" y="' + (avgY-5) + '" text-anchor="end" fill="var(--warn)" font-size="10" font-family="inherit" font-weight="600">均值 ' + avg + '%</text>';
+
+  var stepX = data.length > 1 ? pw / (data.length - 1) : pw;
+  var areaPts = padL + ',' + (padT+ph) + ' ', linePts = '';
+
+  data.forEach(function(d, i) {{
+    var cx = padL + i * stepX;
+    var cy = padT + ph - ((d.success_rate - minR) / (maxR - minR)) * ph;
+    areaPts += cx + ',' + cy + ' ';
+    linePts += cx + ',' + cy + ' ';
+    var color = d.success_rate >= 95 ? 'var(--accent)' : (d.success_rate >= 85 ? 'var(--warn)' : 'var(--danger)');
+    var tipHtml = '<b>' + d.date + '</b><br>成功率: <b style=color:' + color + '>' + d.success_rate + '%</b><br>成功: ' + d.success + ' / 总数: ' + d.total;
+
+    // 数据点 — 外环 + 内点
+    h += '<circle cx="' + cx + '" cy="' + cy + '" r="7" fill="var(--card-bg)" stroke="' + color + '" stroke-width="2" class="chart-dot" data-tooltip="' + tipHtml + '"/>';
+    h += '<circle cx="' + cx + '" cy="' + cy + '" r="3" fill="' + color + '" class="chart-dot" data-tooltip="' + tipHtml + '" style="pointer-events:none"/>';
+    // 透明大点击区
+    h += '<circle cx="' + cx + '" cy="' + cy + '" r="12" fill="transparent" class="chart-dot" data-tooltip="' + tipHtml + '"/>';
+
+    if (data.length <= 30 || i % Math.ceil(data.length / 15) === 0) {{
+      h += '<text x="' + cx + '" y="' + (H-padB+22) + '" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="inherit" transform="rotate(-28,' + cx + ',' + (H-padB+22) + ')">' + d.date.slice(5) + '</text>';
+    }}
+  }});
+
+  areaPts += (padL + (data.length-1)*stepX) + ',' + (padT+ph);
+  h += '<polygon points="' + areaPts + '" fill="url(#areaGrad)"/>';
+  h += '<polyline points="' + linePts + '" fill="none" stroke="var(--accent)" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>';
+
+  svg.innerHTML = h;
+}}
+
+function drawErrorDonut() {{
+  var svg = document.getElementById('chartErrorDonut');
+  var fdata = cachedFilteredData().filter(function(r) {{ return r.status === 'failed' && r.error_type; }});
+  if (fdata.length === 0) {{
+    svg.innerHTML = '<text x="280" y="170" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无失败数据</text>';
+    svg.setAttribute('viewBox', '0 0 560 340');
+    return;
+  }}
+  var counts = {{}};
+  fdata.forEach(function(r) {{ var k = r.error_type || 'unknown'; counts[k] = (counts[k] || 0) + 1; }});
+  var entries = Object.keys(counts).map(function(k) {{ return {{ name: k, count: counts[k] }}; }}).sort(function(a, b) {{ return b.count - a.count; }});
+  // 专业配色 — 暖色到冷色渐变
+  var colors = ['#e76f51','#f4a261','#e9c46a','#2a9d8f','#457b9d','#6d597a','#b56576','#355070'];
+  var cx = 185, cy = 175, r = 115, ir = 58;
+  var total = entries.reduce(function(s, e) {{ return s + e.count; }}, 0);
+  var h = '';
+
+  // 渐变定义
+  h += '<defs>';
+  colors.forEach(function(c, i) {{
+    h += '<linearGradient id="donutGrad' + i + '" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="' + c + '" stop-opacity="0.92"/><stop offset="100%" stop-color="' + c + '" stop-opacity="0.72"/></linearGradient>';
+  }});
+  // 中心圆阴影渐变
+  h += '<radialGradient id="centerShadow" cx="0.5" cy="0.45" r="0.5"><stop offset="0%" stop-color="var(--card-bg)"/><stop offset="100%" stop-color="var(--bg)"/></radialGradient>';
+  h += '</defs>';
+
+  var angle = -Math.PI / 2;
+  entries.forEach(function(e, i) {{
+    var slice = (e.count / total) * Math.PI * 2;
+    var x1 = cx + r * Math.cos(angle);
+    var y1 = cy + r * Math.sin(angle);
+    var x2 = cx + r * Math.cos(angle + slice);
+    var y2 = cy + r * Math.sin(angle + slice);
+    var large = slice > Math.PI ? 1 : 0;
+    var d = 'M' + cx + ',' + cy + ' L' + x1 + ',' + y1 + ' A' + r + ',' + r + ' 0 ' + large + ',1 ' + x2 + ',' + y2 + ' Z';
+    var pct = Math.round(e.count/total*100);
+    var tipHtml5 = '<b>' + e.name + '</b><br>次数: <b>' + e.count + '</b> (' + pct + '%)';
+    h += '<path class="chart-slice" d="' + d + '" fill="url(#donutGrad' + i + ')" stroke="var(--card-bg)" stroke-width="2.5" data-tooltip="' + tipHtml5 + '"/>';
+    // 外部标签 + 引导线
+    var midA = angle + slice / 2;
+    if (pct >= 5) {{
+      var lx1 = cx + (r + 8) * Math.cos(midA), ly1 = cy + (r + 8) * Math.sin(midA);
+      var lx2 = cx + (r + 28) * Math.cos(midA), ly2 = cy + (r + 28) * Math.sin(midA);
+      var anchor = midA > Math.PI/2 && midA < 3*Math.PI/2 ? 'end' : 'start';
+      var lx3 = cx + (r + 30) * Math.cos(midA);
+      h += '<line x1="' + lx1 + '" y1="' + ly1 + '" x2="' + lx2 + '" y2="' + ly2 + '" stroke="var(--muted)" stroke-width="0.6" opacity="0.5"/>';
+      h += '<text x="' + lx3 + '" y="' + (ly2 + 4) + '" text-anchor="' + anchor + '" fill="var(--text)" font-size="10" font-family="inherit">' + e.name + ' ' + pct + '%</text>';
+    }}
+    angle += slice;
+  }});
+
+  // 中心圆
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="' + ir + '" fill="var(--card-bg)" stroke="var(--border)" stroke-width="1"/>';
+  h += '<circle cx="' + cx + '" cy="' + cy + '" r="' + ir + '" fill="url(#centerShadow)" opacity="0.6"/>';
+  // 中心文字
+  h += '<text x="' + cx + '" y="' + (cy - 7) + '" text-anchor="middle" fill="var(--text)" font-size="22" font-weight="700" font-family="inherit">' + total + '</text>';
+  h += '<text x="' + cx + '" y="' + (cy + 14) + '" text-anchor="middle" fill="var(--muted)" font-size="11" font-family="inherit">失败总数</text>';
+
+  // 图例 — 右侧排列
+  var lx2 = 340, ly2 = 40, maxItems = Math.min(entries.length, 9);
+  for (var i = 0; i < maxItems; i++) {{
+    var e = entries[i];
+    var y = ly2 + i * 24;
+    h += '<rect x="' + lx2 + '" y="' + (y+1) + '" width="10" height="10" rx="3" fill="' + colors[i % colors.length] + '" opacity="0.88"/>';
+    var label = e.name + ' (' + Math.round(e.count/total*100) + '%)';
+    if (label.length > 20) label = label.slice(0, 19) + '…';
+    h += '<text x="' + (lx2 + 16) + '" y="' + (y + 10) + '" fill="var(--muted)" font-size="10" font-family="inherit">' + label + '</text>';
+  }}
+
+  svg.innerHTML = h;
+  svg.setAttribute('viewBox', '0 0 560 340');
+}}
+
+function drawToolBarChart() {{
+  var svg = document.getElementById('chartToolBar');
+  var fdata = cachedFilteredData();
+  var counts = {{}};
+  fdata.forEach(function(r) {{
+    var t = r.tool_name;
+    if (!t) return;
+    counts[t] = (counts[t] || 0) + 1;
+  }});
+  var entries = Object.keys(counts).map(function(k) {{ return {{ name: k, count: counts[k] }}; }}).sort(function(a, b) {{ return b.count - a.count; }}).slice(0, 8);
+  if (entries.length === 0) {{
+    svg.innerHTML = '<text x="250" y="150" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无工具调用数据</text>';
+    svg.setAttribute('viewBox', '0 0 500 300');
+    return;
+  }}
+  var W = 500, H = 300, padL = 140, padR = 72, padT = 14, padB = 12;
+  var pw = W - padL - padR;
+  var barH = Math.min(26, (H - padT - padB) / entries.length - 6);
+  var maxV = entries[0].count;
+  var h = '';
+
+  // 渐变定义
+  h += '<defs><linearGradient id="toolBarGrad" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.88"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0.55"/></linearGradient></defs>';
+
+  // X轴基线
+  h += '<line x1="' + padL + '" y1="' + (H-padB) + '" x2="' + padL + '" y2="' + padT + '" stroke="var(--border)" stroke-width="1"/>';
+
+  entries.forEach(function(e, i) {{
+    var y = padT + i * (barH + 6);
+    var w = Math.max(2, (e.count / maxV) * pw);
+    // 标签（截断过长名称）
+    var label = e.name.length > 14 ? e.name.slice(0, 13) + '…' : e.name;
+    h += '<text x="' + (padL - 8) + '" y="' + (y + barH / 2 + 4) + '" text-anchor="end" fill="var(--text)" font-size="11" font-family="inherit">' + label + '</text>';
+    var tipHtml2 = '<b>' + e.name + '</b><br>调用次数: <b>' + e.count + '</b>';
+    h += '<rect class="chart-bar" x="' + padL + '" y="' + y + '" width="' + w + '" height="' + barH + '" rx="4" fill="url(#toolBarGrad)" opacity="0.92" data-tooltip="' + tipHtml2 + '"/>';
+    // 数值标签
+    h += '<text x="' + (padL + w + 8) + '" y="' + (y + barH / 2 + 4) + '" fill="var(--muted)" font-size="10" font-family="inherit">' + e.count.toLocaleString() + '</text>';
+  }});
+
+  svg.innerHTML = h;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+}}
+
+function drawTokenHistogram() {{
+  var svg = document.getElementById('chartTokenHist');
+  var fdata = cachedFilteredData().map(function(r) {{ return r.tokens_used || 0; }});
+  if (fdata.length === 0) {{
+    svg.innerHTML = '<text x="300" y="155" text-anchor="middle" fill="var(--muted)" font-size="13" font-family="inherit">暂无数据</text>';
+    svg.setAttribute('viewBox', '0 0 600 310');
+    return;
+  }}
+  var maxT = Math.max.apply(null, fdata);
+  var binCount = Math.min(25, Math.max(8, Math.ceil(fdata.length / 15)));
+  var binW = Math.ceil(maxT / binCount);
+  if (binW < 1) binW = 1;
+  var bins = [];
+  for (var i = 0; i < binCount; i++) bins.push(0);
+  fdata.forEach(function(v) {{
+    var idx = Math.min(binCount - 1, Math.floor(v / binW));
+    bins[idx]++;
+  }});
+
+  var sorted = fdata.slice().sort(function(a, b) {{ return a - b; }});
+  var med = sorted[Math.floor(sorted.length / 2)];
+  var avg = Math.round(fdata.reduce(function(a, b) {{ return a + b; }}, 0) / fdata.length);
+
+  var W = 600, H = 320, padL = 56, padR = 24, padT = 34, padB = 48;
+  var pw = W - padL - padR, ph = H - padT - padB;
+  var maxBin = Math.max.apply(null, bins);
+  var barW = Math.max(4, pw / binCount - 2);
+  var h = '';
+
+  // 渐变定义
+  h += '<defs><linearGradient id="histGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.90"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0.50"/></linearGradient></defs>';
+
+  // Y轴 + X轴基线
+  h += '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+  h += '<line x1="' + padL + '" y1="' + (padT+ph) + '" x2="' + (W-padR) + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+
+  // Y轴网格
+  for (var i = 0; i <= 4; i++) {{
+    var y = padT + (ph * i / 4);
+    var v = Math.round(maxBin * (1 - i / 4));
+    h += '<line x1="' + (padL+1) + '" y1="' + y + '" x2="' + (W-padR) + '" y2="' + y + '" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>';
+    h += '<text x="' + (padL-8) + '" y="' + (y+5) + '" text-anchor="end" fill="var(--muted)" font-size="10" font-family="inherit">' + v + '</text>';
+  }}
+
+  // 柱状图
+  bins.forEach(function(b, i) {{
+    var barH = Math.max(1, (b / maxBin) * ph);
+    var x = padL + i * (pw / binCount) + 1;
+    var y = padT + ph - barH;
+    var tipHtml3 = '<b>' + (i * binW).toLocaleString() + ' - ' + ((i + 1) * binW).toLocaleString() + ' tokens</b><br>任务数: <b>' + b + '</b>';
+    h += '<rect class="chart-bar" x="' + x + '" y="' + y + '" width="' + barW + '" height="' + barH + '" rx="2" fill="url(#histGrad)" opacity="0.88" data-tooltip="' + tipHtml3 + '"/>';
+    // X轴标签
+    if (i % Math.ceil(binCount / 12) === 0) {{
+      h += '<text x="' + (x + barW / 2) + '" y="' + (H - padB + 18) + '" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="inherit">' + (i * binW).toLocaleString() + '</text>';
+    }}
+  }});
+
+  // 统计标记线 — 错开标签位置避免重叠
+  [{{v: med, label: '中位数', color: 'var(--danger)'}},
+   {{v: avg, label: '均值', color: 'var(--warn)'}}].forEach(function(m, mi) {{
+    var mx = padL + (m.v / (binCount * binW)) * pw;
+    if (mx >= padL && mx <= W - padR) {{
+      h += '<line x1="' + mx + '" y1="' + padT + '" x2="' + mx + '" y2="' + (padT+ph) + '" stroke="' + m.color + '" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.8"/>';
+      // 第二个标签偏移到下方，避免与第一个重叠
+      var labelY = padT - 6 - mi * 16;
+      h += '<text x="' + mx + '" y="' + labelY + '" text-anchor="middle" fill="' + m.color + '" font-size="10" font-weight="600" font-family="inherit">' + m.label + ' ' + m.v.toLocaleString() + '</text>';
+    }}
+  }});
+
+  svg.innerHTML = h;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
+}}
+
+// ===== 刷新时间 =====
+(function() {{
+  var now = new Date();
+  var ts = now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0') + ' ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0') + ':' + String(now.getSeconds()).padStart(2,'0');
+  var el = document.getElementById('refreshTime');
+  if (el) el.textContent = '刷新时间: ' + ts;
+}})();
+
+// ===== CSV =====
+// ===== 交互记录 =====
+var interactPage = 0, interactPageSize = 50, interactTotalPages = 0;
+
+function filteredInteractions() {{
+  if (!INTERACTIONS || !INTERACTIONS.length) return [];
+  var list = INTERACTIONS;
+  // 日期筛选
+  if (dateFrom || dateTo) {{
+    list = list.filter(function(r) {{
+      var d = r.date || (r.timestamp || '').slice(0, 10);
+      return (!dateFrom || d >= fmtDate(dateFrom)) && (!dateTo || d <= fmtDate(dateTo));
+    }});
+  }}
+  // 状态筛选
+  var st = document.getElementById('interactStatus');
+  if (st && st.value !== 'all') list = list.filter(function(r) {{ return r.status === st.value; }});
+  // 触发筛选
+  var tg = document.getElementById('interactTrigger');
+  if (tg && tg.value !== 'all') list = list.filter(function(r) {{ return r.trigger === tg.value; }});
+  // 搜索
+  var q = (document.getElementById('interactSearch') || {{}}).value || '';
+  if (q.trim()) {{
+    var lowerQ = q.trim().toLowerCase();
+    list = list.filter(function(r) {{
+      return (r.user_prompt || '').toLowerCase().indexOf(lowerQ) >= 0
+        || (r.task_id || '').toLowerCase().indexOf(lowerQ) >= 0
+        || (r.error_type || '').toLowerCase().indexOf(lowerQ) >= 0
+        || (r.trigger || '').toLowerCase().indexOf(lowerQ) >= 0
+        || (r.model_id || '').toLowerCase().indexOf(lowerQ) >= 0;
+    }});
+  }}
+  return list;
+}}
+
+function renderInteractions() {{
+  var fdata = filteredInteractions();
+  var total = fdata.length;
+  document.getElementById('interactInfo').textContent = '共 ' + total + ' 条记录';
+
+  var start = interactPage * interactPageSize;
+  var pageData = fdata.slice(start, start + interactPageSize);
+
+  var tbody = document.querySelector('#interactTable tbody');
+  var h = '';
+  pageData.forEach(function(r, i) {{
+    var statusClass = r.status === 'success' ? 'badge-ok' : 'badge-fail';
+    var statusLabel = r.status === 'success' ? '成功' : '失败';
+    var triggerLabel = r.trigger === 'cron' ? 'Cron' : (r.trigger === 'user' ? 'User' : r.trigger || '');
+    var duration = r.duration_ms >= 60000 ? Math.round(r.duration_ms / 60000) + '分' : Math.round(r.duration_ms / 1000) + '秒';
+    var tokens = r.tokens_used > 1000 ? Math.round(r.tokens_used / 1000) + 'K' : String(r.tokens_used);
+    var promptPreview = escHtml((r.prompt_preview || r.user_prompt || '').slice(0, 80));
+    if ((r.user_prompt || '').length > 80) promptPreview += '...';
+    h += '<tr style="cursor:pointer;" onclick="showPromptModal(' + (start + i) + ')" title="点击查看完整提问">';
+    h += '<td style="font-size:.78rem;">' + (r.timestamp || '') + '</td>';
+    h += '<td><span style="font-size:.72rem;padding:2px 6px;border-radius:3px;background:' + (r.trigger==='cron'?'#e8f5e9':'#e3f2fd') + ';color:' + (r.trigger==='cron'?'#2e7d32':'#1565c0') + ';">' + triggerLabel + '</span></td>';
+    h += '<td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8rem;">' + promptPreview + '</td>';
+    h += '<td><span class="' + statusClass + '" style="font-size:.72rem;padding:2px 8px;">' + statusLabel + '</span></td>';
+    h += '<td style="font-size:.78rem;">' + duration + '</td>';
+    h += '<td style="font-size:.78rem;">' + tokens + '</td>';
+    h += '</tr>';
+  }});
+  if (pageData.length === 0) {{
+    h = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px;">暂无匹配的交互记录</td></tr>';
+  }}
+  tbody.innerHTML = h;
+
+  // 分页
+  var totalPages = Math.ceil(total / interactPageSize);
+  interactTotalPages = totalPages;
+  var ph = '';
+  if (totalPages > 1) {{
+    ph += '<button class="btn" style="min-width:32px;padding:4px 8px;font-size:.75rem;" onclick="interactPage=0;renderInteractions();" ' + (interactPage === 0 ? 'disabled' : '') + '>首页</button>';
+    ph += '<button class="btn" style="min-width:32px;padding:4px 8px;font-size:.75rem;" onclick="interactPage=Math.max(0,interactPage-1);renderInteractions();" ' + (interactPage === 0 ? 'disabled' : '') + '>上一页</button>';
+    for (var p = Math.max(0, interactPage - 2); p < Math.min(totalPages, interactPage + 3); p++) {{
+      ph += '<button class="btn" style="' + (p === interactPage ? 'background:var(--accent);color:#fff;' : '') + 'min-width:32px;padding:4px 8px;font-size:.75rem;" onclick="interactPage=' + p + ';renderInteractions();">' + (p + 1) + '</button>';
+    }}
+    ph += '<button class="btn" style="min-width:32px;padding:4px 8px;font-size:.75rem;" onclick="interactPage=Math.min(interactTotalPages-1,interactPage+1);renderInteractions();" ' + (interactPage >= totalPages - 1 ? 'disabled' : '') + '>下一页</button>';
+    ph += '<button class="btn" style="min-width:32px;padding:4px 8px;font-size:.75rem;" onclick="interactPage=' + Math.max(0, totalPages - 1) + ';renderInteractions();" ' + (interactPage >= totalPages - 1 ? 'disabled' : '') + '>末页</button>';
+  }}
+  document.getElementById('interactPages').innerHTML = ph;
+}}
+
+function showPromptModal(idx) {{
+  var fdata = filteredInteractions();
+  var r = fdata[idx];
+  if (!r) return;
+  var statusLabel = r.status === 'success' ? '成功' : '失败';
+  var statusColor = r.status === 'success' ? 'var(--accent)' : 'var(--danger)';
+  var duration = r.duration_ms >= 60000 ? Math.round(r.duration_ms / 60000) + ' 分' : Math.round(r.duration_ms / 1000) + ' 秒';
+  var tokens = (r.tokens_used || 0).toLocaleString();
+  document.getElementById('promptModalTitle').textContent = (r.timestamp || '') + ' | ' + (r.trigger || '') + ' | ' + statusLabel;
+
+  var meta = '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:.78rem;margin-bottom:14px;padding:10px 14px;background:var(--bg);border-radius:6px;">';
+  meta += '<span style="color:var(--muted);">状态</span><span style="color:' + statusColor + ';font-weight:600;">' + statusLabel + '</span>';
+  meta += '<span style="color:var(--muted);">耗时</span><span>' + duration + '</span>';
+  meta += '<span style="color:var(--muted);">Tokens</span><span>' + tokens + '</span>';
+  if (r.trigger) meta += '<span style="color:var(--muted);">触发</span><span>' + r.trigger + '</span>';
+  if (r.task_id) meta += '<span style="color:var(--muted);">Task ID</span><span style="font-family:monospace;font-size:.72rem;">' + r.task_id + '</span>';
+  if (r.model_id) meta += '<span style="color:var(--muted);">模型</span><span>' + r.model_id + '</span>';
+  if (r.error_type) meta += '<span style="color:var(--muted);">错误</span><span style="color:var(--danger);">' + r.error_type + '</span>';
+  if (r.tool_names && r.tool_names.length > 0) meta += '<span style="color:var(--muted);">使用工具</span><span>' + r.tool_names.join(', ') + '</span>';
+  meta += '</div>';
+
+  var promptLabel = '<div style="font-weight:600;font-size:.82rem;margin-bottom:6px;color:var(--muted);">提问内容</div>';
+  var promptText = '<div style="max-height:55vh;overflow-y:auto;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text);word-break:break-word;">' + escHtml(r.user_prompt || '(无提问内容)') + '</div>';
+  document.getElementById('promptContent').innerHTML = meta + promptLabel + promptText;
+  document.getElementById('promptModal').classList.add('show');
+}}
+function closePromptModal() {{ document.getElementById('promptModal').classList.remove('show'); }}
+
+// ===== CSV =====
+function exportCSV(){{
+  var fdata=filteredData();if(fdata.length===0){{alert('无数据');return;}}
+  var headers=['task_id','timestamp','date','hour','status','error_type','duration_ms','tokens_used','tool_calls_count','tool_name','trigger'];
+  var lines=[headers.join(',')];
+  fdata.forEach(function(r){{var row=headers.map(function(h){{var v=r[h];if(v==null)return'';var s=String(v);if(s.indexOf(',')>=0||s.indexOf('"')>=0)s='"'+s.replace(/"/g,'""')+'"';return s;}});lines.push(row.join(','));}});
+  var blob=new Blob(['\\uFEFF'+lines.join('\\n')],{{type:'text/csv;charset=utf-8'}});
+  var url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='openclaw_export.csv';a.click();URL.revokeObjectURL(url);
+}}
+
+// ===== 回到顶部 =====
+window.addEventListener('scroll', function() {{
+  var btn = document.getElementById('backToTop');
+  if (!btn) return;
+  btn.classList.toggle('show', window.scrollY > window.innerHeight);
+}});
+
+// ===== SVG 导出 PNG =====
+function exportChartPNG(svgEl, filename) {{
+  if (!svgEl) return;
+  var clone = svgEl.cloneNode(true);
+  // 获取 SVG 实际尺寸
+  var viewBox = svgEl.getAttribute('viewBox');
+  var vb = viewBox ? viewBox.split(/\\s+/) : [0, 0, 800, 400];
+  var w = parseFloat(vb[2]) || 800, h = parseFloat(vb[3]) || 400;
+  var scale = 2;
+  clone.setAttribute('width', w * scale);
+  clone.setAttribute('height', h * scale);
+  // 确保深色模式下的文字颜色在导出时可见
+  var isDark = document.body.classList.contains('dark');
+  if (isDark) {{
+    clone.querySelectorAll('text').forEach(function(t) {{
+      var c = t.getAttribute('fill') || '';
+      if (c.indexOf('var(--text)') >= 0 || c.indexOf('var(--muted)') >= 0) {{
+        t.setAttribute('fill', c.indexOf('muted') >= 0 ? '#636e72' : '#2d3436');
+      }}
+    }});
+    clone.querySelectorAll('line').forEach(function(l) {{
+      var s = l.getAttribute('stroke') || '';
+      if (s.indexOf('var(--border)') >= 0) l.setAttribute('stroke', '#e0e4e8');
+    }});
+  }}
+  var svgData = new XMLSerializer().serializeToString(clone);
+  var canvas = document.createElement('canvas');
+  canvas.width = w * scale; canvas.height = h * scale;
+  var ctx = canvas.getContext('2d');
+  var img = new Image();
+  var blob = new Blob([svgData], {{type: 'image/svg+xml;charset=utf-8'}});
+  var url = URL.createObjectURL(blob);
+  img.onload = function() {{
+    ctx.fillStyle = isDark ? '#1a1a2e' : '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+    URL.revokeObjectURL(url);
+    canvas.toBlob(function(b) {{
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = filename + '.png';
+      a.click();
+    }}, 'image/png');
+  }};
+  img.src = url;
+  return false;
+}}
+
+// ===== KPI 卡片点击联动 =====
+document.addEventListener('click', function(e) {{
+  var card = e.target.closest('.kpi-card-clickable');
+  if (!card) return;
+  var action = card.dataset.action, val = card.dataset.value;
+  if (action === 'error') {{
+    switchPage('failures');
+    document.getElementById('failureSearch').value = val;
+    renderFailures();
+  }} else if (action === 'tool') {{
+    switchPage('overview');
+    var sec = document.getElementById('sec-charts');
+    if (sec) sec.classList.add('open');
+    var chart = document.getElementById('chartToolBar');
+    if (chart) chart.scrollIntoView({{behavior: 'smooth', block: 'center'}});
+  }}
+}});
+
+// ===== 引导提示 =====
+function dismissOnboarding() {{
+  var banner = document.getElementById('onboardingBanner');
+  if (banner) banner.style.display = 'none';
+  try {{ localStorage.setItem('openclaw-onboarding-done', '1'); }} catch(e) {{}}
+}}
+(function() {{
+  var done = false;
+  try {{ done = localStorage.getItem('openclaw-onboarding-done') === '1'; }} catch(e) {{}}
+  if (!done) {{
+    var banner = document.getElementById('onboardingBanner');
+    if (banner) banner.style.display = '';
+  }}
+}})();
+
+// ===== 键盘快捷键 =====
+document.addEventListener('keydown', function(e) {{
+  // 输入框内不触发快捷键
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+  var key = e.key.toLowerCase();
+  var pages = ['overview', 'failures', 'tokens', 'errors', 'heatmap', 'interactions'];
+  var num = parseInt(key);
+  if (num >= 1 && num <= pages.length) {{
+    e.preventDefault();
+    switchPage(pages[num - 1]);
+  }} else if (key === 'd') {{
+    e.preventDefault();
+    toggleTheme();
+  }} else if (key === 'escape') {{
+    closeModal();
+    closePromptModal();
+  }}
+}});
+
+// ===== 初始化 =====
+document.addEventListener('DOMContentLoaded',function(){{
+  document.getElementById('dateFrom').addEventListener('change',applyFilter);
+  document.getElementById('dateTo').addEventListener('change',applyFilter);
+  document.getElementById('detailModal').addEventListener('click',function(e){{if(e.target===this)closeModal();}});
+  document.getElementById('promptModal').addEventListener('click',function(e){{if(e.target===this)closePromptModal();}});
+  if(RAW_DATA.length>0){{
+    var dates=RAW_DATA.map(function(r){{return r.date||(r.timestamp||'').slice(0,10);}}).filter(Boolean).sort();
+    if(dates.length>0){{document.getElementById('dateFrom').min=dates[0];document.getElementById('dateFrom').max=dates[dates.length-1];document.getElementById('dateTo').min=dates[0];document.getElementById('dateTo').max=dates[dates.length-1];}}
+  }}
+  renderOverview();
+  document.getElementById('filterInfo').textContent='筛选: '+RAW_DATA.length+' / '+RAW_DATA.length+' 条';
+  var fc=filteredFailures().length;
+  document.getElementById('failureBadge').style.display=fc>0?'inline-block':'none';
+}});
+</script>
+<script>
+// ===== 自动刷新（文件监听模式） =====
+(function() {{
+  var lastCount = -1;
+  var RETRY_MAX = 3, retry = 0;
+  function check() {{
+    fetch('/api/status')
+      .then(function(r) {{ return r.json(); }})
+      .then(function(s) {{
+        retry = 0;
+        if (lastCount < 0) {{ lastCount = s.count; return; }}
+        if (s.count !== lastCount) {{
+          console.log('仪表盘数据已更新，自动刷新...');
+          location.reload();
+        }}
+      }})
+      .catch(function() {{
+        retry++;
+        if (retry > RETRY_MAX) console.debug('自动刷新: 服务未连接');
+      }});
+  }}
+  setInterval(check, 5000);
+}})();
+</script>
+</body>
+</html>

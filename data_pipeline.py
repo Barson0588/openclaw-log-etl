@@ -84,7 +84,7 @@ class DataPipeline:
         logger.info("拉取完成，共 %d 条原始记录，%d 个字段", len(df), len(df.columns))
         return df
 
-    def fetch_from_openclaw(self, sessions_dir=None, limit=None):
+    def fetch_from_openclaw(self, sessions_dir=None, limit=None, return_interactions=False):
         """从本地 OpenClaw 环境的 trajectory 文件加载真实日志。
 
         使用 openclaw_adapter 模块读取 ~/.openclaw/agents/main/sessions/
@@ -93,15 +93,19 @@ class DataPipeline:
         Args:
             sessions_dir: trajectory 文件目录路径，默认自动检测
             limit: 最多读取的文件数，None 为全部
+            return_interactions: True 时返回 (DataFrame, interactions) 元组
 
         Returns:
-            pd.DataFrame: 真实 OpenClaw 日志数据（未清洗）
+            pd.DataFrame 或 (pd.DataFrame, list[dict])
         """
         from openclaw_adapter import OpenClawAdapter
 
         adapter = OpenClawAdapter(sessions_dir=sessions_dir)
-        df = adapter.load_trajectories(limit=limit)
-        logger.info("真实数据拉取完成，共 %d 条记录", len(df))
+        df, interactions = adapter.load_all(limit=limit)
+        logger.info("真实数据拉取完成，共 %d 条记录, %d 条交互", len(df), len(interactions))
+
+        if return_interactions:
+            return df, interactions
         return df
 
     # =================================================================
@@ -233,6 +237,9 @@ class DataPipeline:
             filename = f"cleaned_logs_{date_str}.csv"
 
         path = os.path.join(self.output_dir, filename)
-        df.to_csv(path, index=False, encoding="utf-8-sig")
+        try:
+            df.to_csv(path, index=False, encoding="utf-8-sig")
+        except OSError as e:
+            raise OSError(f"CSV 保存失败 (磁盘满或权限不足): {path} — {e}") from e
         logger.info("清洗数据已保存: %s (%d 条记录)", path, len(df))
         return path
