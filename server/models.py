@@ -58,6 +58,7 @@ class ClientInfo(BaseModel):
     name: str
     created_at: str
     record_count: int = 0
+    last_seen: str = ""  # ISO 8601，最近上报时间 (空表示从未上报)
 
     model_config = {"extra": "forbid"}
 

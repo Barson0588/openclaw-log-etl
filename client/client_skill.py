@@ -189,12 +189,18 @@ class OpenClawReporter:
             return
 
         # 找出新记录 (未在 _seen_task_ids 中)
+        # 构建 task_id → interaction 查找表，用于 raw_data_json
+        interaction_map = {}
+        for ix in interactions:
+            interaction_map[ix["task_id"]] = ix
+
         new_records = []
         for _, row in df.iterrows():
             task_id = str(row["task_id"])
             if task_id not in self._seen_task_ids:
                 self._seen_task_ids.add(task_id)
-                new_records.append(self._row_to_payload(row))
+                interaction = interaction_map.get(task_id, {})
+                new_records.append(self._row_to_payload(row, interaction))
 
         if not new_records:
             logger.debug("无新记录需上报 (total_seen=%d)", len(self._seen_task_ids))
@@ -255,8 +261,8 @@ class OpenClawReporter:
         logger.error("上报最终失败: %d 条记录在 3 次重试后仍未成功", len(records))
 
     @staticmethod
-    def _row_to_payload(row) -> dict:
-        """将 DataFrame 的一行转换为符合 API Schema 的 dict。
+    def _row_to_payload(row, interaction: dict | None = None) -> dict:
+        """将 DataFrame 的一行 + 交互详情转换为符合 API Schema 的 dict。
 
         字段映射:
           DataFrame column  →  TelemetryRecord field
@@ -269,12 +275,24 @@ class OpenClawReporter:
           status            →  status
           error_type        →  error_type
           trigger           →  trigger
+          interaction dict  →  raw_data_json (JSON serialized)
         """
         ts = row["timestamp"]
         if hasattr(ts, "isoformat"):
             ts_str = ts.isoformat()
         else:
             ts_str = str(ts)
+
+        raw_json = ""
+        if interaction:
+            # 只保留 Dashboard 需要的字段，避免超大 JSON
+            slim = {
+                "user_prompt": interaction.get("user_prompt", ""),
+                "model_id": interaction.get("model_id", ""),
+                "provider": interaction.get("provider", ""),
+                "tool_names": interaction.get("tool_names", []),
+            }
+            raw_json = json.dumps(slim, ensure_ascii=False)
 
         return {
             "task_id": str(row["task_id"]),
@@ -286,7 +304,7 @@ class OpenClawReporter:
             "status": str(row["status"]),
             "error_type": str(row.get("error_type", "")),
             "trigger": str(row.get("trigger", "unknown")),
-            "raw_data_json": "",
+            "raw_data_json": raw_json,
         }
 
 

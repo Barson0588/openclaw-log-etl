@@ -29,3 +29,6 @@ Thumbs.db
 
 # Remote deployment artifacts
 *-remote-*
+*.db
+*.bundle
+*.log

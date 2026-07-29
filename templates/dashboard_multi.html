@@ -210,6 +210,36 @@
   .chart-empty {{ background: var(--card-bg); border-radius: var(--radius);
     padding: 32px 20px; text-align: center; color: var(--muted); box-shadow: var(--shadow); }}
 
+  /* 侧边栏客户端在线状态 */
+  .sidebar-clients {{
+    padding: 8px 0; border-top: 1px solid var(--border); margin-top: 4px;
+  }}
+  .sidebar-clients .sc-title {{
+    font-size: .65rem; color: var(--muted); padding: 6px 18px 4px;
+    text-transform: uppercase; letter-spacing: .04em; font-weight: 600;
+  }}
+  .sidebar-clients a {{
+    display: flex; align-items: center; gap: 8px; padding: 5px 18px;
+    color: var(--text); text-decoration: none; font-size: .76rem;
+    transition: all .15s; cursor: pointer; margin: 1px 8px; border-radius: 0 8px 8px 0;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }}
+  .sidebar-clients a:hover {{ background: var(--bg); }}
+  .client-status-dot {{
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+    transition: background .3s;
+  }}
+  .client-status-dot.online {{ background: #22c55e; box-shadow: 0 0 6px rgba(34,197,94,.5); }}
+  .client-status-dot.offline {{ background: #94a3b8; }}
+  body.dark .client-status-dot.offline {{ background: #64748b; }}
+
+  /* 多客户端对比表 */
+  .client-compare-section {{ margin-bottom: 16px; }}
+  .client-compare-section h4 {{
+    font-size: .85rem; font-weight: 600; margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }}
+
   /* 对比卡片 */
   .compare-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; }}
   .compare-card {{
@@ -282,6 +312,17 @@
   .modal .close:hover {{ color: var(--danger); }}
   .modal .detail-row {{ display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: .8rem; flex-wrap: wrap; gap: 4px; }}
   .modal .detail-row .k {{ color: var(--muted); }} .modal .detail-row .v {{ font-family: monospace; font-size: .76rem; word-break: break-all; text-align: right; }}
+
+  /* 聊天气泡 */
+  .chat-container {{ max-height: 55vh; overflow-y: auto; padding: 4px 0; }}
+  .chat-msg {{ margin-bottom: 10px; }}
+  .chat-label {{ font-size: .68rem; color: var(--muted); margin-bottom: 2px; padding: 0 4px; }}
+  .chat-bubble-user, .chat-bubble-agent, .chat-bubble-tool {{ padding: 8px 12px; border-radius: 10px; font-size: .8rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; max-width: 88%; }}
+  .chat-bubble-user {{ background: var(--bg); border: 1px solid var(--border); }}
+  .chat-bubble-agent {{ background: #e3f0ff; margin-left: auto; }}
+  body.dark .chat-bubble-agent {{ background: #1a2a3a; }}
+  .chat-bubble-tool {{ background: #f5f0e8; font-family: monospace; font-size: .73rem; border: 1px dashed var(--border); }}
+  body.dark .chat-bubble-tool {{ background: #2a2418; }}
 
   /* 告警 */
   .token-alert {{ display: inline-block; padding: 2px 7px; border-radius: 4px; background: #f8d7da; color: #721c24; font-size: .7rem; font-weight: 600; margin-left: 4px; animation: pulse 2s infinite; }}
@@ -522,6 +563,9 @@
       <span class="ico">&#9993;</span> 交互记录
     </a>
   </div>
+  <div class="sidebar-clients" id="sidebarClients">
+    <div class="sc-title">客户端状态</div>
+  </div>
   <div class="sidebar-footer">
     <button class="btn" onclick="toggleTheme()" id="themeToggle">暗色模式</button>
     <button class="btn" onclick="exportCSV()">导出 CSV</button>
@@ -566,6 +610,12 @@
 
     <div class="kpi-grid" id="kpiGrid"></div>
 
+    <!-- 多客户端对比 KPI 卡片（仅多客户端时显示）-->
+    <div class="client-compare-section" id="clientCompareSection" style="display:none;">
+      <h4>&#9776; 客户端对比概览</h4>
+      <div class="compare-grid" id="clientCompareCards"></div>
+    </div>
+
     <div id="latencyCard" style="background:var(--card-bg);border-radius:10px;padding:14px 18px;margin-bottom:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
         <span style="font-weight:600;font-size:.82rem;">延迟分位分布 (P50 / P95 / P99)</span>
@@ -575,6 +625,19 @@
     </div>
 
     <div class="compare-grid" id="triggerCompare" style="margin-bottom:14px;"></div>
+
+    <!-- 多客户端对比图表（仅多客户端时显示）-->
+    <div class="collapsible open" id="sec-client-compare-chart" style="display:none;">
+      <div class="sec-header" onclick="toggleSection('sec-client-compare-chart')">
+        <h3>&#9733; 多客户端性能对比图</h3><span class="arrow">&#9660;</span>
+      </div>
+      <div class="sec-body">
+        <div class="chart-grid">
+          <div class="chart-card"><div class="chart-card-header"><div><h4>客户端任务量与成功率</h4><div class="desc">双轴对比：柱状图为任务总数，折线为成功率</div></div><button class="chart-export-btn" onclick="exportChartPNG(document.getElementById('chartClientCompare'),'客户端对比')" title="导出 PNG">&#128190; PNG</button></div><svg class="svg-chart" id="chartClientCompare" viewBox="0 0 700 320" preserveAspectRatio="xMidYMid meet"></svg></div>
+          <div class="chart-card"><div class="chart-card-header"><div><h4>客户端对比明细</h4><div class="desc">各客户端关键指标一览</div></div></div><div class="tbl-wrap"><table id="clientCompareTable"><thead><tr><th>客户端</th><th>任务数</th><th>成功率</th><th>总 Token</th><th>平均 Token</th><th>平均耗时(ms)</th><th>最高频工具</th><th>最多错误</th></tr></thead><tbody></tbody></table></div></div>
+        </div>
+      </div>
+    </div>
 
     <div class="collapsible open" id="sec-charts">
       <div class="sec-header" onclick="toggleSection('sec-charts')">
@@ -700,12 +763,9 @@
       <span style="color:var(--muted);font-size:.78rem;" id="interactInfo"></span>
     </div>
     <div class="tbl-wrap"><table id="interactTable"><thead><tr>
-      <th style="width:140px;">时间</th>
-      <th style="width:55px;">触发</th>
-      <th>提问内容</th>
-      <th style="width:65px;">状态</th>
-      <th style="width:75px;">耗时</th>
-      <th style="width:70px;">Tokens</th>
+      <th style="width:150px;">时间 · 触发</th>
+      <th>对话预览</th>
+      <th style="width:130px;">状态 · 耗时 · Token</th>
     </tr></thead><tbody></tbody></table></div>
     <div style="display:flex;justify-content:center;gap:6px;margin-top:12px;" id="interactPages"></div>
   </div>
@@ -761,6 +821,9 @@ function replayWelcome() {{
   if (done) {{
     var overlay = document.getElementById('welcomeOverlay');
     if (overlay) {{ overlay.style.display = 'none'; overlay.classList.remove('show'); }}
+  }} else {{
+    // 5 秒后自动消失，防止卡在启动动画
+    setTimeout(function() {{ dismissWelcome(); }}, 5000);
   }}
 }})();
 
@@ -780,6 +843,7 @@ var INTERACTIONS = [];
 var TOKEN_COST_PER_1M = 4;
 var TOKEN_ALERT_PER_TASK = 50000;
 var TOKEN_ALERT_DAILY = 500000;
+function fmtToken(v) {{ return (v == null || v === 0) ? 'N/A' : v.toLocaleString(); }}
 
 // ===== 客户端列表 =====
 var CLIENT_LIST = INIT_DATA.clients || [];
@@ -791,6 +855,7 @@ var CLIENT_LIST = INIT_DATA.clients || [];
     opt.textContent = c.name + ' (' + c.id + ')';
     sel.appendChild(opt);
   }});
+  renderSidebarClients();
 }})();
 
 // ===== 数据加载 =====
@@ -918,11 +983,13 @@ function loadData() {{
         status: r.status, error_type: r.error_type || '',
         duration_ms: r.duration_ms, tokens_used: r.tokens_used,
         tool_calls_count: r.tool_calls_count, tool_name: r.tool_name || '',
-        tool_names: raw.tool_names || [], client_id: r.client_id
+        tool_names: raw.tool_names || [], conversation: raw.conversation || [],
+        client_id: r.client_id
       }};
     }});
 
     _dataLoaded = true;
+    renderSidebarClients();
     applyFilter();
     return {{ stats: stats, telemetry: telemetry }};
   }}).catch(function(e) {{
@@ -1269,8 +1336,8 @@ function renderOverview() {{
   var cards = [
     ['任务总数',String(total),'', 'neutral', cmpTotal ? arrow2(total, cmpTotal, '', false) : ''],
     ['成功率',String(rate),'%', tone, cmpRate ? arrow2(rate, cmpRate, '', false) : ''],
-    ['Token 总消耗',totalTokens.toLocaleString(),'', 'neutral', cmpTokens ? arrow2(totalTokens, cmpTokens, '', false) : ''],
-    ['平均 Token',String(avgTokens),'', 'neutral', ''],
+    ['Token 总消耗',fmtToken(totalTokens),'', 'neutral', cmpTokens ? arrow2(totalTokens, cmpTokens, '', false) : ''],
+    ['平均 Token',fmtToken(avgTokens),'', 'neutral', ''],
     ['总耗时',Math.round(totalDur/1000).toLocaleString(),'秒', 'neutral', cmpDur ? arrow2(avgDur, cmpDur, 'ms', true) : ''],
     ['平均耗时',String(avgDur),'ms', 'neutral', cmpDur ? arrow2(avgDur, cmpDur, 'ms', true) : ''],
     ['最高频错误',topErr,'', 'neutral', ''],
@@ -1356,7 +1423,7 @@ function renderOverview() {{
   var thtml='';
   TRIGGER_STATS.forEach(function(t){{
     var r2=t.success_rate, t2=r2>=95?'good':(r2>=85?'warn':'bad');
-    thtml+='<tr><td><strong>'+t.trigger+'</strong></td><td>'+t.total+'</td><td>'+t.success+'</td><td>'+t.failed+'</td><td class="value '+t2+'">'+r2+'%</td><td>'+t.avg_tokens.toLocaleString()+'</td><td>'+t.avg_duration_sec+'</td></tr>';
+    thtml+='<tr><td><strong>'+t.trigger+'</strong></td><td>'+t.total+'</td><td>'+t.success+'</td><td>'+t.failed+'</td><td class="value '+t2+'">'+r2+'%</td><td>'+fmtToken(t.avg_tokens)+'</td><td>'+t.avg_duration_sec+'</td></tr>';
   }});
   document.querySelector('#triggerTable tbody').innerHTML=thtml||'<tr><td colspan="7" style="color:var(--muted)">无数据</td></tr>';
 
@@ -1373,7 +1440,7 @@ function renderOverview() {{
     sc.style.display='block';
     var sh='';
     fstorms.forEach(function(s){{
-      sh+='<div class="storm-alert"><div style="font-weight:600;margin-bottom:2px;">'+s.trigger+' — '+s.count+' 次连续失败 (窗口: '+s.window_minutes+' 分钟)</div><div>时间: '+s.start_time+' ~ '+s.end_time+'</div><div>错误: '+(s.error_types||[]).join(', ')+' | Token: '+s.total_tokens.toLocaleString()+'</div></div>';
+      sh+='<div class="storm-alert"><div style="font-weight:600;margin-bottom:2px;">'+s.trigger+' — '+s.count+' 次连续失败 (窗口: '+s.window_minutes+' 分钟)</div><div>时间: '+s.start_time+' ~ '+s.end_time+'</div><div>错误: '+(s.error_types||[]).join(', ')+' | Token: '+fmtToken(s.total_tokens)+'</div></div>';
     }});
     document.getElementById('retryStormsContent').innerHTML=sh;
   }} else {{ sc.style.display='none'; }}
@@ -1385,6 +1452,7 @@ function renderOverview() {{
   else{{level='需要关注';sug='成功率偏低('+rate+'%)，建议排查 <strong>'+topErr+'</strong>。';}}
   var dailyTokens=total>0?Math.round(totalTokens/total):0;
   document.getElementById('assessment').innerHTML='<p style="margin-bottom:6px"><strong>健康评级: '+level+'</strong></p><p>'+sug+'</p><ul style="margin-top:8px;color:var(--muted);font-size:.82rem;"><li>Token 消耗: 日均 '+dailyTokens.toLocaleString()+'，预估成本 $'+(totalTokens/1000000*4).toFixed(2)+'</li><li>耗时: 平均 '+avgDur+'ms，总耗时 '+Math.round(totalDur/1000).toLocaleString()+' 秒</li><li>分布: '+success+' 成功 / '+failed+' 失败 (共 '+total+' 条)</li></ul>';
+  renderClientCompare();
   drawCharts();
 }}
 
@@ -1418,7 +1486,7 @@ function renderFailures() {{
   if(failurePage>=tp)failurePage=Math.max(0,tp-1);
   var start=failurePage*PAGE_SIZE, page=data.slice(start,start+PAGE_SIZE);
   var h='';
-  page.forEach(function(r,i){{h+='<tr style="cursor:pointer;" onclick="openModal('+(start+i)+')" title="点击查看详情"><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id_short||r.task_id||'')+'</td><td><span class="badge-sm bad">'+(r.error_type||'unknown')+'</span></td><td>'+(r.duration_sec!=null?r.duration_sec:'')+'</td><td>'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'')+'</td><td>'+(r.trigger||'')+'</td></tr>';}});
+  page.forEach(function(r,i){{h+='<tr style="cursor:pointer;" onclick="openModal('+(start+i)+')" title="点击查看详情"><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id_short||r.task_id||'')+'</td><td><span class="badge-sm bad">'+(r.error_type||'unknown')+'</span></td><td>'+(r.duration_sec!=null?r.duration_sec:'')+'</td><td>'+fmtToken(r.tokens_used)+'</td><td>'+(r.trigger||'')+'</td></tr>';}});
   document.querySelector('#failureTable tbody').innerHTML=h||'<tr><td colspan="6" style="color:var(--muted)">无匹配记录</td></tr>';
   var ph='<span>第 '+(data.length>0?failurePage+1:0)+'/'+Math.max(1,tp)+' 页</span>';
   ph+='<button onclick="failurePage=0;renderFailures()" '+(failurePage===0?'disabled':'')+'>首页</button>';
@@ -1441,7 +1509,7 @@ function openModal(idx) {{
     '<div class="detail-row"><span class="k">时间</span><span class="v">'+(r.timestamp||'')+'</span></div>'+
     '<div class="detail-row"><span class="k">错误类型</span><span class="v" style="color:var(--danger)">'+(r.error_type||'unknown')+'</span></div>'+
     '<div class="detail-row"><span class="k">耗时(s)</span><span class="v">'+(r.duration_sec!=null?r.duration_sec:'N/A')+'</span></div>'+
-    '<div class="detail-row"><span class="k">Token</span><span class="v">'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'N/A')+'</span></div>'+
+    '<div class="detail-row"><span class="k">Token</span><span class="v">'+fmtToken(r.tokens_used)+'</span></div>'+
     '<div class="detail-row"><span class="k">工具调用</span><span class="v">'+(r.tool_calls_count!=null?r.tool_calls_count:'N/A')+'</span></div>'+
     '<div class="detail-row"><span class="k">主要工具</span><span class="v">'+(r.tool_name||'N/A')+'</span></div>'+
     '<div class="detail-row"><span class="k">Trigger</span><span class="v">'+(r.trigger||'unknown')+'</span></div>';
@@ -1458,10 +1526,10 @@ function renderTokens() {{
   var sorted=fdata.map(function(r){{return r.tokens_used||0}}).sort(function(a,b){{return a-b}});
   var med=0; if(sorted.length>0){{var mid=Math.floor(sorted.length/2);med=sorted.length%2===0?Math.round((sorted[mid-1]+sorted[mid])/2):sorted[mid];}}
   document.getElementById('tokenSummary').innerHTML=
-    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">总消耗</div><div style="font-size:1.05rem;font-weight:700;">'+totalTokens.toLocaleString()+'</div></div>'+
-    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">均值</div><div style="font-size:1.05rem;font-weight:700;">'+avgT.toLocaleString()+'</div></div>'+
-    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">中位数</div><div style="font-size:1.05rem;font-weight:700;">'+med.toLocaleString()+'</div></div>'+
-    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">峰值</div><div style="font-size:1.05rem;font-weight:700;">'+maxT.toLocaleString()+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">总消耗</div><div style="font-size:1.05rem;font-weight:700;">'+fmtToken(totalTokens)+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">均值</div><div style="font-size:1.05rem;font-weight:700;">'+fmtToken(avgT)+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">中位数</div><div style="font-size:1.05rem;font-weight:700;">'+fmtToken(med)+'</div></div>'+
+    '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">峰值</div><div style="font-size:1.05rem;font-weight:700;">'+fmtToken(maxT)+'</div></div>'+
     '<div style="background:var(--card-bg);border-radius:8px;padding:12px 16px;box-shadow:var(--shadow);min-width:130px;"><div style="font-size:.73rem;color:var(--muted);">预估成本</div><div style="font-size:1.05rem;font-weight:700;">$'+(totalTokens/1000000*4).toFixed(2)+'</div></div>';
 
   var dailyMap={{}};
@@ -1470,7 +1538,7 @@ function renderTokens() {{
 
   var top10=fdata.slice().sort(function(a,b){{return(b.tokens_used||0)-(a.tokens_used||0)}}).slice(0,10);
   var th='';
-  top10.forEach(function(r){{var cls=r.status==='success'?'badge-sm good':'badge-sm bad';th+='<tr><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id||'')+'</td><td><span class="'+cls+'">'+r.status+'</span></td><td>'+(r.tokens_used!=null?r.tokens_used.toLocaleString():'')+'</td><td>'+(r.duration_ms!=null?Math.round(r.duration_ms/1000):'')+'</td><td>'+(r.tool_calls_count||0)+'</td></tr>';}});
+  top10.forEach(function(r){{var cls=r.status==='success'?'badge-sm good':'badge-sm bad';th+='<tr><td>'+(r.timestamp||'')+'</td><td style="font-family:monospace;font-size:.75rem;">'+(r.task_id||'')+'</td><td><span class="'+cls+'">'+r.status+'</span></td><td>'+fmtToken(r.tokens_used)+'</td><td>'+(r.duration_ms!=null?Math.round(r.duration_ms/1000):'')+'</td><td>'+(r.tool_calls_count||0)+'</td></tr>';}});
   document.querySelector('#topTokensTable tbody').innerHTML=th||'<tr><td colspan="6" style="color:var(--muted)">无数据</td></tr>';
 }}
 function drawTokenTrend(days,dm){{
@@ -1919,6 +1987,159 @@ function drawTokenHistogram() {{
   svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
 }}
 
+// ===== 侧边栏客户端在线状态 =====
+function renderSidebarClients() {{
+  var container = document.getElementById('sidebarClients');
+  if (!container) return;
+  var clients = CLIENT_LIST;
+  if (!clients || clients.length === 0) {{
+    container.style.display = 'none';
+    return;
+  }}
+  container.style.display = '';
+  var now = new Date();
+  var h = '<div class="sc-title">客户端状态 (' + clients.length + ')</div>';
+  clients.forEach(function(c) {{
+    var isOnline = false;
+    if (c.last_seen) {{
+      var lastSeen = new Date(c.last_seen);
+      isOnline = (now - lastSeen) < 15 * 60 * 1000;
+    }}
+    var dotClass = isOnline ? 'online' : 'offline';
+    var statusTitle = isOnline ? '在线 (最近上报: ' + (c.last_seen || 'N/A') + ')' : '离线' + (c.last_seen ? ' (最后上报: ' + c.last_seen + ')' : '');
+    h += '<a onclick="document.getElementById(\'clientSelect\').value=\'' + c.id + '\';applyFilter();" title="' + statusTitle + '">';
+    h += '<span class="client-status-dot ' + dotClass + '"></span>';
+    h += escHtml(c.name || c.id);
+    h += '<span style="margin-left:auto;font-size:.6rem;color:var(--muted);">' + (c.record_count || 0) + '</span>';
+    h += '</a>';
+  }});
+  container.innerHTML = h;
+}}
+
+// ===== 客户端对比 KPI 与图表 =====
+function renderClientCompare() {{
+  var pc = GLOBAL_STATS.per_client || [];
+  var section = document.getElementById('clientCompareSection');
+  var chartSection = document.getElementById('sec-client-compare-chart');
+  if (!section || !chartSection) return;
+
+  if (pc.length <= 1) {{
+    section.style.display = 'none';
+    chartSection.style.display = 'none';
+    return;
+  }}
+
+  // === 对比 KPI 卡片 ===
+  section.style.display = '';
+  var cardsHtml = '';
+  pc.forEach(function(c) {{
+    var rateClass = c.overall_success_rate >= 95 ? 'good' : (c.overall_success_rate >= 85 ? 'warn' : 'bad');
+    cardsHtml += '<div class="kpi-card kpi-card-clickable" onclick="document.getElementById(\'clientSelect\').value=\'' + c.client_id + '\';applyFilter();" title="点击筛选此客户端">';
+    cardsHtml += '<div class="label">' + escHtml(c.client_name || c.client_id) + ' <span style="font-size:.6rem;color:var(--muted);">(' + c.total_tasks + ' 任务)</span></div>';
+    cardsHtml += '<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;font-size:.75rem;">';
+    cardsHtml += '<span class="value ' + rateClass + '">' + c.overall_success_rate + '%</span>';
+    cardsHtml += '<span style="color:var(--muted);">| Token: <strong>' + (c.total_tokens > 1000 ? Math.round(c.total_tokens/1000) + 'K' : c.total_tokens) + '</strong></span>';
+    cardsHtml += '<span style="color:var(--muted);">| 平均耗时: <strong>' + c.avg_duration_ms + 'ms</strong></span>';
+    cardsHtml += '</div>';
+    cardsHtml += '</div>';
+  }});
+  document.getElementById('clientCompareCards').innerHTML = cardsHtml;
+
+  // === 对比图表 ===
+  chartSection.style.display = '';
+  drawClientCompareChart(pc);
+  renderClientCompareTable(pc);
+}}
+
+function drawClientCompareChart(pc) {{
+  var svg = document.getElementById('chartClientCompare');
+  if (!svg || pc.length === 0) return;
+  var W = 700, H = 320, padL = 64, padR = 60, padT = 18, padB = 58;
+  var pw = W - padL - padR, ph = H - padT - padB;
+  var h = '';
+
+  // 渐变定义
+  h += '<defs>';
+  h += '<linearGradient id="clientBarGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--accent)" stop-opacity="0.88"/><stop offset="100%" stop-color="var(--accent)" stop-opacity="0.45"/></linearGradient>';
+  h += '</defs>';
+
+  // Y轴(左) + X轴
+  h += '<line x1="' + padL + '" y1="' + padT + '" x2="' + padL + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+  h += '<line x1="' + padL + '" y1="' + (padT+ph) + '" x2="' + (W-padR) + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+  // Y轴(右)
+  h += '<line x1="' + (W-padR) + '" y1="' + padT + '" x2="' + (W-padR) + '" y2="' + (padT+ph) + '" stroke="var(--border)" stroke-width="1"/>';
+
+  var maxTasks = Math.max.apply(null, pc.map(function(c) {{ return c.total_tasks; }})) || 1;
+  var barW = Math.min(36, (pw / pc.length - 10));
+
+  // Y轴(左)网格 — 任务数
+  for (var i = 0; i <= 4; i++) {{
+    var y = padT + (ph * i / 4);
+    var v = Math.round(maxTasks * (1 - i / 4));
+    h += '<line x1="' + (padL+1) + '" y1="' + y + '" x2="' + (W-padR) + '" y2="' + y + '" stroke="var(--border)" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.5"/>';
+    h += '<text x="' + (padL-8) + '" y="' + (y+5) + '" text-anchor="end" fill="var(--muted)" font-size="10" font-family="inherit">' + v + '</text>';
+  }}
+
+  // Y轴(右)标签 — 成功率
+  for (var i = 0; i <= 4; i++) {{
+    var y2 = padT + (ph * i / 4);
+    var pct = 100 - i * 25;
+    h += '<text x="' + (W-padR+10) + '" y="' + (y2+5) + '" text-anchor="start" fill="#457b9d" font-size="10" font-family="inherit" font-weight="600">' + pct + '%</text>';
+  }}
+
+  pc.forEach(function(c, idx) {{
+    var cx = padL + idx * (pw / pc.length) + (pw / pc.length - barW) / 2;
+    // 柱状图 — 任务数
+    var bh = Math.max(1, (c.total_tasks / maxTasks) * ph);
+    var by = padT + ph - bh;
+    var tipHtml6 = '<b>' + escHtml(c.client_name || c.client_id) + '</b><br>任务数: <b>' + c.total_tasks + '</b><br>成功: ' + c.total_success + ' / 失败: ' + c.total_failed + '<br>成功率: <b>' + c.overall_success_rate + '%</b>';
+    h += '<rect class="chart-bar" x="' + cx + '" y="' + by + '" width="' + barW + '" height="' + bh + '" rx="4" fill="url(#clientBarGrad)" opacity="0.88" data-tooltip="' + tipHtml6 + '"/>';
+
+    // 成功率折线点
+    var rateY = padT + ph - ((c.overall_success_rate / 100) * ph);
+    h += '<circle cx="' + (cx + barW/2) + '" cy="' + rateY + '" r="5" fill="#457b9d" stroke="var(--card-bg)" stroke-width="2" class="chart-dot" data-tooltip="' + tipHtml6 + '"/>';
+    h += '<circle cx="' + (cx + barW/2) + '" cy="' + rateY + '" r="10" fill="transparent" class="chart-dot" data-tooltip="' + tipHtml6 + '"/>';
+
+    // 连接线
+    if (idx > 0) {{
+      var prevCx = padL + (idx-1) * (pw / pc.length) + (pw / pc.length - barW) / 2 + barW/2;
+      var prevRateY = padT + ph - ((pc[idx-1].overall_success_rate / 100) * ph);
+      h += '<line x1="' + prevCx + '" y1="' + prevRateY + '" x2="' + (cx + barW/2) + '" y2="' + rateY + '" stroke="#457b9d" stroke-width="2" stroke-dasharray="4,2" opacity="0.6"/>';
+    }}
+
+    var label = (c.client_name || c.client_id).substring(0, 10);
+    h += '<text x="' + (cx + barW/2) + '" y="' + (H-padB+22) + '" text-anchor="middle" fill="var(--muted)" font-size="9" font-family="inherit" transform="rotate(-25,' + (cx + barW/2) + ',' + (H-padB+22) + ')">' + label + '</text>';
+  }});
+
+  // 图例
+  h += '<rect x="' + padL + '" y="' + (H-12) + '" width="10" height="10" rx="3" fill="url(#clientBarGrad)" opacity="0.88"/>';
+  h += '<text x="' + (padL+16) + '" y="' + (H-3) + '" fill="var(--muted)" font-size="9" font-family="inherit">任务数量 (左轴)</text>';
+  h += '<circle cx="' + (padL+160) + '" cy="' + (H-7) + '" r="4" fill="#457b9d"/>';
+  h += '<text x="' + (padL+168) + '" y="' + (H-3) + '" fill="var(--muted)" font-size="9" font-family="inherit">成功率 (右轴)</text>';
+
+  svg.innerHTML = h;
+}}
+
+function renderClientCompareTable(pc) {{
+  var tbody = document.querySelector('#clientCompareTable tbody');
+  if (!tbody) return;
+  var h = '';
+  pc.forEach(function(c) {{
+    var rateClass = c.overall_success_rate >= 95 ? 'badge-sm good' : (c.overall_success_rate >= 85 ? 'badge-sm warn' : 'badge-sm bad');
+    h += '<tr style="cursor:pointer;" onclick="document.getElementById(\'clientSelect\').value=\'' + c.client_id + '\';applyFilter();" title="点击筛选此客户端">';
+    h += '<td><strong>' + escHtml(c.client_name || c.client_id) + '</strong></td>';
+    h += '<td>' + c.total_tasks + '</td>';
+    h += '<td><span class="' + rateClass + '">' + c.overall_success_rate + '%</span></td>';
+    h += '<td>' + fmtToken(c.total_tokens) + '</td>';
+    h += '<td>' + fmtToken(c.avg_tokens_per_task) + '</td>';
+    h += '<td>' + c.avg_duration_ms + '</td>';
+    h += '<td>' + escHtml(c.top_tool || 'N/A') + '</td>';
+    h += '<td>' + escHtml(c.top_error_type || 'N/A') + '</td>';
+    h += '</tr>';
+  }});
+  tbody.innerHTML = h;
+}}
+
 // ===== 刷新时间 =====
 (function() {{
   var now = new Date();
@@ -1977,20 +2198,17 @@ function renderInteractions() {{
     var statusLabel = r.status === 'success' ? '成功' : '失败';
     var triggerLabel = r.trigger === 'cron' ? 'Cron' : (r.trigger === 'user' ? 'User' : r.trigger || '');
     var duration = r.duration_ms >= 60000 ? Math.round(r.duration_ms / 60000) + '分' : Math.round(r.duration_ms / 1000) + '秒';
-    var tokens = r.tokens_used > 1000 ? Math.round(r.tokens_used / 1000) + 'K' : String(r.tokens_used);
-    var promptPreview = escHtml((r.prompt_preview || r.user_prompt || '').slice(0, 80));
-    if ((r.user_prompt || '').length > 80) promptPreview += '...';
-    h += '<tr style="cursor:pointer;" onclick="showPromptModal(' + (start + i) + ')" title="点击查看完整提问">';
-    h += '<td style="font-size:.78rem;">' + (r.timestamp || '') + '</td>';
-    h += '<td><span style="font-size:.72rem;padding:2px 6px;border-radius:3px;background:' + (r.trigger==='cron'?'#e8f5e9':'#e3f2fd') + ';color:' + (r.trigger==='cron'?'#2e7d32':'#1565c0') + ';">' + triggerLabel + '</span></td>';
-    h += '<td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.8rem;">' + promptPreview + '</td>';
-    h += '<td><span class="' + statusClass + '" style="font-size:.72rem;padding:2px 8px;">' + statusLabel + '</span></td>';
-    h += '<td style="font-size:.78rem;">' + duration + '</td>';
-    h += '<td style="font-size:.78rem;">' + tokens + '</td>';
+    var promptPreview = escHtml((r.prompt_preview || r.user_prompt || '').slice(0, 100));
+    if ((r.user_prompt || '').length > 100) promptPreview += '...';
+    var timeStr = (r.timestamp || '').replace('T', ' ').slice(0, 16);
+    h += '<tr style="cursor:pointer;" onclick="showPromptModal(' + (start + i) + ')" title="点击查看完整对话">';
+    h += '<td style="font-size:.76rem;line-height:1.4;"><div>' + timeStr + '</div><span style="font-size:.68rem;padding:1px 5px;border-radius:3px;background:' + (r.trigger==='cron'?'#e8f5e9':'#e3f2fd') + ';color:' + (r.trigger==='cron'?'#2e7d32':'#1565c0') + ';">' + triggerLabel + '</span></td>';
+    h += '<td style="max-width:360px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.82rem;">' + promptPreview + '</td>';
+    h += '<td style="font-size:.74rem;line-height:1.5;"><span class="' + statusClass + '" style="font-size:.68rem;padding:2px 6px;">' + statusLabel + '</span> <span style="color:var(--muted);">' + duration + '</span> <span style="color:var(--muted);">' + fmtToken(r.tokens_used) + '</span></td>';
     h += '</tr>';
   }});
   if (pageData.length === 0) {{
-    h = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:32px;">暂无匹配的交互记录</td></tr>';
+    h = '<tr><td colspan="3" style="text-align:center;color:var(--muted);padding:32px;">暂无匹配的交互记录</td></tr>';
   }}
   tbody.innerHTML = h;
 
@@ -2017,26 +2235,61 @@ function showPromptModal(idx) {{
   var statusLabel = r.status === 'success' ? '成功' : '失败';
   var statusColor = r.status === 'success' ? 'var(--accent)' : 'var(--danger)';
   var duration = r.duration_ms >= 60000 ? Math.round(r.duration_ms / 60000) + ' 分' : Math.round(r.duration_ms / 1000) + ' 秒';
-  var tokens = (r.tokens_used || 0).toLocaleString();
+  var tokens = fmtToken(r.tokens_used);
   document.getElementById('promptModalTitle').textContent = (r.timestamp || '') + ' | ' + (r.trigger || '') + ' | ' + statusLabel;
 
-  var meta = '<div style="display:grid;grid-template-columns:auto 1fr;gap:4px 16px;font-size:.78rem;margin-bottom:14px;padding:10px 14px;background:var(--bg);border-radius:6px;">';
-  meta += '<span style="color:var(--muted);">状态</span><span style="color:' + statusColor + ';font-weight:600;">' + statusLabel + '</span>';
-  meta += '<span style="color:var(--muted);">耗时</span><span>' + duration + '</span>';
-  meta += '<span style="color:var(--muted);">Tokens</span><span>' + tokens + '</span>';
-  if (r.trigger) meta += '<span style="color:var(--muted);">触发</span><span>' + r.trigger + '</span>';
-  if (r.task_id) meta += '<span style="color:var(--muted);">Task ID</span><span style="font-family:monospace;font-size:.72rem;">' + r.task_id + '</span>';
-  if (r.model_id) meta += '<span style="color:var(--muted);">模型</span><span>' + r.model_id + '</span>';
-  if (r.error_type) meta += '<span style="color:var(--muted);">错误</span><span style="color:var(--danger);">' + r.error_type + '</span>';
-  if (r.tool_names && r.tool_names.length > 0) meta += '<span style="color:var(--muted);">使用工具</span><span>' + r.tool_names.join(', ') + '</span>';
+  var meta = '<div style="display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.75rem;margin-bottom:12px;padding:8px 12px;background:var(--bg);border-radius:6px;color:var(--muted);">';
+  meta += '<span>状态 <b style="color:' + statusColor + '">' + statusLabel + '</b></span>';
+  meta += '<span>| 耗时 <b>' + duration + '</b></span>';
+  meta += '<span>| Tokens <b>' + tokens + '</b></span>';
+  meta += '<span>| Task <code style="font-size:.68rem;">' + (r.task_id_short || r.task_id || '') + '</code></span>';
+  if (r.model_id) meta += '<span>| ' + escHtml(r.model_id) + '</span>';
+  if (r.tool_names && r.tool_names.length > 0) meta += '<span>| 工具: ' + escHtml(r.tool_names.slice(0,5).join(', ')) + '</span>';
+  if (r.error_type) meta += '<span style="color:var(--danger)">| 错误: ' + escHtml(r.error_type) + '</span>';
   meta += '</div>';
 
-  var promptLabel = '<div style="font-weight:600;font-size:.82rem;margin-bottom:6px;color:var(--muted);">提问内容</div>';
-  var promptText = '<div style="max-height:55vh;overflow-y:auto;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text);word-break:break-word;">' + escHtml(r.user_prompt || '(无提问内容)') + '</div>';
-  document.getElementById('promptContent').innerHTML = meta + promptLabel + promptText;
+  var conv = r.conversation || [];
+  if (conv.length === 0 && r.user_prompt) {{
+    conv = [{{role:'user', text: r.user_prompt}}];
+  }}
+  var bubbles = '';
+  var toggleId = 0;
+  conv.forEach(function(m, mi) {{
+    var cls = m.role === 'assistant' ? 'chat-bubble-agent' : (m.role === 'toolResult' ? 'chat-bubble-tool' : 'chat-bubble-user');
+    var label = m.role === 'assistant' ? 'Agent' : (m.role === 'toolResult' ? 'Tool' : 'User');
+    var text = escHtml(m.text || '');
+    if (m.role === 'toolResult' && text.length > 200) {{
+      var tid = 'tb_' + (toggleId++);
+      bubbles += '<div class="chat-msg"><div class="chat-label">' + label + '</div><div class="' + cls + '">';
+      bubbles += '<span id="' + tid + '_short">' + text.slice(0, 200) + '...</span>';
+      bubbles += '<span id="' + tid + '_full" style="display:none;">' + text + '</span>';
+      bubbles += ' <a href="javascript:void(0)" onclick="toggleBubble(\'' + tid + '\')" style="color:var(--accent);font-size:.72rem;cursor:pointer;white-space:nowrap;" id="' + tid + '_btn">展开全部 &#9660;</a>';
+      bubbles += '</div></div>';
+    }} else {{
+      bubbles += '<div class="chat-msg"><div class="chat-label">' + label + '</div><div class="' + cls + '">' + text + '</div></div>';
+    }}
+  }});
+  if (!bubbles) bubbles = '<div style="color:var(--muted);text-align:center;padding:20px;">无对话内容</div>';
+
+  document.getElementById('promptContent').innerHTML = meta + '<div class="chat-container">' + bubbles + '</div>';
   document.getElementById('promptModal').classList.add('show');
 }}
 function closePromptModal() {{ document.getElementById('promptModal').classList.remove('show'); }}
+function toggleBubble(tid) {{
+  var s = document.getElementById(tid + '_short');
+  var f = document.getElementById(tid + '_full');
+  var b = document.getElementById(tid + '_btn');
+  if (!s || !f || !b) return;
+  if (f.style.display === 'none') {{
+    s.style.display = 'none';
+    f.style.display = 'inline';
+    b.innerHTML = '收起 &#9650;';
+  }} else {{
+    s.style.display = 'inline';
+    f.style.display = 'none';
+    b.innerHTML = '展开全部 &#9660;';
+  }}
+}}
 
 // ===== CSV =====
 function exportCSV(){{
@@ -2150,6 +2403,7 @@ document.addEventListener('keydown', function(e) {{
     e.preventDefault();
     toggleTheme();
   }} else if (key === 'escape') {{
+    dismissWelcome();
     closeModal();
     closePromptModal();
   }}
@@ -2161,6 +2415,9 @@ document.addEventListener('DOMContentLoaded',function(){{
   document.getElementById('dateTo').addEventListener('change',applyFilter);
   document.getElementById('detailModal').addEventListener('click',function(e){{if(e.target===this)closeModal();}});
   document.getElementById('promptModal').addEventListener('click',function(e){{if(e.target===this)closePromptModal();}});
+  // 点击欢迎遮罩背景关闭
+  var welcomeOverlay = document.getElementById('welcomeOverlay');
+  if (welcomeOverlay) welcomeOverlay.addEventListener('click', function(e) {{ if (e.target === this) dismissWelcome(); }});
   // 从服务端加载数据
   loadData().then(function() {{
     if (RAW_DATA.length > 0) {{

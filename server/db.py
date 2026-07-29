@@ -134,10 +134,11 @@ def get_client_api_key_hash(
 
 
 def get_all_clients(db: sqlite3.Connection) -> list[dict]:
-    """获取所有已注册客户端及其记录数量。"""
+    """获取所有已注册客户端及其记录数量和最近活跃时间。"""
     rows = db.execute("""
         SELECT c.id, c.name, c.created_at,
-               COUNT(t.id) AS record_count
+               COUNT(t.id) AS record_count,
+               COALESCE(MAX(t.received_at), '') AS last_seen
         FROM clients c
         LEFT JOIN telemetry_records t ON c.id = t.client_id
         GROUP BY c.id
