@@ -1,16 +1,16 @@
 <table align="center">
 <tr>
   <td width="33%">
-    <img src="screenshot-overview.png" alt="概览" width="100%">
+    <img src="screenshots/01-overview.png" alt="概览" width="100%">
     <br><em>概览 — KPI日环比 + 延迟分位 + SVG趋势</em>
   </td>
   <td width="33%">
-    <img src="screenshot-failures.png" alt="失败明细" width="100%">
+    <img src="screenshots/02-failures.png" alt="失败明细" width="100%">
     <br><em>失败明细 — 可排序分页 + 重试风暴检测</em>
   </td>
   <td width="33%">
-    <img src="screenshot-multi.png" alt="多客户端" width="100%">
-    <br><em>多客户端对比 — 多机器数据汇总</em>
+    <img src="screenshots/03-tokens.png" alt="Token分析" width="100%">
+    <br><em>Token 分析 — 消耗趋势 + 分布直方图 + 成本估算</em>
   </td>
 </tr>
 </table>
@@ -85,6 +85,23 @@ from client.client_skill import OpenClawReporter
 reporter = OpenClawReporter()
 reporter.start()  # 后台线程，3次指数退避重试
 ```
+
+## 截图展示
+
+<table>
+<tr>
+  <td width="50%"><img src="screenshots/01-overview.png" alt="概览"><br><em>概览 — KPI 卡片 + 延迟分位 + SVG 趋势图</em></td>
+  <td width="50%"><img src="screenshots/02-failures.png" alt="失败明细"><br><em>失败明细 — 可排序分页列表 + 重试风暴检测</em></td>
+</tr>
+<tr>
+  <td><img src="screenshots/03-tokens.png" alt="Token分析"><br><em>Token 分析 — 消耗趋势 + 分布直方图 + 成本估算</em></td>
+  <td><img src="screenshots/04-errors.png" alt="错误趋势"><br><em>错误趋势 — 堆叠面积图展示各类错误日变化</em></td>
+</tr>
+<tr>
+  <td><img src="screenshots/05-heatmap.png" alt="热力图"><br><em>时段热力图 — 24h × 日期失败率矩阵</em></td>
+  <td><img src="screenshots/06-interactions.png" alt="交互记录"><br><em>交互记录 — 搜索/筛选对话，查看提问原文</em></td>
+</tr>
+</table>
 
 ## 快速开始
 
