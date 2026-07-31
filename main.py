@@ -185,7 +185,7 @@ def run_pipeline(api_url=None, mock_data_path="mock_data.json",
         notifier = Notifier()
         notifier.send(stats, html_path)
     except Exception:
-        logger.debug("通知模块加载失败，跳过推送", exc_info=True)
+        logger.warning("通知推送失败 (非致命，管线继续)", exc_info=True)
 
     # ---- 汇总 ----
     logger.info("=" * 50)

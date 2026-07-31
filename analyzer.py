@@ -31,51 +31,59 @@ logger = logging.getLogger(__name__)
 sns.set_style("whitegrid")
 sns.set_palette("Set2")
 
-# 中文字体 —— 通过 font_manager 直接指定系统字体文件路径
-_font_candidates = [
-    "/System/Library/Fonts/STHeiti Light.ttc",     # macOS
-    "/System/Library/Fonts/STHeiti Medium.ttc",    # macOS
-    "/System/Library/Fonts/Supplemental/Songti.ttc",  # macOS
-    "/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc",  # Linux (Noto CJK)
-    "/usr/share/fonts/google-noto-cjk/NotoSansCJK-Light.ttc",    # Linux
-    "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",  # Linux (WenQuanYi)
-    "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",  # Linux
-    "C:/Windows/Fonts/simhei.ttf",                 # Windows
-    "C:/Windows/Fonts/msyh.ttc",                   # Windows
-]
+# 中文字体配置 — 延迟到首次实际使用时才检测，避免 import 时的 I/O 开销
 _cjk_font_prop = None
-for _fp in _font_candidates:
-    try:
-        _prop = fm.FontProperties(fname=_fp)
-        _prop.get_name()  # 强制触发字体文件加载验证
-        _cjk_font_prop = _prop
-        break
-    except (FileNotFoundError, RuntimeError, OSError):
-        continue
+_font_configured = False
 
-if _cjk_font_prop is not None:
-    _font_name = _cjk_font_prop.get_name()
-    plt.rcParams["font.family"] = "sans-serif"
-    plt.rcParams["font.sans-serif"] = [_font_name]
-else:
-    # 动态搜索：查找系统上任意可用的 CJK 字体
-    _fallback_font = None
-    for _f in fm.fontManager.ttflist:
-        _fname_lower = (_f.name or "").lower()
-        if any(kw in _fname_lower for kw in ["cjk", "noto", "wenquan", "hei", "song", "ming", "kai", "fang", "gothic"]):
-            try:
-                _fallback_font = fm.FontProperties(fname=_f.fname)
-                break
-            except (FileNotFoundError, RuntimeError):
-                continue
-    if _fallback_font is not None:
-        _font_name = _fallback_font.get_name()
+
+def _ensure_cjk_font():
+    """检测并配置中文字体，仅首次调用时执行。"""
+    global _cjk_font_prop, _font_configured
+    if _font_configured:
+        return
+
+    _font_candidates = [
+        "/System/Library/Fonts/STHeiti Light.ttc",     # macOS
+        "/System/Library/Fonts/STHeiti Medium.ttc",    # macOS
+        "/System/Library/Fonts/Supplemental/Songti.ttc",  # macOS
+        "/usr/share/fonts/google-noto-cjk/NotoSansCJK-Regular.ttc",  # Linux
+        "/usr/share/fonts/google-noto-cjk/NotoSansCJK-Light.ttc",    # Linux
+        "/usr/share/fonts/truetype/wqy/wqy-microhei.ttc",  # Linux
+        "/usr/share/fonts/truetype/droid/DroidSansFallbackFull.ttf",  # Linux
+        "C:/Windows/Fonts/simhei.ttf",                 # Windows
+        "C:/Windows/Fonts/msyh.ttc",                   # Windows
+    ]
+    for fp in _font_candidates:
+        try:
+            prop = fm.FontProperties(fname=fp)
+            prop.get_name()
+            _cjk_font_prop = prop
+            break
+        except (FileNotFoundError, RuntimeError, OSError):
+            continue
+
+    if _cjk_font_prop is not None:
+        font_name = _cjk_font_prop.get_name()
         plt.rcParams["font.family"] = "sans-serif"
-        plt.rcParams["font.sans-serif"] = [_font_name]
+        plt.rcParams["font.sans-serif"] = [font_name]
     else:
-        plt.rcParams["font.sans-serif"] = ["PingFang SC", "Heiti SC", "SimHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei"]
+        for f in fm.fontManager.ttflist:
+            fname_lower = (f.name or "").lower()
+            if any(kw in fname_lower for kw in ["cjk", "noto", "wenquan", "hei", "song", "ming", "kai", "fang", "gothic"]):
+                try:
+                    _cjk_font_prop = fm.FontProperties(fname=f.fname)
+                    break
+                except (FileNotFoundError, RuntimeError):
+                    continue
+        if _cjk_font_prop is not None:
+            font_name = _cjk_font_prop.get_name()
+            plt.rcParams["font.family"] = "sans-serif"
+            plt.rcParams["font.sans-serif"] = [font_name]
+        else:
+            plt.rcParams["font.sans-serif"] = ["PingFang SC", "Heiti SC", "SimHei", "Noto Sans CJK SC", "WenQuanYi Micro Hei"]
 
-plt.rcParams["axes.unicode_minus"] = False
+    plt.rcParams["axes.unicode_minus"] = False
+    _font_configured = True
 
 
 class LogAnalyzer:
@@ -151,6 +159,7 @@ class LogAnalyzer:
             str: 图表保存路径
         """
         logger.info("生成图表: 每日任务成功率")
+        _ensure_cjk_font()
 
         # Step 1: 提取日期列（只保留日期部分，去掉时分秒）
         df = self.df.copy()
@@ -209,6 +218,7 @@ class LogAnalyzer:
             str: 图表保存路径
         """
         logger.info("生成图表: 错误类型分布")
+        _ensure_cjk_font()
 
         # 只取失败任务的 error_type
         failed = self.df[self.df["status"] == "failed"]
@@ -266,6 +276,7 @@ class LogAnalyzer:
             str: 图表保存路径
         """
         logger.info("生成图表: 工具使用频次 Top 5")
+        _ensure_cjk_font()
 
         # 排除 "none" 和 NaN（表示没有工具调用的 session）
         tool_series = self.df["tool_name"].fillna("none").replace("", "none")
@@ -320,6 +331,7 @@ class LogAnalyzer:
             str: 图表保存路径
         """
         logger.info("生成图表: Token 消耗分布")
+        _ensure_cjk_font()
 
         fig, axes = plt.subplots(1, 2, figsize=(14, 5))
 

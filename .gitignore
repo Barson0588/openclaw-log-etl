@@ -27,6 +27,10 @@ Thumbs.db
 # Claude
 .claude/
 
+# Large data / demo assets (generate locally)
+mock_data.json
+screenshot.png
+
 # Remote deployment artifacts
 *-remote-*
 *.db

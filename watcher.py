@@ -35,7 +35,7 @@ logger = logging.getLogger("watcher")
 DEBOUNCE_SEC = 10
 _timer = None
 _lock = threading.Lock()
-LAST_UPDATE = {"ts": "", "count": 0, "html": ""}
+LAST_UPDATE = {"ts": "", "count": 0, "html": "", "error": ""}
 
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 REPORTS_DIR = os.path.join(ROOT_DIR, "reports")
@@ -55,7 +55,9 @@ def rebuild():
             LAST_UPDATE = {"ts": now, "count": LAST_UPDATE["count"] + 1, "html": fixed_path}
         logger.info("仪表盘已更新: %s", fixed_path)
     except Exception:
-        logger.exception("重建失败")
+        logger.exception("仪表盘重建失败")
+        with _lock:
+            LAST_UPDATE["error"] = str(sys.exc_info()[1])[:200]
 
 
 def debounced_rebuild():
