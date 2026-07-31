@@ -99,7 +99,7 @@ async def api_ingest_telemetry(
     "/api/v1/telemetry",
     response_model=TelemetryQueryResponse,
     summary="查询遥测记录",
-    description="分页查询遥测数据，支持按客户端、时间范围、任务状态筛选。",
+    description="分页查询遥测数据，支持按客户端、时间范围、任务状态筛选。需要认证。",
 )
 async def api_query_telemetry(
     client_id: Optional[str] = Query(None, description="筛选客户端 ID"),
@@ -109,8 +109,9 @@ async def api_query_telemetry(
     limit: int = Query(1000, le=10000, description="每页条数"),
     offset: int = Query(0, ge=0, description="偏移量"),
     db=Depends(get_db),
+    _authenticated: str = Depends(require_auth),
 ):
-    """公开查询接口 — 不需要认证（Dashboard 使用）。"""
+    """遥测数据查询 — 需要认证（包含原始提问内容，敏感数据）。"""
     return query_telemetry(db, client_id, start, end, status, limit, offset)
 
 
@@ -121,7 +122,10 @@ async def api_query_telemetry(
     description="获取所有已注册客户端及其遥测记录数量。",
 )
 async def api_list_clients(db=Depends(get_db)):
-    """公开接口 — Dashboard 客户端选择器使用。"""
+    """客户端列表 — Dashboard SPA 需要此端点公开访问。
+
+    仅暴露客户端名称和记录数量，不含敏感数据。
+    生产环境建议通过反向代理 (nginx/Caddy) 加 basic auth。"""
     clients = get_all_clients(db)
     return ClientsResponse(clients=clients)
 
@@ -139,7 +143,10 @@ async def api_get_stats(
     end: Optional[str] = Query(None, description="截止时间"),
     db=Depends(get_db),
 ):
-    """公开接口 — 统计查询不需要认证。"""
+    """聚合统计 — Dashboard SPA 需要此端点公开访问。
+
+    仅暴露聚合 KPI，不含原始提问内容。
+    生产环境建议通过反向代理加 basic auth。"""
     return get_stats(db, client_id, start, end)
 
 
@@ -151,11 +158,9 @@ async def api_get_stats(
                 "所有数据通过前端 fetch 调用上述 API 动态加载。",
 )
 async def api_serve_dashboard(db=Depends(get_db)):
-    """Dashboard 页面 — 动态加载客户端数据。
+    """Dashboard 页面 — 公开访问，数据由前端 JS 动态加载。
 
-    将已注册的客户端列表注入模板初始数据，避免页面加载后立即多一个请求。
-    Dashboard 内的图表数据由前端 JS 通过 /api/v1/stats 和 /api/v1/telemetry 获取。
-    """
+    生产环境建议通过反向代理加 basic auth 保护整个 /api/v1/ 路径。"""
     from server.dashboard_server import build_dashboard
 
     return build_dashboard(db)

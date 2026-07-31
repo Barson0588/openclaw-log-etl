@@ -134,6 +134,10 @@ class DataPipeline:
         initial_count = len(df)
         logger.info("开始清洗，初始记录数: %d", initial_count)
 
+        if initial_count == 0:
+            logger.info("数据集为空，跳过清洗")
+            return df
+
         # --- 阶段 1: 检查是否缺少必填列 ---
         missing_cols = set(self.REQUIRED_COLUMNS) - set(df.columns)
         if missing_cols:

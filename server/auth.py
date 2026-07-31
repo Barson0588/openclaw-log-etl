@@ -65,7 +65,7 @@ def require_auth(
     """
     import sqlite3
 
-    conn = sqlite3.connect(db_path, check_same_thread=False)
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     try:
         hashed = get_client_api_key_hash(conn, x_client_id)

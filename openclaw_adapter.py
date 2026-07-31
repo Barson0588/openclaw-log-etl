@@ -74,9 +74,12 @@ class OpenClawAdapter:
         files = sorted(glob.glob(pattern))
 
         if not files:
-            raise FileNotFoundError(
-                f"未找到 trajectory 文件: {self.sessions_dir}/*.trajectory.jsonl"
-            )
+            logger.info("未找到 trajectory 文件，返回空数据集 (目录: %s)", self.sessions_dir)
+            empty_df = pd.DataFrame(columns=[
+                "task_id", "timestamp", "duration_ms", "tool_calls_count",
+                "tokens_used", "status", "error_type", "tool_name", "trigger",
+            ])
+            return empty_df, []
 
         if limit:
             files = files[:limit]

@@ -376,6 +376,25 @@ class LogAnalyzer:
         if self.df is None:
             self.load()
 
+        if len(self.df) == 0:
+            logger.info("数据集为空，跳过分析")
+            empty_stats = {
+                "total_tasks": 0, "total_success": 0, "total_failed": 0,
+                "overall_success_rate": 0.0, "total_tokens": 0,
+                "avg_tokens_per_task": 0.0, "total_duration_seconds": 0.0,
+                "avg_duration_ms": 0.0, "p50_duration_ms": 0.0,
+                "p95_duration_ms": 0.0, "p99_duration_ms": 0.0,
+                "p50_tokens": 0.0, "p95_tokens": 0.0, "p99_tokens": 0.0,
+                "date_range_start": "N/A", "date_range_end": "N/A",
+                "top_error_type": "N/A", "top_tool": "N/A",
+            }
+            empty_extra = {
+                "failure_details": [], "raw_data": [], "trigger_stats": [],
+                "hourly_pattern": [], "error_trend": [], "retry_storms": [],
+                "daily_summary": [],
+            }
+            return empty_stats, {}, empty_extra
+
         success_mask = self.df["status"] == "success"
         failed_mask = self.df["status"] == "failed"
 

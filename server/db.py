@@ -78,7 +78,11 @@ def get_db(db_path: str = DEFAULT_DB_PATH):
       FastAPI 的同步路由通过 run_in_threadpool 在独立线程中执行，
       但依赖 (Depends) 在主线程中创建连接对象。
       关闭线程检查后，连接可在任意线程使用 — 由于每个请求创建独立连接，
-      不存在并发冲突问题。
+      不存在同一连接的并发冲突问题。
+
+    ⚠️ 生产注意: 多 worker (uvicorn -w > 1) 时，不同 worker 进程
+    可能同时写入同一 SQLite 文件。SQLite WAL 模式能缓解但不能完全
+    消除竞态。生产环境请使用 PostgreSQL 或确保 -w 1。
 
     使用方式::
 
