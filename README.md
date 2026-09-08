@@ -155,9 +155,24 @@ python3 skills/openclaw-monitor/scripts/reporter.py
 # 中心服务器
 python3 -m server.manage serve --port 8000
 python3 -m server.manage register-client <id> <name>
+
+# 一键部署到远程服务器
+bash skills/deploy/scripts/deploy.sh root@<host>
 ```
 
 ## 部署到服务器
+
+### 一键部署（deploy skill）
+
+只把监控服务端 + 上报客户端部署到一台服务器，直接跑：
+
+```bash
+bash skills/deploy/scripts/deploy.sh root@<host>
+```
+
+脚本自动 scp 上传、装依赖、初始化数据库、写入 systemd 服务并启动。部署后注册客户端拿到 API Key 填进 `openclaw-reporter` 服务即可（详见 `skills/deploy/SKILL.md`）。
+
+### 手动部署（rsync + cron）
 
 我自己用的场景：阿里云轻量服务器同时跑监控服务端 + 作为 OpenClaw 任务机。
 
@@ -218,11 +233,15 @@ openclaw-log-etl/
 │   └── client_skill.py  # OpenClawReporter 守护线程
 ├── server/              # 中心监控服务端（多机器数据汇总）
 ├── skills/              # OpenClaw 技能插件
-│   └── openclaw-monitor/
+│   ├── openclaw-monitor/  # 遥测上报技能
+│   │   ├── SKILL.md      # 技能说明
+│   │   └── scripts/
+│   │       ├── setup.sh      # 一键接入脚本
+│   │       └── reporter.py   # cron 上报脚本
+│   └── deploy/          # 一键部署技能
 │       ├── SKILL.md      # 技能说明
 │       └── scripts/
-│           ├── setup.sh      # 一键接入脚本
-│           └── reporter.py   # cron 上报脚本
+│           └── deploy.sh     # SSH + systemd 部署脚本
 ├── templates/           # 仪表盘 HTML 模板
 │   ├── dashboard.html       # 单机版
 │   └── dashboard_multi.html # 多客户端对比版

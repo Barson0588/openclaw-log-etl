@@ -1,6 +1,6 @@
 #!/bin/bash
 # deploy.sh — 部署 OpenClaw ETL + 监控服务端到远程服务器
-# 使用方式: ./deploy.sh root@47.251.96.81
+# 使用方式: bash skills/deploy/scripts/deploy.sh root@47.251.96.81
 #
 # 部署内容:
 #   1. FastAPI 监控服务端 (端口 8000) — 多客户端 Dashboard + API
@@ -8,10 +8,11 @@
 #   3. ETL 管线 + watcher (端口 8889) — 本地报表生成
 #
 set -e
-HOST="${1:?请指定 SSH 主机，例如: ./deploy.sh root@47.251.96.81}"
+HOST="${1:?请指定 SSH 主机，例如: bash skills/deploy/scripts/deploy.sh root@47.251.96.81}"
 REMOTE_DIR="/opt/openclaw-log-etl"
 SERVER_PORT=8000
-PROJECT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# 脚本位于 skills/deploy/scripts/，往上三级才是仓库根目录
+PROJECT_DIR="$(cd "$(dirname "$0")/../../.." && pwd)"
 
 echo "=== 上传项目文件 ==="
 ssh "$HOST" "mkdir -p $REMOTE_DIR/server $REMOTE_DIR/client $REMOTE_DIR/templates"
