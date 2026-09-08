@@ -136,7 +136,7 @@ bash skills/openclaw-monitor/scripts/setup.sh
 
 按提示输入服务器地址、客户端名称、API Key。脚本会自动装依赖、配 cron、测通。
 
-接入后在服务器上打开 `dashboard_multi.html` 就能看到所有机器的数据对比。
+接入后在服务器上打开 `dashboard_multi.html` 就能看到所有机器的数据对比。完整的服务器 / 个人端两条路径指引见下方「部署」章节。
 
 ## 命令参考
 
@@ -157,22 +157,34 @@ python3 -m server.manage serve --port 8000
 python3 -m server.manage register-client <id> <name>
 
 # 一键部署到远程服务器
-bash skills/deploy/scripts/deploy.sh root@<host>
+./deploy.sh root@<host>
 ```
 
-## 部署到服务器
+## 部署
 
-### 一键部署（deploy skill）
+这个项目有两种机器要部署，先分清你是哪种：
 
-只把监控服务端 + 上报客户端部署到一台服务器，直接跑：
+| 你要部署的机器 | 用哪个 skill | 做什么 |
+|--------------|-------------|--------|
+| **中心监控服务器**（汇总所有机器数据） | `deploy` | 部署 FastAPI 服务端，接收所有客户端上报 |
+| **个人端 / 任务机**（跑 OpenClaw 的机器） | `openclaw-monitor` | 每 5 分钟上报本机轨迹到中心服务器 |
+
+简单说：**先部署一台中心服务器（路径 A），再让每台跑 OpenClaw 的机器接入上报（路径 B）**。
+
+### 路径 A：部署中心服务器（deploy skill）
+
+> ⚠️ 部署前检查（缺一不可，否则脚本会卡住）：
+> 1. 本机已配好 SSH 免密登录目标机（`ssh root@<host>` 能直接进去、不用输密码）
+> 2. 目标机是 Linux 且有 `systemd`
+> 3. 目标机已装 `python3` 和 `pip3`
 
 ```bash
-bash skills/deploy/scripts/deploy.sh root@<host>
+./deploy.sh root@<host>
 ```
 
-脚本自动 scp 上传、装依赖、初始化数据库、写入 systemd 服务并启动。部署后注册客户端拿到 API Key 填进 `openclaw-reporter` 服务即可（详见 `skills/deploy/SKILL.md`）。
+脚本自动 scp 上传 → 装依赖 → 初始化数据库 → 写 systemd → 启动服务端。部署后注册客户端、填 API Key 即可（详见 `skills/deploy/SKILL.md`）。
 
-### 手动部署（rsync + cron）
+#### 附：手动部署（rsync + cron，不用 skill）
 
 我自己用的场景：阿里云轻量服务器同时跑监控服务端 + 作为 OpenClaw 任务机。
 
@@ -192,6 +204,27 @@ crontab -e
 ```
 
 阿里云 Linux 4 + Python 3.11 验证通过。中文显示需要字体（脚本会自动装，如果失败手动 `apt install fonts-wqy-zenhei`）。
+
+### 路径 B：接入个人端 / 任务机（openclaw-monitor skill）
+
+每台跑 OpenClaw 的机器（MacBook、Office PC，甚至那台服务器本身）都要接入上报：
+
+```bash
+# 在个人端机器上运行（不是服务器）
+bash skills/openclaw-monitor/scripts/setup.sh
+```
+
+按提示输入：服务器地址、客户端名称、API Key。脚本自动装依赖、配 cron、测通。
+
+> **服务器本身也跑 OpenClaw？** 那台服务器同样要跑一次 setup.sh 接入上报（client_id 用 `server-01`）。
+
+**API Key 怎么拿**：先在服务器上注册客户端，返回的 Key 填进 setup 提示即可：
+
+```bash
+ssh root@<host> 'cd /opt/openclaw-log-etl && python3 -m server.manage register-client <id> <名称>'
+```
+
+接入后打开服务器的 `dashboard_multi.html` 就能看到所有机器的数据对比。
 
 ## 通知配置
 
