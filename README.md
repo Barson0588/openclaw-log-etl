@@ -1,32 +1,31 @@
-<table align="center">
-<tr>
-  <td width="33%">
-    <img src="screenshots/01-overview.png" alt="概览" width="100%">
-    <br><em>概览 — KPI日环比 + 延迟分位 + SVG趋势</em>
-  </td>
-  <td width="33%">
-    <img src="screenshots/02-failures.png" alt="失败明细" width="100%">
-    <br><em>失败明细 — 可排序分页 + 重试风暴检测</em>
-  </td>
-  <td width="33%">
-    <img src="screenshots/03-tokens.png" alt="Token分析" width="100%">
-    <br><em>Token 分析 — 消耗趋势 + 分布直方图 + 成本估算</em>
-  </td>
-</tr>
-</table>
+<img width="2400" alt="hero" src="screenshots/hero.png">
 
-<h1 align="center">OpenClaw Log ETL</h1>
+<h1 align="center">OpenClaw 零侵入监控面板</h1>
 
 <p align="center">
-  <b>OpenClaw agent 日志 → 监控仪表盘 + 多机器遥测 + 日报推送</b>
+  <b>不改一行代码，直接读 trajectory 文件，3 秒看清你的 agent 今天挂了几个、烧了多少 token</b>
   <br><br>
+  <a href="https://barson0588.github.io/openclaw-log-etl/"><b>👉 在线体验 Demo（零安装，直接看效果）</b></a>
+  <br><br>
+  <img src="https://img.shields.io/github/stars/Barson0588/openclaw-log-etl?style=flat-square" alt="stars">
+  <img src="https://img.shields.io/github/license/Barson0588/openclaw-log-etl" alt="license">
+  <img src="https://img.shields.io/badge/%E9%9B%B6%E4%BE%B5%E5%85%A5-%E8%AF%BB%E6%96%87%E4%BB%B6%E5%8D%B3%E5%87%BA%E5%9B%BE-brightgreen" alt="零侵入">
   <img src="https://img.shields.io/badge/Python-3.9+-blue?logo=python&logoColor=white" alt="Python">
-  <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
-  <img src="https://img.shields.io/badge/dashboard-HTML_standalone-orange" alt="Dashboard">
-  <img src="https://img.shields.io/badge/notify-email_%7C_wecom-green" alt="Notify">
-  <img src="https://img.shields.io/badge/telemetry-multi--machine-blueviolet" alt="Telemetry">
   <img src="https://img.shields.io/badge/platform-macOS_%7C_Linux-lightgrey" alt="Platform">
 </p>
+
+---
+
+## 为什么选它，而不是 Langfuse / Helicone
+
+大多数 LLM 可观测平台都要你**改代码、加 SDK 埋点、改代理**才能看到数据。这个项目反着来：
+
+| | OpenClaw 零侵入监控面板 | Langfuse / Helicone |
+|---|---|---|
+| 接入方式 | **直接读 trajectory 文件，0 行代码** | 需 SDK 埋点 / 改代理 |
+| 部署 | 一个 HTML 文件，双击即开 | 平台级服务 |
+| 适合 | OpenClaw 个人 / 小团队 | 生产级 LLM 应用 |
+| 上手时间 | 30 秒 | 半天起 |
 
 ---
 
@@ -87,6 +86,8 @@ reporter.start()  # 后台线程，3次指数退避重试
 ```
 
 ## 截图展示
+
+<img src="screenshots/demo.gif" alt="六页面切换演示" width="100%">
 
 <table>
 <tr>
