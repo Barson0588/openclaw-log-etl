@@ -159,6 +159,8 @@ class OpenClawAdapter:
         user_prompt = ""
         model_id = ""
         provider = ""
+        conversation = []
+        _seen_texts = set()
 
         with open(fpath, "r", encoding="utf-8") as f:
             for line in f:
@@ -196,6 +198,26 @@ class OpenClawAdapter:
                 elif ev_type == "model.completed":
                     usage = data.get("usage", {})
                     total_tokens += usage.get("total", 0)
+                    # 从完整消息快照提取多轮对话，供报表气泡展示
+                    for msg in data.get("messagesSnapshot") or []:
+                        role = msg.get("role", "")
+                        content = msg.get("content", "")
+                        if isinstance(content, list):
+                            text = " ".join(
+                                c.get("text", "")
+                                for c in content
+                                if c.get("type") == "text"
+                            )
+                        else:
+                            text = str(content) if content else ""
+                        text = text.strip()
+                        if not text or text in _seen_texts or role not in ("user", "assistant"):
+                            continue
+                        _seen_texts.add(text)
+                        if role == "user":
+                            parts = text.split("\n```\n")
+                            text = parts[-1].strip() if len(parts) >= 3 else text
+                        conversation.append({"role": role, "text": text})
 
                 elif ev_type == "trace.artifacts":
                     tool_metas = data.get("toolMetas") or []
@@ -259,6 +281,7 @@ class OpenClawAdapter:
             "tool_calls_count": len(tool_names),
             "tool_name": primary_tool,
             "tool_names": list(set(tool_names)),
+            "conversation": conversation,
         }
 
         return basic, interaction

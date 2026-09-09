@@ -283,6 +283,15 @@
   .modal .detail-row {{ display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid var(--border); font-size: .8rem; flex-wrap: wrap; gap: 4px; }}
   .modal .detail-row .k {{ color: var(--muted); }} .modal .detail-row .v {{ font-family: monospace; font-size: .76rem; word-break: break-all; text-align: right; }}
 
+  /* 聊天气泡 */
+  .chat-container {{ max-height: 55vh; overflow-y: auto; padding: 4px 0; }}
+  .chat-msg {{ margin-bottom: 10px; }}
+  .chat-label {{ font-size: .68rem; color: var(--muted); margin-bottom: 2px; padding: 0 4px; }}
+  .chat-bubble-user, .chat-bubble-agent {{ padding: 8px 12px; border-radius: 10px; font-size: .8rem; line-height: 1.6; white-space: pre-wrap; word-break: break-word; max-width: 88%; }}
+  .chat-bubble-user {{ background: var(--bg); border: 1px solid var(--border); }}
+  .chat-bubble-agent {{ background: #e3f0ff; margin-left: auto; }}
+  body.dark .chat-bubble-agent {{ background: #1a2a3a; }}
+
   /* 告警 */
   .token-alert {{ display: inline-block; padding: 2px 7px; border-radius: 4px; background: #f8d7da; color: #721c24; font-size: .7rem; font-weight: 600; margin-left: 4px; animation: pulse 2s infinite; }}
   body.dark .token-alert {{ background: #3a1a1a; color: #e07070; }}
@@ -1850,12 +1859,47 @@ function showPromptModal(idx) {{
   if (r.tool_names && r.tool_names.length > 0) meta += '<span style="color:var(--muted);">使用工具</span><span>' + r.tool_names.join(', ') + '</span>';
   meta += '</div>';
 
-  var promptLabel = '<div style="font-weight:600;font-size:.82rem;margin-bottom:6px;color:var(--muted);">提问内容</div>';
-  var promptText = '<div style="max-height:55vh;overflow-y:auto;white-space:pre-wrap;font-size:.82rem;line-height:1.7;color:var(--text);word-break:break-word;">' + escHtml(r.user_prompt || '(无提问内容)') + '</div>';
-  document.getElementById('promptContent').innerHTML = meta + promptLabel + promptText;
+  var conv = r.conversation || [];
+  if (conv.length === 0 && r.user_prompt) {{
+    conv = [{{role:'user', text: r.user_prompt}}];
+  }}
+  var bubbles = '';
+  var toggleId = 0;
+  conv.forEach(function(m) {{
+    var cls = m.role === 'assistant' ? 'chat-bubble-agent' : 'chat-bubble-user';
+    var label = m.role === 'assistant' ? 'Agent' : 'User';
+    var text = escHtml(m.text || '');
+    if (text.length > 200) {{
+      var tid = 'tb_' + (toggleId++);
+      bubbles += '<div class="chat-msg"><div class="chat-label">' + label + '</div><div class="' + cls + '">';
+      bubbles += '<span id="' + tid + '_short">' + text.slice(0, 200) + '...</span>';
+      bubbles += '<span id="' + tid + '_full" style="display:none;">' + text + '</span>';
+      bubbles += ' <a href="javascript:void(0)" onclick="toggleBubble(\'' + tid + '\')" style="color:var(--accent);font-size:.72rem;cursor:pointer;white-space:nowrap;" id="' + tid + '_btn">展开全部 &#9660;</a>';
+      bubbles += '</div></div>';
+    }} else {{
+      bubbles += '<div class="chat-msg"><div class="chat-label">' + label + '</div><div class="' + cls + '">' + text + '</div></div>';
+    }}
+  }});
+  if (!bubbles) bubbles = '<div style="color:var(--muted);text-align:center;padding:20px;">无对话内容</div>';
+  document.getElementById('promptContent').innerHTML = meta + '<div class="chat-container">' + bubbles + '</div>';
   document.getElementById('promptModal').classList.add('show');
 }}
 function closePromptModal() {{ document.getElementById('promptModal').classList.remove('show'); }}
+function toggleBubble(tid) {{
+  var s = document.getElementById(tid + '_short');
+  var f = document.getElementById(tid + '_full');
+  var b = document.getElementById(tid + '_btn');
+  if (!s || !f || !b) return;
+  if (f.style.display === 'none') {{
+    s.style.display = 'none';
+    f.style.display = 'inline';
+    b.innerHTML = '收起 &#9650;';
+  }} else {{
+    s.style.display = 'inline';
+    f.style.display = 'none';
+    b.innerHTML = '展开全部 &#9660;';
+  }}
+}}
 
 // ===== CSV =====
 function exportCSV(){{
