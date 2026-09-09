@@ -53,6 +53,19 @@ if [[ "$*" == *"--real"* ]]; then
     else
         echo "[数据] 未找到 $SESSIONS_DIR，请确认 OpenClaw 已安装并运行过"
     fi
+else
+    # ---- 保护：mock 模式会覆盖今天的真实报表 ----
+    if [ -f "$DASHBOARD" ]; then
+        echo ""
+        echo "[警告] 当前是 mock 模式，会覆盖今天的报表:"
+        echo "       $DASHBOARD"
+        echo "       如需真实数据，请改用 ./run.sh --real"
+        read -r -p "       确认用 mock 覆盖？输入 yes 继续，其他键取消: " CONFIRM
+        if [ "$CONFIRM" != "yes" ]; then
+            echo "已取消。"
+            exit 0
+        fi
+    fi
 fi
 
 # ---- 运行 ETL 管线 ----
